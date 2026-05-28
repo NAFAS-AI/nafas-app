@@ -1,0 +1,13 @@
+{
+  "name": "nafas-app",
+  "version": "7.0.0",
+  "description": "Nafas - AI Burnout Diagnostic Tool | 120 Intelligence Layers",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "author": "Munira Ali Al Marri <munira.almarri35@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://nafas-app.vercel.app"
+}
