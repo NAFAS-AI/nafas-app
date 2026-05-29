@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نَفَس — الخطة الاستراتيجية الشاملة 2026–2028</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0f1a;--bg2:#111427;--bg3:#181c30;--card:#161a2e;
+  --teal:#2dd4bf;--teal2:#14b8a6;--teal-dim:rgba(45,212,191,.12);
+  --gold:#eccc5c;--gold-dim:rgba(236,204,92,.12);
+  --purple:#8b5cf6;--purple-dim:rgba(139,92,246,.12);
+  --rose:#f43f5e;--rose-dim:rgba(244,63,94,.12);
+  --blue:#3b82f6;--blue-dim:rgba(59,130,246,.12);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.12);
+  --orange:#f59e0b;--orange-dim:rgba(245,158,11,.12);
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:rgba(45,212,191,.15);
+  --glow:0 0 30px rgba(45,212,191,.15);
+  --radius:16px;--radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* Layout */
+.app{display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--bg2);border-left:1px solid var(--border);position:fixed;top:0;right:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}
+.main{margin-right:260px;flex:1;padding:30px 40px 60px;max-width:1100px}
+
+/* Sidebar */
+.sidebar-header{padding:24px 20px;border-bottom:1px solid var(--border);text-align:center}
+.sidebar-logo{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px;animation:breathe 4s ease-in-out infinite;box-shadow:0 0 20px rgba(45,212,191,.3)}
+@keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(45,212,191,.3)}50%{transform:scale(1.08);box-shadow:0 0 35px rgba(45,212,191,.5)}}
+.sidebar-title{font-size:18px;font-weight:800;color:var(--teal)}
+.sidebar-subtitle{font-size:12px;color:var(--text3);margin-top:2px}
+.sidebar-label{padding:16px 20px 8px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px}
+.sidebar-nav{list-style:none;padding:0 8px}
+.sidebar-nav li{margin:2px 0}
+.sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--radius-sm);color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s}
+.sidebar-nav a:hover{background:var(--teal-dim);color:var(--teal)}
+.sidebar-nav a.active{background:var(--teal-dim);color:var(--teal);font-weight:700;border-right:3px solid var(--teal)}
+.sidebar-nav .emoji{font-size:18px;width:24px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);text-align:center}
+.sidebar-footer p{font-size:11px;color:var(--text3);line-height:1.6}
+.sidebar-footer a{color:var(--teal);text-decoration:none}
+
+/* Mobile toggle */
+.menu-toggle{display:none;position:fixed;top:12px;right:12px;z-index:200;width:44px;height:44px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);color:var(--teal);font-size:22px;cursor:pointer;align-items:center;justify-content:center}
+
+/* Top Countdown Banner */
+.top-countdown{position:sticky;top:0;z-index:90;background:linear-gradient(135deg,rgba(244,63,94,.15),rgba(236,204,92,.08));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--rose);border-radius:var(--radius);padding:16px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;box-shadow:0 4px 24px rgba(244,63,94,.2);animation:pulse-border 3s ease-in-out infinite}
+@keyframes pulse-border{0%,100%{border-color:var(--rose);box-shadow:0 4px 24px rgba(244,63,94,.2)}50%{border-color:var(--gold);box-shadow:0 4px 30px rgba(236,204,92,.25)}}
+.top-countdown .tc-icon{font-size:28px;animation:ring 2s ease-in-out infinite}
+@keyframes ring{0%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-13deg)}30%{transform:rotate(10deg)}40%{transform:rotate(-8deg)}50%{transform:rotate(0)}}
+.top-countdown .tc-title{font-size:15px;font-weight:700;color:var(--rose)}
+.top-countdown .tc-timer{display:flex;gap:10px;direction:ltr}
+.top-countdown .tc-unit{background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.3);border-radius:10px;padding:8px 12px;text-align:center;min-width:64px}
+.top-countdown .tc-num{font-size:26px;font-weight:900;color:var(--rose);font-variant-numeric:tabular-nums;line-height:1}
+.top-countdown .tc-label{font-size:10px;color:var(--text3);margin-top:3px;font-weight:600}
+
+/* Section */
+.section{margin-bottom:50px;animation:fadeUp .5s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.section-icon{font-size:28px}
+.section-title{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--teal),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-desc{font-size:14px;color:var(--text3);margin-top:2px;font-weight:400;-webkit-text-fill-color:var(--text3)}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;transition:all .3s}
+.card:hover{border-color:var(--teal);box-shadow:var(--glow)}
+.card-title{font-size:16px;font-weight:700;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card-grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card-grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+
+/* Stat cards */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--glow)}
+.stat-num{font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--teal),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:13px;color:var(--text3);margin-top:4px}
+
+/* Vision box */
+.vision-box{background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(236,204,92,.05));border:1px solid var(--teal);border-radius:var(--radius);padding:32px;text-align:center;margin:20px 0}
+.vision-box .label{color:var(--gold);font-size:13px;font-weight:700;margin-bottom:8px}
+.vision-box .text{font-size:20px;font-weight:700;line-height:1.8}
+.vision-box .text span{color:var(--teal);font-weight:900}
+
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.tag{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:6px;transition:all .2s}
+.tag:hover{transform:scale(1.05);border-color:var(--teal)}
+
+/* Tables */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg3);color:var(--teal);font-weight:700;padding:12px 16px;text-align:right;white-space:nowrap}
+td{padding:10px 16px;border-top:1px solid rgba(255,255,255,.05);color:var(--text2)}
+tr:hover td{background:var(--teal-dim)}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.badge-red{background:var(--rose-dim);color:var(--rose)}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-gold{background:var(--gold-dim);color:var(--gold)}
+.badge-blue{background:var(--blue-dim);color:var(--blue)}
+.badge-purple{background:var(--purple-dim);color:var(--purple)}
+.badge-teal{background:var(--teal-dim);color:var(--teal)}
+
+/* Timeline */
+.timeline{position:relative;padding-right:30px}
+.timeline::before{content:'';position:absolute;right:10px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--teal),var(--gold),var(--purple))}
+.tl-item{position:relative;margin-bottom:24px;padding-right:30px}
+.tl-item::before{content:'';position:absolute;right:-26px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--teal);border:3px solid var(--bg);box-shadow:0 0 10px rgba(45,212,191,.5)}
+.tl-item.gold::before{background:var(--gold);box-shadow:0 0 10px rgba(236,204,92,.5)}
+.tl-item.purple::before{background:var(--purple);box-shadow:0 0 10px rgba(139,92,246,.5)}
+.tl-item .tl-date{font-size:12px;color:var(--gold);font-weight:700;margin-bottom:4px}
+.tl-item .tl-title{font-size:15px;font-weight:700;color:var(--text)}
+.tl-item .tl-desc{font-size:13px;color:var(--text3);margin-top:4px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn.active,.tab-btn:hover{background:var(--teal-dim);color:var(--teal);border-color:var(--teal)}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeUp .3s ease}
+
+/* Copy button */
+.copy-wrap{position:relative}
+.copy-btn{position:absolute;top:8px;left:8px;padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text3);font-family:inherit;font-size:11px;cursor:pointer;transition:all .2s;z-index:2}
+.copy-btn:hover{border-color:var(--teal);color:var(--teal)}
+.copy-btn.copied{background:var(--teal-dim);color:var(--teal);border-color:var(--teal)}
+.template-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;font-size:13px;line-height:2;color:var(--text2);white-space:pre-wrap;direction:ltr;text-align:left;max-height:300px;overflow-y:auto}
+.template-box.rtl-t{direction:rtl;text-align:right}
+
+/* Progress bar */
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;border-radius:3px;transition:width 1s ease}
+
+/* Filters */
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:inherit;font-size:12px;cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:var(--teal-dim);color:var(--teal);border-color:var(--teal)}
+
+/* Alert box */
+.alert{border-radius:var(--radius);padding:20px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start}
+.alert-urgent{background:var(--rose-dim);border:1px solid var(--rose)}
+.alert-info{background:var(--blue-dim);border:1px solid var(--blue)}
+.alert-success{background:var(--green-dim);border:1px solid var(--green)}
+.alert .alert-icon{font-size:24px;flex-shrink:0}
+.alert .alert-text{font-size:14px;line-height:1.8}
+.alert .alert-title{font-weight:700;font-size:15px;margin-bottom:4px}
+
+/* Eye cards */
+.eye-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .3s}
+.eye-card:hover{border-color:var(--teal);box-shadow:var(--glow)}
+.eye-header{padding:16px 20px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.eye-body{padding:0 20px 20px}
+.eye-body table{font-size:12px}
+
+/* Audience cards */
+.audience-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .3s}
+.audience-card:hover{transform:translateY(-4px);box-shadow:var(--glow)}
+.audience-card .a-icon{font-size:32px;margin-bottom:8px}
+.audience-card .a-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.audience-card .a-desc{font-size:12px;color:var(--text3)}
+
+/* Brand section */
+.brand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.brand-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center}
+.brand-card .b-label{color:var(--gold);font-size:12px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.color-swatch{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.swatch{width:48px;height:48px;border-radius:12px;border:2px solid rgba(255,255,255,.1)}
+
+/* Countdown */
+.countdown-box{background:linear-gradient(135deg,rgba(244,63,94,.1),rgba(236,204,92,.05));border:1px solid var(--rose);border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:20px}
+.countdown-nums{display:flex;gap:16px;justify-content:center;margin:16px 0}
+.cd-unit{text-align:center}
+.cd-num{font-size:36px;font-weight:900;color:var(--rose);display:block}
+.cd-label{font-size:11px;color:var(--text3)}
+
+/* Responsive */
+@media(max-width:900px){
+  .sidebar{transform:translateX(100%)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-toggle{display:flex}
+  .main{margin-right:0;padding:20px 16px 60px}
+  .brand-grid{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:1fr}
+  .section-title{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">🌬️</div>
+    <div class="sidebar-title">نَفَس · Nafas</div>
+    <div class="sidebar-subtitle">Breathe Before You Break</div>
+  </div>
+  <div class="sidebar-label">الخطة الاستراتيجية</div>
+  <ul class="sidebar-nav">
+    <li><a href="#vision" class="active"><span class="emoji">🎯</span> الرؤية والهوية</a></li>
+    <li><a href="#roadmap"><span class="emoji">🗺️</span> خارطة الطريق</a></li>
+    <li><a href="#financial"><span class="emoji">💰</span> الخطة المالية</a></li>
+    <li><a href="#tech"><span class="emoji">⚙️</span> التكنولوجيا</a></li>
+    <li><a href="#marketing"><span class="emoji">📣</span> التسويق</a></li>
+    <li><a href="#partners"><span class="emoji">🤝</span> الشراكات والاستثمار</a></li>
+    <li><a href="#exhibition"><span class="emoji">🏆</span> المعرض 2026</a></li>
+    <li><a href="#ip"><span class="emoji">📜</span> الملكية الفكرية</a></li>
+    <li><a href="#templates"><span class="emoji">📋</span> القوالب الجاهزة</a></li>
+    <li><a href="#inspection"><span class="emoji">🔬</span> فحص بأربع عيون</a></li>
+    <li><a href="#kpis"><span class="emoji">📊</span> مؤشرات النجاح</a></li>
+    <li><a href="#expansion"><span class="emoji">🌍</span> التوسع والمستقبل</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <p>منيرة علي المري<br>المؤسسة والمطورة<br><a href="mailto:munira.almarri35@gmail.com">munira.almarri35@gmail.com</a><br><br>© 2026 منيرة علي المري<br>جميع الحقوق محفوظة</p>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- TOP COUNTDOWN BANNER -->
+<div class="top-countdown" id="top-countdown-banner">
+  <span class="tc-icon">🚨</span>
+  <div class="tc-title">مسابقة صندوق خليفة لريادة الأعمال — الموعد النهائي!</div>
+  <div class="tc-timer" id="tc-timer">
+    <div class="tc-unit"><div class="tc-num" id="tc-days">--</div><div class="tc-label">يوم</div></div>
+    <div class="tc-unit"><div class="tc-num" id="tc-hours">--</div><div class="tc-label">ساعة</div></div>
+    <div class="tc-unit"><div class="tc-num" id="tc-mins">--</div><div class="tc-label">دقيقة</div></div>
+    <div class="tc-unit"><div class="tc-num" id="tc-secs">--</div><div class="tc-label">ثانية</div></div>
+  </div>
+</div>
+
+<!-- ============ 1. VISION ============ -->
+<section id="vision" class="section">
+  <div class="section-header">
+    <span class="section-icon">🎯</span>
+    <div>
+      <div class="section-title">الرؤية والهوية</div>
+      <div class="section-desc">من نحن، لماذا نوجد، وماذا نريد أن نصبح</div>
+    </div>
+  </div>
+
+  <div class="vision-box">
+    <div class="label">الرؤية 2028</div>
+    <div class="text">أن تكون <span>نَفَس</span> المنصة الأولى في منطقة <span>MENA</span> للكشف عن الإرهاق الوظيفي بالذكاء الاصطناعي — تخدم <span>مليون</span> مستخدم بـ <span>15</span> لغة عبر <span>20</span> دولة</div>
+  </div>
+
+  <div class="card-grid" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">☀️ الرسالة</div>
+      <p style="color:var(--text2);font-size:14px;line-height:2">تمكين كل إنسان من فهم مستوى إرهاقه الوظيفي في دقائق — بذكاء اصطناعي يفهم السياق الثقافي واللهجة المحلية — قبل أن يتحول الإرهاق لاستقالة أو انهيار.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 الميزة التنافسية</div>
+      <p style="color:var(--text2);font-size:14px;line-height:2">نَفَس ليست أداة صحة نفسية عامة — هي <strong style="color:var(--teal)">منصة تشخيص إرهاق وظيفي ذكي</strong>:<br>المهنة × اللهجة × السياق الثقافي × 120 طبقة AI = تقييم فريد لكل شخص</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💎 القيم الجوهرية</div>
+    <div class="tags" style="margin-top:12px">
+      <span class="tag">💡 الابتكار المستدام</span>
+      <span class="tag">⭐ الجودة أولاً</span>
+      <span class="tag">🇦🇪 الانتماء الإماراتي</span>
+      <span class="tag">⚡ التمكين الحقيقي</span>
+      <span class="tag">🔒 الخصوصية والثقة</span>
+      <span class="tag">🌱 الأثر الدائم</span>
+      <span class="tag">♿ الشمولية</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎨 الهوية البصرية المعتمدة</div>
+    <div class="brand-grid" style="margin-top:16px">
+      <div class="brand-card">
+        <div class="b-label">🎨 الألوان</div>
+        <div class="color-swatch">
+          <div class="swatch" style="background:#0c0f1a" title="#0C0F1A الداكن"></div>
+          <div class="swatch" style="background:#2dd4bf" title="#2DD4BF التركواز"></div>
+          <div class="swatch" style="background:#14b8a6" title="#14B8A6 التركواز الداكن"></div>
+        </div>
+        <p style="font-size:12px;color:var(--text3)">#0C0F1A الداكن<br>#2DD4BF التركواز الأساسي<br>#14B8A6 التركواز الثانوي</p>
+      </div>
+      <div class="brand-card">
+        <div class="b-label">✏️ الخط</div>
+        <p style="font-size:14px;color:var(--text);margin:8px 0">Tajawal</p>
+        <p style="font-size:12px;color:var(--text3)">عربي حديث ونظيف<br>8 أوزان متاحة<br>مجاني من Google Fonts</p>
+      </div>
+      <div class="brand-card">
+        <div class="b-label">🌬️ الشعار</div>
+        <p style="font-size:14px;color:var(--text);margin:8px 0">نَفَس · Nafas</p>
+        <p style="font-size:12px;color:var(--text3)">Breathe Before You Break<br>أنيميشن التنفس المميز<br>دائرة تركوازية متوهجة</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">👥 الجمهور المستهدف — 8 شرائح</div>
+    <div class="card-grid-4" style="margin-top:12px">
+      <div class="audience-card"><div class="a-icon">👩‍🏫</div><div class="a-title">المعلمون</div><div class="a-desc">الشريحة الأولى — إرهاق تعليمي مزمن</div></div>
+      <div class="audience-card"><div class="a-icon">🏥</div><div class="a-title">الأطباء والتمريض</div><div class="a-desc">أعلى معدلات الإرهاق عالمياً</div></div>
+      <div class="audience-card"><div class="a-icon">🏦</div><div class="a-title">موظفو البنوك</div><div class="a-desc">ضغط مالي ونفسي مستمر</div></div>
+      <div class="audience-card"><div class="a-icon">👨‍💻</div><div class="a-title">العاملون في التقنية</div><div class="a-desc">Burnout culture سائدة</div></div>
+      <div class="audience-card"><div class="a-icon">🔍</div><div class="a-title">الباحثون عن عمل</div><div class="a-desc">ضغط البحث والرفض المتكرر</div></div>
+      <div class="audience-card"><div class="a-icon">🏗️</div><div class="a-title">موظفو الصناعة</div><div class="a-desc">بيئة عمل شاقة وخطرة</div></div>
+      <div class="audience-card"><div class="a-icon">🏛️</div><div class="a-title">الموظف الحكومي</div><div class="a-desc">ضغط إداري وبيروقراطي</div></div>
+      <div class="audience-card"><div class="a-icon">🌍</div><div class="a-title">أي موظف — عالمياً</div><div class="a-desc">الإرهاق لا يعرف حدوداً</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. ROADMAP ============ -->
+<section id="roadmap" class="section">
+  <div class="section-header">
+    <span class="section-icon">🗺️</span>
+    <div>
+      <div class="section-title">خارطة الطريق</div>
+      <div class="section-desc">المراحل الزمنية من الإطلاق إلى التوسع العالمي</div>
+    </div>
+  </div>
+
+  <div class="alert alert-urgent">
+    <span class="alert-icon">⏰</span>
+    <div class="alert-text">
+      <div class="alert-title">مسابقة صندوق خليفة — الموعد النهائي 5 يونيو!</div>
+      <div id="countdown-text">جاري الحساب...</div>
+    </div>
+  </div>
+
+  <div class="card-grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-num">120</div><div class="stat-label">طبقة ذكاء</div></div>
+    <div class="stat-card"><div class="stat-num">7,506</div><div class="stat-label">سطر كود</div></div>
+    <div class="stat-card"><div class="stat-num">166</div><div class="stat-label">اختبار ناجح</div></div>
+    <div class="stat-card"><div class="stat-num">530</div><div class="stat-label">KB حجم الملف</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 المراحل الأربع</div>
+    <div class="timeline" style="margin-top:16px">
+      <div class="tl-item">
+        <div class="tl-date">المرحلة 1 — يونيو 2026</div>
+        <div class="tl-title">🚀 الإطلاق والحماية</div>
+        <div class="tl-desc">تسجيل المصنف الفكري + براءة الاختراع + التقديم على مسابقة صندوق خليفة + نشر نَفَس على Vercel + تسجيل العلامة التجارية</div>
+      </div>
+      <div class="tl-item gold">
+        <div class="tl-date">المرحلة 2 — يوليو–أكتوبر 2026</div>
+        <div class="tl-title">📈 البناء والتجهيز</div>
+        <div class="tl-desc">تطوير Demo Mode + تصميم مواد البوث + حملات تسويقية + تجهيز Pitch Deck + بناء الأداة الثانية (كاشف الانحياز) + تحويل PWA/App Store</div>
+      </div>
+      <div class="tl-item purple">
+        <div class="tl-date">المرحلة 3 — نوفمبر 2026</div>
+        <div class="tl-title">🏆 المعرض والإطلاق الرسمي</div>
+        <div class="tl-desc">توظيف × زاهب 2026 (17–19 نوفمبر) — الإطلاق الرسمي أمام 12,000+ زائر + شراكات B2B + تغطية إعلامية</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">المرحلة 4 — 2027–2028</div>
+        <div class="tl-title">🌍 التوسع الإقليمي والعالمي</div>
+        <div class="tl-desc">التوسع لـ 6 دول عربية + إضافة الإنجليزية + إطلاق API للمؤسسات + 10 أدوات تعليمية متكاملة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 الجدول التفصيلي — يونيو 2026</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>المهمة</th><th>الموعد</th><th>الأولوية</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <tr><td>التقديم على مسابقة صندوق خليفة</td><td>قبل 5 يونيو</td><td><span class="badge badge-red">عاجل</span></td><td>⏳</td></tr>
+          <tr><td>تسجيل مصنف فكري (50 درهم)</td><td>أول يوم عمل بعد العيد</td><td><span class="badge badge-red">عاجل</span></td><td>⏳</td></tr>
+          <tr><td>إعداد Pitch Deck</td><td>30–31 مايو</td><td><span class="badge badge-red">عاجل</span></td><td>⏳</td></tr>
+          <tr><td>نشر نَفَس على Vercel</td><td>1–5 يونيو</td><td><span class="badge badge-gold">مهم</span></td><td>⏳</td></tr>
+          <tr><td>إرسال استفسار المشاركة في المعرض</td><td>1–10 يونيو</td><td><span class="badge badge-gold">مهم</span></td><td>⏳</td></tr>
+          <tr><td>طلب شراكة العافية</td><td>1–10 يونيو</td><td><span class="badge badge-gold">مهم</span></td><td>⏳</td></tr>
+          <tr><td>تقديم طلب براءة اختراع</td><td>خلال يونيو</td><td><span class="badge badge-blue">مهم</span></td><td>⏳</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. FINANCIAL ============ -->
+<section id="financial" class="section">
+  <div class="section-header">
+    <span class="section-icon">💰</span>
+    <div>
+      <div class="section-title">الخطة المالية</div>
+      <div class="section-desc">التكاليف، الإيرادات، ونماذج التسعير</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💳 التكاليف التأسيسية (المنجزة والمطلوبة)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>البند</th><th>التكلفة</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <tr><td>رخصة تاجر أبوظبي</td><td>مجاني (مبادرة حكومية)</td><td><span class="badge badge-gold">قيد المعالجة</span></td></tr>
+          <tr><td>تسجيل مصنف فكري</td><td>50 درهم</td><td><span class="badge badge-red">لم يُقدَّم</span></td></tr>
+          <tr><td>براءة اختراع</td><td>~1,000 درهم</td><td><span class="badge badge-red">لم يُقدَّم</span></td></tr>
+          <tr><td>العلامة التجارية "نَفَس"</td><td>~3,000 درهم</td><td><span class="badge badge-blue">ينتظر الرخصة</span></td></tr>
+          <tr><td>نطاق nafas.app (اختياري)</td><td>~150 درهم/سنة</td><td>⏳</td></tr>
+          <tr><td>Vercel Pro (اختياري)</td><td>73 درهم/شهر</td><td>مجاني حالياً</td></tr>
+          <tr><td>Supabase (مجاني حالياً)</td><td>0 → 92 درهم/شهر</td><td><span class="badge badge-green">مجاني</span></td></tr>
+          <tr><td>Gemini API (مجاني حالياً)</td><td>0 → حسب الاستخدام</td><td><span class="badge badge-green">مجاني</span></td></tr>
+          <tr style="background:var(--teal-dim)"><td><strong>المجموع التأسيسي</strong></td><td><strong>~4,200 درهم</strong></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💵 نموذج الإيرادات — ثلاثي المسار</div>
+    <div class="tabs" id="revenue-tabs">
+      <button class="tab-btn active" data-tab="b2c">👤 B2C — أفراد</button>
+      <button class="tab-btn" data-tab="b2b">🏢 B2B — شركات</button>
+      <button class="tab-btn" data-tab="b2g">🏛️ B2G — حكومات</button>
+    </div>
+    <div id="tab-b2c" class="tab-content active">
+      <div class="table-wrap"><table>
+        <thead><tr><th>الباقة</th><th>السعر</th><th>المميزات</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-green">مجاني</span> أساسي</td><td>0</td><td>3 جلسات/شهر + تحقق سريع فقط</td></tr>
+          <tr><td><span class="badge badge-teal">بريميوم</span></td><td>19 درهم/شهر</td><td>جلسات لا محدودة + 3 أوضاع + تقارير PDF + تاريخ الجلسات</td></tr>
+          <tr><td><span class="badge badge-gold">سنوي</span></td><td>149 درهم/سنة</td><td>كل مميزات بريميوم + خصم 35%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-b2b" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>الباقة</th><th>السعر</th><th>المميزات</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-blue">Starter</span> حتى 50 موظف</td><td>499 درهم/شهر</td><td>لوحة تحكم HR + تقارير مجهولة + 3 أوضاع</td></tr>
+          <tr><td><span class="badge badge-purple">Business</span> حتى 500 موظف</td><td>1,999 درهم/شهر</td><td>كل Starter + API + تخصيص + دعم أولوي</td></tr>
+          <tr><td><span class="badge badge-gold">Enterprise</span> 500+</td><td>حسب الطلب</td><td>كل Business + SLA + white-label + تدريب</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-b2g" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>النموذج</th><th>التفاصيل</th></tr></thead>
+        <tbody>
+          <tr><td>ترخيص سنوي للوزارة/الجهة</td><td>10,000–50,000 درهم/سنة حسب عدد الموظفين</td></tr>
+          <tr><td>مشروع تكامل مخصص</td><td>50,000–200,000 درهم لمرة واحدة</td></tr>
+          <tr><td>شراكة بحثية</td><td>تمويل مشترك + بيانات مجهولة</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 التوقعات المالية — 3 سنوات</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>البند</th><th>2026 (6 أشهر)</th><th>2027</th><th>2028</th></tr></thead>
+        <tbody>
+          <tr><td>مستخدمون (B2C)</td><td>500</td><td>10,000</td><td>100,000</td></tr>
+          <tr><td>عملاء (B2B)</td><td>3</td><td>25</td><td>100</td></tr>
+          <tr><td>إيرادات B2C</td><td>5,000 AED</td><td>120,000 AED</td><td>1,200,000 AED</td></tr>
+          <tr><td>إيرادات B2B</td><td>15,000 AED</td><td>300,000 AED</td><td>2,400,000 AED</td></tr>
+          <tr><td>إيرادات B2G</td><td>0</td><td>50,000 AED</td><td>500,000 AED</td></tr>
+          <tr style="background:var(--teal-dim)"><td><strong>إجمالي الإيرادات</strong></td><td><strong>20,000 AED</strong></td><td><strong>470,000 AED</strong></td><td><strong>4,100,000 AED</strong></td></tr>
+          <tr><td>التكاليف التشغيلية</td><td>8,000 AED</td><td>120,000 AED</td><td>800,000 AED</td></tr>
+          <tr style="background:var(--green-dim)"><td><strong>صافي الربح</strong></td><td><strong>12,000 AED</strong></td><td><strong>350,000 AED</strong></td><td><strong>3,300,000 AED</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 ميزانية المعرض — 3 سيناريوهات</div>
+    <div class="tabs" id="budget-tabs">
+      <button class="tab-btn active" data-tab="budgetA">🟢 الحد الأدنى<br><small>~850–2,850 AED</small></button>
+      <button class="tab-btn" data-tab="budgetB">🟡 المتوسط<br><small>~9,000–14,000 AED</small></button>
+      <button class="tab-btn" data-tab="budgetC">🔴 المتميّز<br><small>~27,500 AED</small></button>
+    </div>
+    <div id="tab-budgetA" class="tab-content active">
+      <div class="table-wrap"><table>
+        <thead><tr><th>البند</th><th>التكلفة</th></tr></thead>
+        <tbody>
+          <tr><td>بوث ركن ريادة الأعمال</td><td>مجاني–2,000 AED</td></tr>
+          <tr><td>بروشورات 200 نسخة</td><td>300 AED</td></tr>
+          <tr><td>بطاقات عمل 500</td><td>150 AED</td></tr>
+          <tr><td>Roll-up Banner</td><td>250 AED</td></tr>
+          <tr><td>QR Code stand أكريليك</td><td>50 AED</td></tr>
+          <tr><td>ملصقات 500</td><td>100 AED</td></tr>
+          <tr style="background:var(--green-dim)"><td><strong>المجموع</strong></td><td><strong>850–2,850 AED</strong></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-budgetB" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>البند</th><th>التكلفة</th></tr></thead>
+        <tbody>
+          <tr><td>بوث 3×3 م</td><td>5,000–10,000 AED</td></tr>
+          <tr><td>شاشة 43" إيجار 3 أيام</td><td>800 AED</td></tr>
+          <tr><td>Roll-up Banners ×2</td><td>500 AED</td></tr>
+          <tr><td>بروشورات 500</td><td>600 AED</td></tr>
+          <tr><td>بطاقات عمل 1,000</td><td>250 AED</td></tr>
+          <tr><td>هدايا ترويجية</td><td>1,500 AED</td></tr>
+          <tr><td>ملصقات + أساور</td><td>300 AED</td></tr>
+          <tr style="background:var(--gold-dim)"><td><strong>المجموع</strong></td><td><strong>9,050–14,050 AED</strong></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-budgetC" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>البند</th><th>التكلفة</th></tr></thead>
+        <tbody>
+          <tr><td>بوث مخصص 4×4 م</td><td>15,000 AED</td></tr>
+          <tr><td>شاشتان + iPad تفاعلي</td><td>2,000 AED</td></tr>
+          <tr><td>بروشورات + كتيّب 1,000</td><td>2,000 AED</td></tr>
+          <tr><td>هدايا مميزة (كوب + مفكرة)</td><td>5,000 AED</td></tr>
+          <tr><td>بانرات كبيرة</td><td>1,500 AED</td></tr>
+          <tr><td>تصوير فيديو</td><td>2,000 AED</td></tr>
+          <tr style="background:var(--rose-dim)"><td><strong>المجموع</strong></td><td><strong>~27,500 AED</strong></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. TECH ============ -->
+<section id="tech" class="section">
+  <div class="section-header">
+    <span class="section-icon">⚙️</span>
+    <div>
+      <div class="section-title">التكنولوجيا</div>
+      <div class="section-desc">البنية التقنية، المكونات، وخارطة التطوير</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏗️ البنية التقنية الحالية</div>
+    <div class="card-grid-3" style="margin-top:12px">
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">🧠</div><div class="stat-label">نموذج الذكاء</div><div style="color:var(--teal);font-weight:700;margin-top:4px">Gemini 2.5 Flash</div></div>
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">🗄️</div><div class="stat-label">قاعدة البيانات</div><div style="color:var(--teal);font-weight:700;margin-top:4px">Supabase (PostgreSQL)</div></div>
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">🌐</div><div class="stat-label">الاستضافة</div><div style="color:var(--teal);font-weight:700;margin-top:4px">Vercel (Serverless)</div></div>
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">📱</div><div class="stat-label">النوع</div><div style="color:var(--teal);font-weight:700;margin-top:4px">PWA (تطبيق ويب تقدمي)</div></div>
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">🔐</div><div class="stat-label">الأمان</div><div style="color:var(--teal);font-weight:700;margin-top:4px">لا بيانات شخصية</div></div>
+      <div class="stat-card"><div style="font-size:28px;margin-bottom:6px">🔗</div><div class="stat-label">الـ API</div><div style="color:var(--teal);font-weight:700;margin-top:4px">Serverless Proxy</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧬 الأوضاع الثلاثة</div>
+    <div class="card-grid" style="margin-top:12px">
+      <div style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:var(--radius-sm);padding:16px;text-align:center">
+        <div style="font-size:28px">⚡</div>
+        <div style="font-weight:700;margin:8px 0;color:var(--teal)">تحقق سريع</div>
+        <div style="font-size:12px;color:var(--text3)">90 ثانية — 5 أسئلة<br>فحص أولي لمستوى الإرهاق</div>
+      </div>
+      <div style="background:var(--purple-dim);border:1px solid var(--purple);border-radius:var(--radius-sm);padding:16px;text-align:center">
+        <div style="font-size:28px">📊</div>
+        <div style="font-weight:700;margin:8px 0;color:var(--purple)">تقييم عميق</div>
+        <div style="font-size:12px;color:var(--text3)">15–20 دقيقة — تحليل شامل<br>تقرير مفصّل + توصيات</div>
+      </div>
+      <div style="background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius-sm);padding:16px;text-align:center">
+        <div style="font-size:28px">💙</div>
+        <div style="font-weight:700;margin:8px 0;color:var(--gold)">فضفضة حرة</div>
+        <div style="font-size:12px;color:var(--text3)">بدون وقت محدد<br>حوار مفتوح مع AI إنساني</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔧 تحسينات مطلوبة للمعرض</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>الميزة</th><th>الوصف</th><th>الأولوية</th></tr></thead>
+        <tbody>
+          <tr><td>Demo Mode</td><td>وضع عرض مخصص للبوث — يبدأ بسؤال واحد فقط</td><td><span class="badge badge-red">عالية</span></td></tr>
+          <tr><td>شاشة QR Code</td><td>شاشة نهاية تعرض QR لتحميل التطبيق</td><td><span class="badge badge-red">عالية</span></td></tr>
+          <tr><td>إحصائيات حية</td><td>لوحة تعرض: "كم شخص فحص اليوم"</td><td><span class="badge badge-gold">متوسطة</span></td></tr>
+          <tr><td>بانر المعرض</td><td>شريط خاص "نَفَس في توظيف × زاهب"</td><td><span class="badge badge-gold">متوسطة</span></td></tr>
+          <tr><td>زر المشاركة</td><td>مشاركة النتيجة على وسائل التواصل</td><td><span class="badge badge-blue">منخفضة</span></td></tr>
+          <tr><td>استبيان التجربة</td><td>"كيف كانت تجربتك؟" — 3 نجوم</td><td><span class="badge badge-blue">منخفضة</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📱 مسار التطبيقات الأصلية</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>المنصة</th><th>التقنية</th><th>التوقيت</th><th>التكلفة</th></tr></thead>
+        <tbody>
+          <tr><td>🌐 ويب (حالي)</td><td>PWA — HTML/CSS/JS</td><td>✅ جاهز</td><td>مجاني</td></tr>
+          <tr><td>📱 iOS</td><td>Capacitor (من الكود الحالي)</td><td>أغسطس 2026</td><td>375 AED/سنة (Apple Developer)</td></tr>
+          <tr><td>🤖 Android</td><td>Capacitor (من الكود الحالي)</td><td>أغسطس 2026</td><td>92 AED مرة واحدة (Google Play)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. MARKETING ============ -->
+<section id="marketing" class="section">
+  <div class="section-header">
+    <span class="section-icon">📣</span>
+    <div>
+      <div class="section-title">التسويق</div>
+      <div class="section-desc">الاستراتيجية التسويقية، القنوات، والمحتوى</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎤 الرسائل التسويقية الأساسية</div>
+    <div class="vision-box" style="border-color:var(--gold)">
+      <div class="label">الشعار الرئيسي</div>
+      <div class="text" style="font-size:22px">"<span>نَفَس</span> — لأن البحث عن وظيفة مرهق أيضاً 💙"</div>
+    </div>
+    <div class="card-grid" style="margin-top:12px">
+      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:16px">
+        <div style="font-weight:700;color:var(--teal);margin-bottom:8px">🎯 للأفراد</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.8">"اكتشف إرهاقك في 90 ثانية — بلهجتك — بدون ما أحد يدري"</p>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:16px">
+        <div style="font-weight:700;color:var(--gold);margin-bottom:8px">🏢 للشركات</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.8">"اكتشفوا إرهاق موظفيكم قبل أن يتحول لاستقالة — بأقل من تكلفة استبدال موظف واحد"</p>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:16px">
+        <div style="font-weight:700;color:var(--purple);margin-bottom:8px">🏛️ للحكومات</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.8">"حل إماراتي 100% يدعم رؤية الرفاهية الوطنية — بالذكاء الاصطناعي"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📱 القنوات التسويقية</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>القناة</th><th>المحتوى</th><th>التكرار</th><th>التكلفة</th></tr></thead>
+        <tbody>
+          <tr><td>LinkedIn</td><td>مقالات + إحصائيات + B2B</td><td>3 مرات/أسبوع</td><td>مجاني</td></tr>
+          <tr><td>Instagram</td><td>Reels + Stories + Tips</td><td>يومياً</td><td>مجاني</td></tr>
+          <tr><td>X (Twitter)</td><td>أخبار + تفاعل + Threads</td><td>يومياً</td><td>مجاني</td></tr>
+          <tr><td>TikTok</td><td>فيديوهات قصيرة + تحديات</td><td>3 مرات/أسبوع</td><td>مجاني</td></tr>
+          <tr><td>YouTube</td><td>شروحات + قصص نجاح</td><td>أسبوعياً</td><td>مجاني</td></tr>
+          <tr><td>إعلانات Meta</td><td>حملة مدفوعة قبل المعرض</td><td>أكتوبر–نوفمبر</td><td>2,000–5,000 AED</td></tr>
+          <tr><td>PR (علاقات إعلامية)</td><td>بيان صحفي + مقابلات</td><td>قبل المعرض</td><td>مجاني</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎪 6 أفكار لاستقطاب الجماهير في المعرض</div>
+    <div class="card-grid" style="margin-top:12px">
+      <div class="audience-card"><div class="a-icon">⚡</div><div class="a-title">تحقق 90 ثانية</div><div class="a-desc">"وقّف 90 ثانية واكتشف إرهاقك مجاناً!" — نتيجة فورية على الشاشة</div></div>
+      <div class="audience-card"><div class="a-icon">🌬️</div><div class="a-title">جدار التنفّس</div><div class="a-desc">لوحة يكتب عليها الزوار: "أنا محتاج أتنفس لأن..." — تُصوَّر وتُنشر</div></div>
+      <div class="audience-card"><div class="a-icon">💓</div><div class="a-title">مسابقة أقل نبض</div><div class="a-desc">من يخفّض نبضه أكثر بتمرين التنفس؟ — جائزة بسيطة للفائز</div></div>
+      <div class="audience-card"><div class="a-icon">☕</div><div class="a-title">زاوية الراحة</div><div class="a-desc">مكان هادئ بجوار البوث — "استريح عندنا لأن البحث عن وظيفة يتعب"</div></div>
+      <div class="audience-card"><div class="a-icon">🤔</div><div class="a-title">لوحة تفاعلية</div><div class="a-desc">"هل أنت مُرهق ولا تعرف؟" — 5 أسئلة بتصميم أرضي يقف عليه الزائر</div></div>
+      <div class="audience-card"><div class="a-icon">📱</div><div class="a-title">#جرّب_نَفَس</div><div class="a-desc">تحدي وسائل التواصل — شارك تجربتك وادخل سحب على هدية</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. PARTNERSHIPS ============ -->
+<section id="partners" class="section">
+  <div class="section-header">
+    <span class="section-icon">🤝</span>
+    <div>
+      <div class="section-title">الشراكات والاستثمار</div>
+      <div class="section-desc">الشركات المستهدفة وفرص التمويل</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏢 الشركات المستهدفة — 80+ جهة في 7 فئات</div>
+    <div class="filters" id="company-filters">
+      <button class="filter-btn active" data-filter="all">الكل</button>
+      <button class="filter-btn" data-filter="gov">🏛️ حكومية</button>
+      <button class="filter-btn" data-filter="bank">🏦 بنوك</button>
+      <button class="filter-btn" data-filter="tech">📡 تقنية</button>
+      <button class="filter-btn" data-filter="industry">🏗️ صناعة</button>
+      <button class="filter-btn" data-filter="consult">🏢 استشارات</button>
+      <button class="filter-btn" data-filter="edu">🎓 تعليم</button>
+      <button class="filter-btn" data-filter="strategic">🤝 استراتيجي</button>
+    </div>
+    <div class="table-wrap">
+      <table id="companies-table">
+        <thead><tr><th>الجهة</th><th>الفئة</th><th>سبب الاستهداف</th><th>نوع التعامل</th></tr></thead>
+        <tbody>
+          <tr data-cat="gov"><td>صندوق خليفة (KFED)</td><td><span class="badge badge-purple">حكومية</span></td><td>شريك رواد الأعمال الرسمي + المسابقة</td><td>مسابقة + شراكة</td></tr>
+          <tr data-cat="gov"><td>نافس (البرنامج الحكومي)</td><td><span class="badge badge-purple">حكومية</span></td><td>دعم التمكين الوظيفي + الرفاهية</td><td>شراكة استراتيجية</td></tr>
+          <tr data-cat="gov"><td>مجلس الأمن السيبراني</td><td><span class="badge badge-purple">حكومية</span></td><td>AI + الابتكار</td><td>عرض تقني</td></tr>
+          <tr data-cat="gov"><td>شرطة أبوظبي</td><td><span class="badge badge-purple">حكومية</span></td><td>ضغط العمل الأمني = إرهاق</td><td>B2G عرض</td></tr>
+          <tr data-cat="gov"><td>سند</td><td><span class="badge badge-purple">حكومية</span></td><td>دعم الباحثين عن عمل نفسياً</td><td>شراكة</td></tr>
+          <tr data-cat="gov"><td>وزارة الداخلية</td><td><span class="badge badge-purple">حكومية</span></td><td>رفاهية الموظفين الأمنيين</td><td>B2G عرض</td></tr>
+          <tr data-cat="bank"><td>بنك أبوظبي التجاري ADCB</td><td><span class="badge badge-blue">بنوك</span></td><td>قطاع مصرفي = إرهاق عالي</td><td>B2B عرض</td></tr>
+          <tr data-cat="bank"><td>بنك أبوظبي الأول FAB</td><td><span class="badge badge-blue">بنوك</span></td><td>أكبر بنك بالإمارات</td><td>B2B عرض</td></tr>
+          <tr data-cat="bank"><td>مصرف أبوظبي الإسلامي ADIB</td><td><span class="badge badge-blue">بنوك</span></td><td>قطاع مصرفي</td><td>B2B عرض</td></tr>
+          <tr data-cat="bank"><td>البنك المركزي</td><td><span class="badge badge-blue">بنوك</span></td><td>جهة تنظيمية + ضغط عمل</td><td>B2B/B2G</td></tr>
+          <tr data-cat="tech"><td>اتصالات e&</td><td><span class="badge badge-teal">تقنية</span></td><td>أكبر شركة اتصالات + برامج رفاهية</td><td>B2B عرض</td></tr>
+          <tr data-cat="tech"><td>Core42 (G42)</td><td><span class="badge badge-teal">تقنية</span></td><td>ذكاء اصطناعي</td><td>شراكة تقنية</td></tr>
+          <tr data-cat="tech"><td>Cognizant</td><td><span class="badge badge-teal">تقنية</span></td><td>استشارات تقنية عالمية</td><td>B2B عرض</td></tr>
+          <tr data-cat="industry"><td>الإمارات للألمنيوم EGA</td><td><span class="badge badge-gold">صناعة</span></td><td>صناعة ثقيلة = ضغط + حوادث</td><td>B2B عرض</td></tr>
+          <tr data-cat="industry"><td>TAQA</td><td><span class="badge badge-gold">صناعة</span></td><td>قطاع الطاقة</td><td>B2B عرض</td></tr>
+          <tr data-cat="industry"><td>Siemens Energy</td><td><span class="badge badge-gold">صناعة</span></td><td>طاقة عالمية</td><td>B2B عرض</td></tr>
+          <tr data-cat="consult"><td>EY (Ernst & Young)</td><td><span class="badge badge-red">استشارات</span></td><td>Big 4 — برامج رفاهية</td><td>B2B عرض</td></tr>
+          <tr data-cat="consult"><td>PwC</td><td><span class="badge badge-red">استشارات</span></td><td>Big 4</td><td>B2B عرض</td></tr>
+          <tr data-cat="consult"><td>ManpowerGroup</td><td><span class="badge badge-red">استشارات</span></td><td>أكبر شركة توظيف</td><td>شراكة توزيع</td></tr>
+          <tr data-cat="edu"><td>جامعة أبوظبي</td><td><span class="badge badge-green">تعليم</span></td><td>رفاهية الطلاب والأكاديميين</td><td>شراكة أكاديمية</td></tr>
+          <tr data-cat="edu"><td>جامعة العين</td><td><span class="badge badge-green">تعليم</span></td><td>قريبة جغرافياً (العين)</td><td>شراكة محلية</td></tr>
+          <tr data-cat="edu"><td>كليات التقنية العليا HCT</td><td><span class="badge badge-green">تعليم</span></td><td>أكبر مؤسسة تعليمية</td><td>B2B عرض</td></tr>
+          <tr data-cat="strategic"><td>ImInclusive</td><td><span class="badge badge-teal">استراتيجي</span></td><td>شريك إدماج أصحاب الهمم</td><td>شراكة قيمية</td></tr>
+          <tr data-cat="strategic"><td>Informa Connect</td><td><span class="badge badge-teal">استراتيجي</span></td><td>منظّم المعرض — شراكة العافية</td><td>Wellness Partner</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏦 فرص التمويل والدعم</div>
+    <div class="card-grid" style="margin-top:12px">
+      <div class="audience-card" style="border:1px solid var(--gold)"><div class="a-icon">🏆</div><div class="a-title" style="color:var(--gold)">مسابقة صندوق خليفة</div><div class="a-desc">+1 مليون درهم جوائز — مجاني — قبل 5 يونيو!</div></div>
+      <div class="audience-card"><div class="a-icon">🏛️</div><div class="a-title">صندوق خليفة — تمويل</div><div class="a-desc">قروض ميسّرة + دعم فني للمشاريع الناشئة</div></div>
+      <div class="audience-card"><div class="a-icon">🌱</div><div class="a-title">Hub71</div><div class="a-desc">مسرّعة أعمال أبوظبي — تمويل + مقر + إرشاد</div></div>
+      <div class="audience-card"><div class="a-icon">💡</div><div class="a-title">شراكات بحثية</div><div class="a-desc">جامعات + مراكز أبحاث — تمويل مشترك</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. EXHIBITION ============ -->
+<section id="exhibition" class="section">
+  <div class="section-header">
+    <span class="section-icon">🏆</span>
+    <div>
+      <div class="section-title">المعرض 2026</div>
+      <div class="section-desc">توظيف × زاهب — 17–19 نوفمبر — أدنيك أبوظبي</div>
+    </div>
+  </div>
+
+  <div class="card-grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-num">12,000+</div><div class="stat-label">زائر متوقع</div></div>
+    <div class="stat-card"><div class="stat-num">100+</div><div class="stat-label">عارض</div></div>
+    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">أيام</div></div>
+    <div class="stat-card"><div class="stat-num">20</div><div class="stat-label">سنة — الذكرى</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 جدول الأيام الثلاثة</div>
+    <div class="tabs" id="days-tabs">
+      <button class="tab-btn active" data-tab="day1">🚀 يوم 1 — الإطلاق</button>
+      <button class="tab-btn" data-tab="day2">🤝 يوم 2 — الشراكات</button>
+      <button class="tab-btn" data-tab="day3">📊 يوم 3 — الحصاد</button>
+    </div>
+    <div id="tab-day1" class="tab-content active">
+      <div class="table-wrap"><table>
+        <thead><tr><th>الوقت</th><th>النشاط</th></tr></thead>
+        <tbody>
+          <tr><td>8:00–9:00</td><td>الوصول وتجهيز البوث</td></tr>
+          <tr><td>9:00–10:00</td><td>افتتاح + جولة على الأجنحة</td></tr>
+          <tr><td>10:00–12:00</td><td>🔥 عروض حية لنَفَس — "جرّب التحقق السريع"</td></tr>
+          <tr><td>12:00–13:00</td><td>استراحة + networking مع العارضين</td></tr>
+          <tr><td>13:00–15:00</td><td>لقاءات B2B مجدولة مع HR الشركات</td></tr>
+          <tr><td>15:00–17:00</td><td>تجارب حية + جمع بيانات الاتصال</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-day2" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>الوقت</th><th>النشاط</th></tr></thead>
+        <tbody>
+          <tr><td>10:00–11:00</td><td>🎤 Mini Workshop: "كيف تكتشف إرهاقك قبل ما يكتشفك"</td></tr>
+          <tr><td>11:00–13:00</td><td>لقاءات مع الجهات الحكومية</td></tr>
+          <tr><td>13:00–14:00</td><td>🏆 عرض في ركن ريادة الأعمال (Pitch)</td></tr>
+          <tr><td>14:00–16:00</td><td>تجارب حية + مقابلات إعلامية</td></tr>
+          <tr><td>16:00–17:00</td><td>جلسة مع مسؤولي التوطين</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div id="tab-day3" class="tab-content">
+      <div class="table-wrap"><table>
+        <thead><tr><th>الوقت</th><th>النشاط</th></tr></thead>
+        <tbody>
+          <tr><td>10:00–12:00</td><td>آخر الجولات + تجارب</td></tr>
+          <tr><td>12:00–14:00</td><td>لقاءات متابعة مع الجهات المهتمة</td></tr>
+          <tr><td>14:00–16:00</td><td>جمع التغذية الراجعة + استبيان</td></tr>
+          <tr><td>16:00–17:00</td><td>📸 إغلاق + صور + شكر</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎁 ماذا يأخذ الزائر معه؟</div>
+    <div class="card-grid-3" style="margin-top:12px">
+      <div class="audience-card"><div class="a-icon">📱</div><div class="a-title">تجربة شخصية</div><div class="a-desc">رمز رحلة لاستكمال التقييم لاحقاً</div></div>
+      <div class="audience-card"><div class="a-icon">📲</div><div class="a-title">QR Code</div><div class="a-desc">رابط مباشر لتحميل نَفَس</div></div>
+      <div class="audience-card"><div class="a-icon">📄</div><div class="a-title">بروشور</div><div class="a-desc">عربي/إنجليزي بهوية نَفَس</div></div>
+      <div class="audience-card"><div class="a-icon">🏷️</div><div class="a-title">ملصق</div><div class="a-desc">"أنا فحصت نفسي 💙"</div></div>
+      <div class="audience-card"><div class="a-icon">📧</div><div class="a-title">إيميل متابعة</div><div class="a-desc">بعد 48 ساعة بنتائج وروابط</div></div>
+      <div class="audience-card"><div class="a-icon">😊</div><div class="a-title">تجربة إنسانية</div><div class="a-desc">شعور بأن أحداً يهتم</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. IP ============ -->
+<section id="ip" class="section">
+  <div class="section-header">
+    <span class="section-icon">📜</span>
+    <div>
+      <div class="section-title">الملكية الفكرية</div>
+      <div class="section-desc">حماية الابتكار — مصنف فكري، براءة اختراع، علامة تجارية</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🛡️ خطة الحماية الثلاثية</div>
+    <div class="card-grid" style="margin-top:12px">
+      <div style="background:var(--green-dim);border:1px solid var(--green);border-radius:var(--radius);padding:20px">
+        <div style="font-size:28px;text-align:center">📜</div>
+        <div style="font-weight:700;text-align:center;margin:8px 0;color:var(--green)">مصنف فكري (حق المؤلف)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <strong>يحمي:</strong> الكود + الواجهة + النصوص + التصميم<br>
+          <strong>التكلفة:</strong> 50 درهم فقط<br>
+          <strong>المدة:</strong> حياة المؤلف + 50 سنة<br>
+          <strong>التوقيت:</strong> فوراً بعد العيد<br>
+          <strong>الحالة:</strong> <span class="badge badge-red">لم يُقدَّم</span>
+        </div>
+      </div>
+      <div style="background:var(--blue-dim);border:1px solid var(--blue);border-radius:var(--radius);padding:20px">
+        <div style="font-size:28px;text-align:center">🔧</div>
+        <div style="font-weight:700;text-align:center;margin:8px 0;color:var(--blue)">براءة اختراع</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <strong>يحمي:</strong> منهجية الـ 120 طبقة<br>
+          <strong>التكلفة:</strong> ~1,000 درهم<br>
+          <strong>المدة:</strong> 20 سنة<br>
+          <strong>التوقيت:</strong> يونيو 2026<br>
+          <strong>الحالة:</strong> <span class="badge badge-red">لم يُقدَّم</span>
+        </div>
+      </div>
+      <div style="background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius);padding:20px">
+        <div style="font-size:28px;text-align:center">™️</div>
+        <div style="font-weight:700;text-align:center;margin:8px 0;color:var(--gold)">علامة تجارية "نَفَس"</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <strong>يحمي:</strong> الاسم + الشعار + الهوية<br>
+          <strong>التكلفة:</strong> ~3,000 درهم<br>
+          <strong>المدة:</strong> 10 سنوات (قابلة للتجديد)<br>
+          <strong>التوقيت:</strong> بعد صدور الرخصة<br>
+          <strong>الحالة:</strong> <span class="badge badge-gold">ينتظر الرخصة</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <span class="alert-icon">💡</span>
+    <div class="alert-text">
+      <div class="alert-title">ملاحظة مهمة عن الذكاء الاصطناعي</div>
+      أنتِ المخترعة والمؤلفة قانونياً — الـ AI أداتك مثل القلم في يد الكاتب. عند التقديم اكتبي: "تم تطوير التطبيق باستخدام أدوات ذكاء اصطناعي مساعدة تحت إشراف وتوجيه المؤلفة/المخترعة بالكامل"
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. TEMPLATES ============ -->
+<section id="templates" class="section">
+  <div class="section-header">
+    <span class="section-icon">📋</span>
+    <div>
+      <div class="section-title">القوالب الجاهزة</div>
+      <div class="section-desc">إيميلات، منشورات، وخطابات — جاهزة للنسخ والإرسال</div>
+    </div>
+  </div>
+
+  <div class="tabs" id="template-tabs">
+    <button class="tab-btn active" data-tab="tpl1">📧 طلب عرض</button>
+    <button class="tab-btn" data-tab="tpl2">🤝 شراكة العافية</button>
+    <button class="tab-btn" data-tab="tpl3">🏢 B2B</button>
+    <button class="tab-btn" data-tab="tpl4">📱 منشورات</button>
+    <button class="tab-btn" data-tab="tpl5">🎤 Pitch</button>
+    <button class="tab-btn" data-tab="tpl6">📋 استفسار الموقع</button>
+  </div>
+
+  <div id="tab-tpl1" class="tab-content active">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">📧 إيميل طلب المشاركة كعارض</div>
+      <div class="template-box rtl-t">Subject: طلب المشاركة في ركن ريادة الأعمال — توظيف × زاهب 2026
+
+السادة المحترمون في فريق تنظيم "توظيف × زاهب 2026"،
+
+تحية طيبة،
+
+أنا منيرة علي المري، مؤسسة "بوابة الجود الذكية" — مشروع تقني إماراتي مُرخّص بموجب رخصة تاجر أبوظبي (CN-6573712).
+
+أرغب في المشاركة كعارضة في ركن ريادة الأعمال الجديد ضمن نسخة 2026، لعرض منتجنا الرئيسي "نَفَس" — أول أداة ذكاء اصطناعي باللغة العربية لتشخيص الإرهاق الوظيفي.
+
+نبذة عن نَفَس:
+• أداة ذكاء اصطناعي بـ 120 طبقة تحليل
+• تعمل بـ 4 لهجات عربية + الإنجليزية
+• 3 أوضاع: تحقق سريع | فضفضة حرة | تقييم عميق
+• مُسجّلة كملكية فكرية إماراتية
+
+أرجو تزويدي بتفاصيل المشاركة والتكاليف.
+
+مع خالص التقدير،
+منيرة علي المري
+بوابة الجود الذكية | Al Jood Smart Portal
+📧 munira.almarri35@gmail.com</div>
+    </div>
+  </div>
+
+  <div id="tab-tpl2" class="tab-content">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">🤝 طلب شراكة العافية (Wellness Partner)</div>
+      <div class="template-box rtl-t">Subject: عرض شراكة العافية — "نَفَس" | توظيف × زاهب 2026
+
+السادة فريق الشراكات في "توظيف × زاهب 2026"،
+
+تحية طيبة،
+
+أكتب إليكم لاقتراح شراكة العافية (Wellness Partner) لنسخة 2026 من معرض "توظيف × زاهب".
+
+نحن "بوابة الجود الذكية" — مشروع تقني إماراتي يقدّم "نَفَس"، أول أداة ذكاء اصطناعي عربية لتشخيص الإرهاق الوظيفي.
+
+ما يمكننا تقديمه كشريك عافية:
+1. زاوية "التنفّس" — مساحة استرخاء للزوار
+2. جلسات تحقق سريع مجانية — 90 ثانية لكل زائر
+3. ورشة عمل "كيف تكتشف إرهاقك" — 30 دقيقة
+4. تقارير إحصائية مجهولة عن مستوى الإرهاق
+5. محتوى رقمي — نصائح يومية على شاشات المعرض
+
+نَفَس يملك: 120 طبقة AI + ملكية فكرية مسجّلة + رخصة تاجر + MVP مكتمل
+
+نتطلع لمناقشة تفاصيل الشراكة.
+
+منيرة علي المري
+📧 munira.almarri35@gmail.com</div>
+    </div>
+  </div>
+
+  <div id="tab-tpl3" class="tab-content">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">🏢 إيميل B2B للشركات</div>
+      <div class="template-box rtl-t">Subject: نَفَس — حل ذكي لرفاهية موظفيكم | تجربة مجانية في توظيف × زاهب 2026
+
+[اسم المسؤول] المحترم/ة،
+
+تحية طيبة من "بوابة الجود الذكية"،
+
+هل تعلمون أن 70% من الموظفين في الإمارات يعانون من أعراض الإرهاق الوظيفي بدون أن يدركوا؟
+
+نقدّم لكم "نَفَس" — أول أداة ذكاء اصطناعي عربية لتشخيص الإرهاق الوظيفي:
+
+✅ يكشف الإرهاق مبكراً — قبل أن يتحول لاستقالة
+✅ يعمل بـ 120 طبقة تحليل ذكي
+✅ يفهم اللهجة الإماراتية والخليجية
+✅ خصوصية كاملة — بدون اسم أو إيميل
+
+القيمة لشركتكم:
+• تقليل معدل الاستقالات بـ 30-50%
+• اكتشاف مشاكل بيئة العمل مبكراً
+• تحسين إنتاجية الموظفين
+
+ندعوكم لتجربة نَفَس مباشرة في جناحنا بمعرض "توظيف × زاهب 2026" (17–19 نوفمبر — أدنيك أبوظبي).
+
+هل يمكننا ترتيب لقاء قصير خلال المعرض؟
+
+منيرة علي المري
+📧 munira.almarri35@gmail.com</div>
+    </div>
+  </div>
+
+  <div id="tab-tpl4" class="tab-content">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">📱 منشورات وسائل التواصل</div>
+      <div class="template-box rtl-t">🌬️ نَفَس قادم لتوظيف × زاهب 2026!
+
+أول أداة ذكاء اصطناعي إماراتية لتشخيص الإرهاق الوظيفي.
+
+📍 17–19 نوفمبر | أدنيك أبوظبي
+🎯 ركن ريادة الأعمال
+
+البحث عن وظيفة مرهق... ونَفَس يفهم 💙
+
+جرّب التحقق السريع — 90 ثانية فقط!
+
+#نَفَس #توظيف_زاهب_2026 #ذكاء_اصطناعي #صنع_في_الإمارات #ريادة_أعمال #صحة_نفسية
+
+---
+
+⏰ بقي 7 أيام!
+
+نَفَس ينتظرك في توظيف × زاهب 2026.
+اكتشف مستوى إرهاقك مجاناً في 90 ثانية.
+لأن صحتك النفسية أهم من أي وظيفة 💙
+
+📍 أدنيك أبوظبي | 17–19 نوفمبر
+
+#جرّب_نَفَس #توظيف_زاهب_2026</div>
+    </div>
+  </div>
+
+  <div id="tab-tpl5" class="tab-content">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">🎤 Elevator Pitch — 30 ثانية</div>
+      <div class="template-box rtl-t">🇦🇪 بالعربي:
+"أنا منيرة المري — صنعت نَفَس، أول أداة ذكاء اصطناعي إماراتية تفهم إرهاقك الوظيفي بلهجتك. تسوي فحص في 90 ثانية، تكتشف إرهاقك قبل ما يكتشفك، وتعطيك خطة تتنفس فيها. 120 طبقة ذكاء — لأي موظف في أي مهنة في العالم. جرّبها الحين!"
+
+🇬🇧 By English:
+"I'm Munira Al Marri — I built Nafas, the first Arabic AI tool that understands your burnout in your own dialect. A 90-second check, 120 intelligence layers, and it works for any employee in any profession worldwide. Made in the UAE. Try it now!"</div>
+    </div>
+  </div>
+
+  <div id="tab-tpl6" class="tab-content">
+    <div class="card copy-wrap">
+      <button class="copy-btn" onclick="copyTemplate(this)">📋 نسخ</button>
+      <div class="card-title">📋 نص الاستفسار على موقع المعرض (إنجليزي)</div>
+      <div class="template-box">Name: Munira Ali Al Marri
+Company: Al Jood Smart Portal
+Position: Founder & Developer
+Email: munira.almarri35@gmail.com
+
+Message:
+I am interested in exhibiting at Tawdheef x Zaheb 2026, specifically in the new Entrepreneurship Zone. I am the founder of "Nafas" — the first Arabic AI-powered burnout diagnostic tool, registered under Abu Dhabi Trader License CN-6573712.
+
+I would like to:
+1. Inquire about booth options in the Entrepreneurship Zone
+2. Discuss Wellness Partner opportunities for 2026
+3. Propose a mini-workshop: "How to Detect Your Burnout Before It Finds You"
+
+Looking forward to your response.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. INSPECTION ============ -->
+<section id="inspection" class="section">
+  <div class="section-header">
+    <span class="section-icon">🔬</span>
+    <div>
+      <div class="section-title">فحص بأربع عيون</div>
+      <div class="section-desc">تقييم نَفَس من منظور المستثمر، المقيّم التقني، الزبون، والجهة الحكومية</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="eye-card" style="border-top:3px solid var(--gold)">
+      <div class="eye-header" style="color:var(--gold)">👁️ عين المستثمر</div>
+      <div class="eye-body">
+        <table>
+          <tr><td>المشكلة حقيقية؟</td><td><span class="badge badge-green">✅ نعم — 70% إرهاق</span></td></tr>
+          <tr><td>الحل مبتكر؟</td><td><span class="badge badge-green">✅ أول أداة AI عربية</span></td></tr>
+          <tr><td>السوق كبير؟</td><td><span class="badge badge-green">✅ 400M+ عربي</span></td></tr>
+          <tr><td>قابل للتوسع؟</td><td><span class="badge badge-green">✅ SaaS عالمي</span></td></tr>
+          <tr><td>الملكية محمية؟</td><td><span class="badge badge-green">✅ IP + رخصة</span></td></tr>
+          <tr><td>الفريق؟</td><td><span class="badge badge-gold">⚠️ شخص واحد</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="eye-card" style="border-top:3px solid var(--blue)">
+      <div class="eye-header" style="color:var(--blue)">👁️ عين المقيّم التقني</div>
+      <div class="eye-body">
+        <table>
+          <tr><td>بنية الكود</td><td><span class="badge badge-green">✅ 7,500 سطر منظّم</span></td></tr>
+          <tr><td>الاختبارات</td><td><span class="badge badge-green">✅ 166/166</span></td></tr>
+          <tr><td>الأمان</td><td><span class="badge badge-green">✅ لا بيانات شخصية</span></td></tr>
+          <tr><td>AI Quality</td><td><span class="badge badge-green">✅ 120 طبقة</span></td></tr>
+          <tr><td>Responsive</td><td><span class="badge badge-gold">⚠️ يحتاج فحص</span></td></tr>
+          <tr><td>هيكل الإنتاج</td><td><span class="badge badge-gold">⚠️ ملف واحد</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="eye-card" style="border-top:3px solid var(--green)">
+      <div class="eye-header" style="color:var(--green)">👁️ عين الزبون</div>
+      <div class="eye-body">
+        <table>
+          <tr><td>سهل الاستخدام؟</td><td><span class="badge badge-green">✅ واجهة بسيطة</span></td></tr>
+          <tr><td>يفهم لهجتي؟</td><td><span class="badge badge-green">✅ 4 لهجات</span></td></tr>
+          <tr><td>يحتاج حساب؟</td><td><span class="badge badge-green">✅ لا — رمز فقط</span></td></tr>
+          <tr><td>بياناتي آمنة؟</td><td><span class="badge badge-green">✅ لا اسم/إيميل</span></td></tr>
+          <tr><td>إشعارات متابعة</td><td><span class="badge badge-gold">⚠️ غير موجودة</span></td></tr>
+          <tr><td>تطبيق أصلي</td><td><span class="badge badge-gold">⚠️ قيد التطوير</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="eye-card" style="border-top:3px solid var(--purple)">
+      <div class="eye-header" style="color:var(--purple)">👁️ عين الجهة الحكومية</div>
+      <div class="eye-body">
+        <table>
+          <tr><td>رؤية الإمارات 2031</td><td><span class="badge badge-green">✅ صحة نفسية</span></td></tr>
+          <tr><td>توافق مع "نافس"</td><td><span class="badge badge-green">✅ تمكين وظيفي</span></td></tr>
+          <tr><td>عام الأسرة</td><td><span class="badge badge-green">✅ الأسرة العاملة</span></td></tr>
+          <tr><td>توطين 100%</td><td><span class="badge badge-green">✅ إماراتية</span></td></tr>
+          <tr><td>خصوصية البيانات</td><td><span class="badge badge-green">✅ ممتاز</span></td></tr>
+          <tr><td>ISO/SOC2</td><td><span class="badge badge-gold">⚠️ مطلوب لاحقاً</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. KPIs ============ -->
+<section id="kpis" class="section">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <div>
+      <div class="section-title">مؤشرات النجاح</div>
+      <div class="section-desc">KPIs — كيف نقيس التقدم والإنجاز</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 مؤشرات المعرض</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>المؤشر</th><th>الهدف</th><th>التقدم</th></tr></thead>
+        <tbody>
+          <tr><td>تجارب مباشرة في البوث</td><td>500+</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--teal)"></div></div></td></tr>
+          <tr><td>بطاقات عمل مُجمّعة</td><td>200+</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--blue)"></div></div></td></tr>
+          <tr><td>شراكات B2B</td><td>3+</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--gold)"></div></div></td></tr>
+          <tr><td>تحميلات/زيارات</td><td>1,000+</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--purple)"></div></div></td></tr>
+          <tr><td>تغطية إعلامية</td><td>5+ منافذ</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--green)"></div></div></td></tr>
+          <tr><td>ROI</td><td>3x+</td><td><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--orange)"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 مؤشرات 2026 (6 أشهر)</div>
+    <div class="card-grid-3" style="margin-top:12px">
+      <div class="stat-card"><div class="stat-num" style="font-size:24px">500</div><div class="stat-label">مستخدم B2C</div></div>
+      <div class="stat-card"><div class="stat-num" style="font-size:24px">3</div><div class="stat-label">عملاء B2B</div></div>
+      <div class="stat-card"><div class="stat-num" style="font-size:24px">20K</div><div class="stat-label">درهم إيرادات</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 المتابعة بعد المعرض</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>المهمة</th><th>الموعد</th></tr></thead>
+        <tbody>
+          <tr><td>إرسال شكر لكل زائر</td><td>20 نوفمبر</td></tr>
+          <tr><td>إرسال عرض B2B</td><td>21–25 نوفمبر</td></tr>
+          <tr><td>متابعة الجهات الحكومية</td><td>25–30 نوفمبر</td></tr>
+          <tr><td>نشر ملخص المعرض على LinkedIn</td><td>22 نوفمبر</td></tr>
+          <tr><td>نشر إحصائيات (إنفوغرافيك)</td><td>25 نوفمبر</td></tr>
+          <tr><td>تقرير ROI</td><td>ديسمبر</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. EXPANSION ============ -->
+<section id="expansion" class="section">
+  <div class="section-header">
+    <span class="section-icon">🌍</span>
+    <div>
+      <div class="section-title">التوسع والمستقبل</div>
+      <div class="section-desc">خطة النمو من الإمارات إلى العالم</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺️ خطة التوسع الجغرافي</div>
+    <div class="timeline" style="margin-top:16px">
+      <div class="tl-item">
+        <div class="tl-date">2026 — الإطلاق المحلي</div>
+        <div class="tl-title">🇦🇪 الإمارات العربية المتحدة</div>
+        <div class="tl-desc">العين ← أبوظبي ← دبي — اللهجة الإماراتية + الخليجية</div>
+      </div>
+      <div class="tl-item gold">
+        <div class="tl-date">2027 — التوسع الخليجي</div>
+        <div class="tl-title">🇸🇦🇶🇦🇧🇭🇰🇼🇴🇲 دول الخليج</div>
+        <div class="tl-desc">السعودية + قطر + البحرين + الكويت + عُمان — لهجات خليجية</div>
+      </div>
+      <div class="tl-item purple">
+        <div class="tl-date">2027–2028 — التوسع العربي</div>
+        <div class="tl-title">🇪🇬🇯🇴🇲🇦 مصر + الأردن + المغرب</div>
+        <div class="tl-desc">اللهجة المصرية + الشامية + المغربية</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2028 — العالمية</div>
+        <div class="tl-title">🌍 الإنجليزية + لغات أخرى</div>
+        <div class="tl-desc">الإنجليزية + الفرنسية + الإسبانية — 15 لغة مستهدفة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🛠️ الأدوات العشرة — المنظومة المتكاملة</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>الأداة</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>🌬️ نَفَس — مُشخِّص الإرهاق الوظيفي</td><td><span class="badge badge-green">✅ 120/120 طبقة</span></td></tr>
+          <tr><td>2</td><td>📋 كاشف الانحياز في التقييم</td><td><span class="badge badge-blue">⏳ تالياً</span></td></tr>
+          <tr><td>3</td><td>📊 محلل بيانات الأداء</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>4</td><td>🎯 مولّد أهداف التعلم</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>5</td><td>📝 مساعد التقارير الذكي</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>6</td><td>🗓️ منظّم الجدول الذكي</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>7</td><td>💬 مترجم التواصل مع أولياء الأمور</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>8</td><td>📖 مولّد المحتوى التعليمي</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>9</td><td>🏆 نظام المكافآت والتحفيز</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+          <tr><td>10</td><td>📈 لوحة التحليلات الشاملة</td><td><span class="badge badge-purple">مخطط</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 الهدف النهائي — 2028</div>
+    <div class="card-grid-4" style="margin-top:12px">
+      <div class="stat-card"><div class="stat-num" style="font-size:22px">1M</div><div class="stat-label">مستخدم</div></div>
+      <div class="stat-card"><div class="stat-num" style="font-size:22px">15</div><div class="stat-label">لغة</div></div>
+      <div class="stat-card"><div class="stat-num" style="font-size:22px">20</div><div class="stat-label">دولة</div></div>
+      <div class="stat-card"><div class="stat-num" style="font-size:22px">4.1M</div><div class="stat-label">درهم إيرادات</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:40px 20px;margin-top:30px">
+    <div style="font-size:40px;margin-bottom:16px">🌬️</div>
+    <div style="font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--teal),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px">نَفَس — Breathe Before You Break</div>
+    <div style="font-size:13px;color:var(--text3)">© 2026 منيرة علي المري — جميع الحقوق محفوظة</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">رخصة تاجر أبوظبي CN-6573712 | وثيقة سرية — لا تُوزّع</div>
+  </div>
+</main>
+</div>
+
+<script>
+// Sidebar active link
+document.querySelectorAll('.sidebar-nav a').forEach(link=>{
+  link.addEventListener('click',function(){
+    document.querySelectorAll('.sidebar-nav a').forEach(l=>l.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelector('.sidebar').classList.remove('open');
+  });
+});
+
+// Scroll spy
+const sections=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id});
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>{
+    a.classList.remove('active');
+    if(a.getAttribute('href')==='#'+cur)a.classList.add('active');
+  });
+});
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    const parent=this.closest('.card,.section');
+    const tabGroup=this.closest('.tabs');
+    tabGroup.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    const tabId=this.dataset.tab;
+    // Find sibling tab contents
+    let container=tabGroup.parentElement;
+    container.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
+    const target=container.querySelector('#tab-'+tabId);
+    if(target)target.classList.add('active');
+  });
+});
+
+// Company filter
+document.querySelectorAll('#company-filters .filter-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('#company-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    const f=this.dataset.filter;
+    document.querySelectorAll('#companies-table tbody tr').forEach(tr=>{
+      if(f==='all'||tr.dataset.cat===f)tr.style.display='';
+      else tr.style.display='none';
+    });
+  });
+});
+
+// Copy template
+function copyTemplate(btn){
+  const box=btn.closest('.copy-wrap').querySelector('.template-box');
+  navigator.clipboard.writeText(box.textContent.trim()).then(()=>{
+    btn.textContent='✅ تم النسخ!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 نسخ';btn.classList.remove('copied')},2000);
+  });
+}
+
+// Countdown to June 5, 2026
+function updateCountdown(){
+  const target=new Date('2026-06-05T23:59:59+04:00');
+  const now=new Date();
+  const diff=target-now;
+  if(diff<=0){
+    document.getElementById('countdown-text').textContent='⚠️ انتهى الموعد!';
+    document.getElementById('top-countdown-banner').style.borderColor='var(--text3)';
+    ['tc-days','tc-hours','tc-mins','tc-secs'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='0';});
+    return;
+  }
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  // Update inline countdown
+  document.getElementById('countdown-text').innerHTML='متبقي: <strong style="color:var(--rose)">'+d+' يوم و '+h+' ساعة و '+m+' دقيقة</strong>';
+  // Update top banner
+  const de=document.getElementById('tc-days');if(de)de.textContent=d;
+  const he=document.getElementById('tc-hours');if(he)he.textContent=String(h).padStart(2,'0');
+  const me=document.getElementById('tc-mins');if(me)me.textContent=String(m).padStart(2,'0');
+  const se=document.getElementById('tc-secs');if(se)se.textContent=String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+</script>
+</body>
+</html>
