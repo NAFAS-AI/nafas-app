@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="نَفَس">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231a1a2e'/><text x='90' y='120' text-anchor='middle' font-size='100'>💙</text></svg>">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://generativelanguage.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co https://generativelanguage.googleapis.com https://ipapi.co https://api.elevenlabs.io;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://generativelanguage.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://chart.googleapis.com; connect-src 'self' https://*.supabase.co https://generativelanguage.googleapis.com https://ipapi.co https://api.elevenlabs.io;">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -436,6 +436,54 @@ a.skip-link:focus{top:0}
   }
   .breathing-circle, .blob { animation: none !important; }
 }
+
+/* === 4th Mode Card — Demo (orange/coral) === */
+.mode-card:nth-child(4)::before{background:linear-gradient(180deg,#f97316,#ef4444);opacity:.7}
+.mode-card:nth-child(4) .mode-icon{background:rgba(249,115,22,.1);box-shadow:0 0 0 1px rgba(249,115,22,.15)}
+.mode-card:nth-child(4):hover .mode-icon{box-shadow:0 4px 16px rgba(249,115,22,.2)}
+.mode-card:nth-child(4)::after{background:linear-gradient(135deg,rgba(249,115,22,.04),transparent)}
+
+/* === QR Overlay === */
+.qr-overlay{display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);align-items:center;justify-content:center;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.qr-box{background:var(--bg-card);border:1px solid var(--border);border-radius:24px;padding:32px 28px;max-width:360px;width:90%;text-align:center;position:relative;animation:msgIn .4s;box-shadow:0 16px 64px rgba(0,0,0,.4)}
+.qr-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
+[dir="ltr"] .qr-close{right:auto;left:12px}
+.qr-close:hover{background:var(--bg-input)}
+.qr-box h2{font-size:1.2rem;margin-bottom:8px;color:var(--text-primary)}
+.qr-box p{color:var(--text-secondary);font-size:.9rem;margin-bottom:16px}
+.qr-code{background:#fff;border-radius:16px;padding:16px;display:inline-block;margin-bottom:12px}
+.qr-code img{width:200px;height:200px;display:block}
+.qr-link{color:var(--accent-primary);font-size:1rem;font-weight:600;margin-bottom:12px;letter-spacing:1px}
+.qr-stats{color:var(--text-secondary);font-size:.82rem;margin-bottom:14px}
+.qr-share-btn{background:linear-gradient(135deg,var(--accent-primary),#a78bfa);border:none;color:#fff;padding:12px 28px;border-radius:16px;font-size:.95rem;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:inherit}
+.qr-share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(88,166,255,.3)}
+.qr-copyright{color:var(--text-secondary);font-size:.7rem;opacity:.5;margin-top:14px}
+
+/* === Live Stats Badge === */
+.live-stats{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:8px 16px;margin-bottom:12px;font-size:.85rem;color:var(--text-secondary);backdrop-filter:blur(8px);animation:msgIn .5s}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#3fb950;animation:livePulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(63,185,80,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(63,185,80,0)}}
+
+/* === Exhibition Banner === */
+.exhibition-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:90;background:linear-gradient(135deg,#0d9488,#f97316);padding:10px 40px 10px 16px;text-align:center;animation:slideDown .4s;font-size:.88rem;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+[dir="ltr"] .exhibition-banner{padding:10px 16px 10px 40px}
+@keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.exhibition-text{color:#fff;font-weight:500}
+.exhibition-close{position:absolute;top:50%;right:10px;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.8);font-size:1.3rem;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s}
+[dir="ltr"] .exhibition-close{right:auto;left:10px}
+.exhibition-close:hover{background:rgba(255,255,255,.15)}
+
+/* === Survey Overlay === */
+.survey-overlay{display:none;position:fixed;inset:0;z-index:160;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;animation:fadeIn .3s}
+.survey-box{background:var(--bg-card);border:1px solid var(--border);border-radius:24px;padding:32px 28px;max-width:340px;width:88%;text-align:center;animation:msgIn .4s;box-shadow:0 16px 64px rgba(0,0,0,.4)}
+.survey-box h3{font-size:1.1rem;margin-bottom:20px;color:var(--text-primary);line-height:1.6}
+.survey-stars{display:flex;justify-content:center;gap:16px;margin-bottom:12px}
+.survey-star{background:none;border:2px solid var(--border);width:56px;height:56px;border-radius:16px;font-size:1.8rem;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center}
+.survey-star:hover{transform:scale(1.15);border-color:var(--accent-warm);box-shadow:0 4px 16px rgba(227,162,114,.3)}
+.survey-labels{display:flex;justify-content:space-between;color:var(--text-secondary);font-size:.78rem;margin-bottom:18px;padding:0 8px}
+.survey-skip{background:none;border:none;color:var(--text-secondary);font-size:.88rem;cursor:pointer;padding:8px 16px;border-radius:12px;transition:color .2s}
+.survey-skip:hover{color:var(--text-primary)}
 </style>
 </head>
 <body>
@@ -547,6 +595,12 @@ a.skip-link:focus{top:0}
   </div>
 </div>
 
+<!-- Exhibition Banner -->
+<div class="exhibition-banner" id="exhibitionBanner" style="display:none">
+  <span class="exhibition-text">🎪 نَفَس في توظيف × زاهب 2026 | Nafas at Tawdheef x Zaheb 2026</span>
+  <button class="exhibition-close" onclick="document.getElementById('exhibitionBanner').style.display='none'">&times;</button>
+</div>
+
 <!-- Welcome Screen -->
 <div id="welcomeScreen" class="screen welcome" role="main">
   <div class="app-name" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
@@ -556,8 +610,13 @@ a.skip-link:focus{top:0}
     <div class="mode-card" onclick="startMode('quick')" role="button" tabindex="0" aria-label="Quick Check"><div class="mode-icon">⚡</div><div class="mode-text"><h3 id="modeQuick">تحقق سريع</h3><p id="modeQuickDesc">سؤال واحد &bull; 30 ثانية</p></div><span class="mode-arrow">&#8592;</span></div>
     <div class="mode-card" onclick="startMode('vent')" role="button" tabindex="0" aria-label="Free Venting"><div class="mode-icon">💙</div><div class="mode-text"><h3 id="modeVent">فضفضة حرة</h3><p id="modeVentDesc">أنا أسمع &bull; بلا أسئلة</p></div><span class="mode-arrow">&#8592;</span></div>
     <div class="mode-card" onclick="startMode('deep')" role="button" tabindex="0" aria-label="Deep Assessment"><div class="mode-icon">📊</div><div class="mode-text"><h3 id="modeDeep">تقييم عميق</h3><p id="modeDeepDesc">محادثة &bull; 5-10 دقائق</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('demo')" role="button" tabindex="0" aria-label="Demo Mode"><div class="mode-icon">🎪</div><div class="mode-text"><h3 id="modeDemo">وضع العرض</h3><p id="modeDemoDesc">عرض سريع &bull; للمعارض</p></div><span class="mode-arrow">&#8592;</span></div>
   </div>
   <div class="session-count" id="sessionCount" aria-live="polite">...</div>
+  <div class="live-stats" id="liveStats" style="display:none">
+    <span class="live-dot"></span>
+    <span id="liveStatsText">0 شخص فحص اليوم</span>
+  </div>
   <button class="journey-link" id="journeyLink" onclick="showJourneyEntry()" style="display:none" aria-label="Enter journey code">&#128273; لديّ رمز رحلة</button>
   <div class="journey-entry" id="journeyEntry">
     <input type="text" id="journeyCodeInput" maxlength="6" placeholder="ABC123" aria-label="Journey code">
@@ -602,6 +661,7 @@ a.skip-link:focus{top:0}
         <button onclick="showPrivacyPolicy()" id="settPrivacy" aria-label="Privacy Policy">🔒 سياسة الخصوصية</button>
         <button onclick="showMethodology()" id="settMethodology" aria-label="Scientific Methodology">📚 المنهجية العلمية</button>
         <button onclick="deleteMyData()" id="settDeleteData" aria-label="Delete my data" style="color:#ff6b6b">🗑️ حذف بياناتي</button>
+        <button onclick="toggleExhibitionMode()" id="settExhibition">🎪 وضع المعرض</button>
       </div>
     </div>
   </div>
@@ -662,6 +722,39 @@ a.skip-link:focus{top:0}
   </div>
   <div class="breath-label" id="breathLabel"></div>
   <button class="breath-close" onclick="closeBreathing()">إغلاق</button>
+</div>
+
+<!-- QR Code Overlay -->
+<div class="qr-overlay" id="qrOverlay">
+  <div class="qr-box">
+    <button class="qr-close" onclick="closeQR()">&times;</button>
+    <h2 id="qrTitle">📱 جرّب نَفَس على جهازك</h2>
+    <p id="qrSubtitle">امسح الرمز لزيارة الموقع</p>
+    <div class="qr-code" id="qrCodeContainer">
+      <img id="qrImage" src="" alt="QR Code" />
+    </div>
+    <div class="qr-link">nafas-app.com</div>
+    <div class="qr-stats" id="qrStats"></div>
+    <button class="qr-share-btn" onclick="shareNafas()">📤 <span id="qrShareText">شارك نَفَس</span></button>
+    <p class="qr-copyright">© منيرة علي المري 2026 — بوابة الجود الذكية</p>
+  </div>
+</div>
+
+<!-- Survey Overlay -->
+<div class="survey-overlay" id="surveyOverlay">
+  <div class="survey-box">
+    <h3 id="surveyTitle">كيف كانت تجربتك مع نَفَس؟</h3>
+    <div class="survey-stars" id="surveyStars">
+      <button class="survey-star" onclick="rateSurvey(1)">⭐</button>
+      <button class="survey-star" onclick="rateSurvey(2)">⭐</button>
+      <button class="survey-star" onclick="rateSurvey(3)">⭐</button>
+    </div>
+    <p class="survey-labels">
+      <span id="surveyLabel1">يحتاج تحسين</span>
+      <span id="surveyLabel3">ممتازة!</span>
+    </p>
+    <button class="survey-skip" onclick="closeSurvey()" id="surveySkipBtn">تخطي</button>
+  </div>
 </div>
 
 <script>
@@ -1761,7 +1854,7 @@ async function callGeminiAI(userMessage, mode) {
 const i18n = {
   ar:{
     appName:'نَفَس',tagline:'يفهمكِ من كلامكِ',
-    modes:{quick:{title:'⚡ تحقق سريع',desc:'سؤال واحد • 30 ثانية'},vent:{title:'💙 فضفضة حرة',desc:'أنا أسمع • بلا أسئلة'},deep:{title:'📊 تقييم عميق',desc:'محادثة • 5-10 دقائق'}},
+    modes:{quick:{title:'⚡ تحقق سريع',desc:'سؤال واحد • 30 ثانية'},vent:{title:'💙 فضفضة حرة',desc:'أنا أسمع • بلا أسئلة'},deep:{title:'📊 تقييم عميق',desc:'محادثة • 5-10 دقائق'},demo:{title:'🎪 وضع العرض',desc:'عرض سريع • للمعارض'}},
     sessions:n=>n===0?'لا جلسات سابقة':`${n} جلسة سابقة محفوظة`,
     sendPlaceholder:'اكتبي هنا... (Enter للإرسال)',
     voiceOn:'🔊 الصوت مفعّل',voiceOff:'🔇 الصوت مُعطّل',
@@ -1790,7 +1883,7 @@ const i18n = {
   },
   en:{
     appName:'Nafas',tagline:'Understands you from your words',
-    modes:{quick:{title:'⚡ Quick Check',desc:'One question • 30 seconds'},vent:{title:'💙 Free Venting',desc:"I'm listening • No questions"},deep:{title:'📊 Deep Assessment',desc:'Conversation • 5-10 minutes'}},
+    modes:{quick:{title:'⚡ Quick Check',desc:'One question • 30 seconds'},vent:{title:'💙 Free Venting',desc:"I'm listening • No questions"},deep:{title:'📊 Deep Assessment',desc:'Conversation • 5-10 minutes'},demo:{title:'🎪 Demo Mode',desc:'Quick demo • For exhibitions'}},
     sessions:n=>n===0?'No previous sessions':`${n} sessions saved`,
     sendPlaceholder:'Type here... (Enter to send)',
     voiceOn:'🔊 Voice on',voiceOff:'🔇 Voice off',
@@ -2594,6 +2687,8 @@ function updateUI(){
   document.getElementById('modeVentDesc').textContent = L.modes.vent.desc;
   document.getElementById('modeDeep').textContent = L.modes.deep.title;
   document.getElementById('modeDeepDesc').textContent = L.modes.deep.desc;
+  if(document.getElementById('modeDemo')) document.getElementById('modeDemo').textContent = L.modes.demo.title;
+  if(document.getElementById('modeDemoDesc')) document.getElementById('modeDemoDesc').textContent = L.modes.demo.desc;
   document.getElementById('tourBtn').textContent = L.tour;
   document.getElementById('userInput').placeholder = L.sendPlaceholder;
   document.getElementById('drawerTitle').textContent = L.resources;
@@ -3198,6 +3293,7 @@ function showQuickResultCard(){
     <div class="qr-actions">
       <button onclick="switchToMode('deep')">${deeperLabel}</button>
       <button onclick="switchToMode('vent')">${ventLabel}</button>
+      <button onclick="shareNafas()" style="background:linear-gradient(135deg,var(--accent-primary),#a78bfa);margin-top:6px">📤 ${L === 'ar' ? 'شارك نَفَس' : 'Share Nafas'}</button>
     </div>
   </div>`;
   addCardToChat(card);
@@ -6430,7 +6526,7 @@ function buildProfileCard(){
       kinesthetic:'أنتِ تدركين العالم حسياً — المشاعر الجسدية والأحاسيس تؤثر فيكِ بعمق.',
       mixed:'لديكِ نمط إدراكي متنوع — تستخدمين حواساً متعددة لفهم العالم حولكِ.'
     }[vak];
-    return `<div class="profile-card"><h3>نتيجة تقييمكِ</h3><div class="pattern"><strong>نمطكِ الإدراكي:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>مستوى الإرهاق:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>توصياتكِ الشخصية:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 نصائح يومية حسب نمطكِ (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.ar.disclaimer}</p></div>`;
+    return `<div class="profile-card"><h3>نتيجة تقييمكِ</h3><div class="pattern"><strong>نمطكِ الإدراكي:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>مستوى الإرهاق:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>توصياتكِ الشخصية:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 نصائح يومية حسب نمطكِ (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.ar.disclaimer}</p><div style="text-align:center;margin-top:12px"><button onclick="shareNafas()" style="background:linear-gradient(135deg,var(--accent-primary),#a78bfa);border:none;color:#fff;padding:10px 24px;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:inherit">📤 شارك نَفَس</button></div></div>`;
   }else{
     const vakDesc = {
       visual:'You perceive the world visually — images, colors, and scenes affect you deeply.',
@@ -6438,7 +6534,7 @@ function buildProfileCard(){
       kinesthetic:'You perceive the world physically — bodily sensations and feelings affect you deeply.',
       mixed:'You have a diverse perceptual pattern — you use multiple senses to understand the world.'
     }[vak];
-    return `<div class="profile-card"><h3>Your Assessment Result</h3><div class="pattern"><strong>Your Perceptual Pattern:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>Burnout Level:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>Your Personal Recommendations:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 Daily Tips for Your Pattern (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.en.disclaimer}</p></div>`;
+    return `<div class="profile-card"><h3>Your Assessment Result</h3><div class="pattern"><strong>Your Perceptual Pattern:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>Burnout Level:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>Your Personal Recommendations:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 Daily Tips for Your Pattern (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.en.disclaimer}</p><div style="text-align:center;margin-top:12px"><button onclick="shareNafas()" style="background:linear-gradient(135deg,var(--accent-primary),#a78bfa);border:none;color:#fff;padding:10px 24px;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:inherit">📤 Share Nafas</button></div></div>`;
   }
 }
 
@@ -6961,7 +7057,7 @@ function showJourneySavePrompt(){
     <p>${i18n[L].journeySave}</p>
     <div class="jsc-actions">
       <button class="jsc-yes" onclick="confirmJourneySave('${code}')">${i18n[L].yes}</button>
-      <button class="jsc-no" onclick="this.closest('.journey-save-card').style.display='none'">${i18n[L].no}</button>
+      <button class="jsc-no" onclick="declineJourneySave()">${i18n[L].no}</button>
     </div>
   </div>`;
   addCardToChat(html);
@@ -6984,6 +7080,13 @@ function confirmJourneySave(code){
     <p style="font-size:.82rem;color:var(--text-secondary)">${i18n[L].journeySaveNote}</p>
   </div>`;
   addCardToChat(html);
+}
+
+function declineJourneySave(){
+  document.querySelectorAll('.journey-save-card').forEach(c => c.remove());
+  if(state.messages.length > 2){ showSurvey(); }
+  showScreen('welcomeScreen');
+  updateUI();
 }
 
 /* ============================================================
@@ -7024,7 +7127,9 @@ function startMode(mode){
   setTimeout(()=>{
     let greeting;
     const L = state.lang;
-    if(mode === 'quick'){
+    if(mode === 'demo'){
+      greeting = L === 'ar' ? 'مرحباً! أنا نَفَس 💙 جرّبني بسؤال واحد — كيف حالك اليوم؟' : 'Hi! I\'m Nafas 💙 Try me with one question — how are you today?';
+    }else if(mode === 'quick'){
       greeting = L === 'ar' ? 'أهلاً... أخبريني بكلمات بسيطة: كيف حالكِ الآن؟ 💙' : 'Hi... tell me simply: how are you feeling right now? 💙';
     }else if(mode === 'vent'){
       greeting = L === 'ar' ? 'أنا هنا فقط لأسمعكِ... قولي ما تريدين بلا حكم ولا مقاطعة 💙' : "I'm here just to listen... say whatever you need, no judgment 💙";
@@ -7042,6 +7147,10 @@ async function goBack(){
   if(!state.sessionSaved && state.messages.length > 2 && !state.journeyCode){
     showJourneySavePrompt();
     return; // Don't navigate yet
+  }
+  // Show survey if meaningful session
+  if(state.messages.length > 2){
+    showSurvey();
   }
   showScreen('welcomeScreen');
   updateUI();
@@ -7165,6 +7274,14 @@ async function sendMessage(){
       return;
     }
 
+    // --- Demo mode: show QR after first AI response ---
+    if(state.mode === 'demo'){
+      addMessage('bot', botReply);
+      speak(botReply);
+      setTimeout(()=>{ showQR(); }, 2500);
+      return;
+    }
+
     // --- Deep mode: track step progression ---
     if(state.mode === 'deep'){
       state.deepStep++;
@@ -7220,6 +7337,15 @@ async function sendMessage(){
     }
 
     let response; let isHTML = false;
+
+    // --- Demo mode fallback: use quick response then show QR ---
+    if(state.mode === 'demo'){
+      response = quickResponse(text);
+      addMessage('bot', response);
+      speak(response);
+      setTimeout(()=>{ showQR(); }, 2500);
+      return;
+    }
 
     if(state.mode === 'quick'){
       if(state.quickCheckDone){
@@ -7467,6 +7593,126 @@ function installPWA() {
 }
 
 /* ============================================================
+   QR CODE, SHARE, LIVE STATS, EXHIBITION, SURVEY
+   ============================================================ */
+
+function showQR(){
+  const img = document.getElementById('qrImage');
+  if(img) img.src = 'https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=https://nafas-app.com&choe=UTF-8';
+  const overlay = document.getElementById('qrOverlay');
+  if(overlay) overlay.style.display = 'flex';
+  // Update text for language
+  const isAr = state.lang === 'ar';
+  const titleEl = document.getElementById('qrTitle');
+  const subEl = document.getElementById('qrSubtitle');
+  const shareTextEl = document.getElementById('qrShareText');
+  if(titleEl) titleEl.textContent = isAr ? '📱 جرّب نَفَس على جهازك' : '📱 Try Nafas on your device';
+  if(subEl) subEl.textContent = isAr ? 'امسح الرمز لزيارة الموقع' : 'Scan to visit the website';
+  if(shareTextEl) shareTextEl.textContent = isAr ? 'شارك نَفَس' : 'Share Nafas';
+  // Show stats if available
+  const statsEl = document.getElementById('qrStats');
+  const liveText = document.getElementById('liveStatsText');
+  if(statsEl && liveText && liveText.textContent){
+    statsEl.textContent = liveText.textContent;
+  }
+}
+
+function closeQR(){
+  const overlay = document.getElementById('qrOverlay');
+  if(overlay) overlay.style.display = 'none';
+}
+
+async function shareNafas(){
+  const isAr = state.lang === 'ar';
+  const text = isAr
+    ? 'جرّبت نَفَس — أداة ذكاء اصطناعي إماراتية لتشخيص الإرهاق الوظيفي 💙 جربها بنفسك:'
+    : 'I tried Nafas — a UAE AI burnout diagnostic tool 💙 Try it yourself:';
+  const url = 'https://nafas-app.com';
+
+  if(navigator.share){
+    try{
+      await navigator.share({ title: 'نَفَس | Nafas', text: text, url: url });
+    }catch(e){}
+  }else{
+    try{
+      await navigator.clipboard.writeText(text + ' ' + url);
+      alert(isAr ? '✅ تم النسخ!' : '✅ Copied!');
+    }catch(e){
+      prompt(isAr ? 'انسخ الرابط:' : 'Copy link:', text + ' ' + url);
+    }
+  }
+}
+
+async function loadLiveStats(){
+  try{
+    const today = new Date().toISOString().split('T')[0];
+    const res = await fetch(SUPA_URL + '/rest/v1/nafas_sessions?created_at=gte.' + today + 'T00:00:00&select=id', {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+    });
+    const data = await res.json();
+    const count = Array.isArray(data) ? data.length : 0;
+    const el = document.getElementById('liveStats');
+    const textEl = document.getElementById('liveStatsText');
+    if(count > 0 && el){
+      el.style.display = 'flex';
+      textEl.textContent = state.lang === 'ar' ? count + ' شخص فحص اليوم' : count + ' people checked today';
+    }
+  }catch(e){ console.warn('Live stats error:', e); }
+}
+
+function toggleExhibitionMode(){
+  const banner = document.getElementById('exhibitionBanner');
+  if(!banner) return;
+  if(banner.style.display === 'none' || !banner.style.display){
+    banner.style.display = 'flex';
+  }else{
+    banner.style.display = 'none';
+  }
+}
+
+function showSurvey(){
+  const overlay = document.getElementById('surveyOverlay');
+  if(!overlay) return;
+  overlay.style.display = 'flex';
+  const isAr = state.lang === 'ar';
+  const titleEl = document.getElementById('surveyTitle');
+  const label1 = document.getElementById('surveyLabel1');
+  const label3 = document.getElementById('surveyLabel3');
+  const skipBtn = document.getElementById('surveySkipBtn');
+  if(titleEl) titleEl.textContent = isAr ? 'كيف كانت تجربتك مع نَفَس؟' : 'How was your experience with Nafas?';
+  if(label1) label1.textContent = isAr ? 'يحتاج تحسين' : 'Needs improvement';
+  if(label3) label3.textContent = isAr ? 'ممتازة!' : 'Excellent!';
+  if(skipBtn) skipBtn.textContent = isAr ? 'تخطي' : 'Skip';
+}
+
+function rateSurvey(stars){
+  if(state.sessionId){
+    fetch(SUPA_URL + '/rest/v1/nafas_sessions?id=eq.' + state.sessionId, {
+      method: 'PATCH',
+      headers: { ...supaHeaders, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ rating: stars })
+    }).catch(()=>{});
+  }
+  closeSurvey();
+  const isAr = state.lang === 'ar';
+  const thanks = isAr ? '💙 شكراً لتقييمك!' : '💙 Thanks for your feedback!';
+  showToast(thanks);
+}
+
+function closeSurvey(){
+  const overlay = document.getElementById('surveyOverlay');
+  if(overlay) overlay.style.display = 'none';
+}
+
+function showToast(msg){
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--accent-primary);color:var(--text-primary);padding:12px 24px;border-radius:16px;z-index:200;animation:msgIn .3s;font-size:.95rem;box-shadow:0 8px 32px rgba(0,0,0,.3)';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 if('speechSynthesis' in window){
@@ -7493,6 +7739,11 @@ checkConsent();
   initSpeechRecognition();
   populateVoiceList();
   detectUserCountry(); // Detect country for crisis numbers (non-blocking)
+  loadLiveStats(); // Load live stats for welcome screen
+  // Check for exhibition mode URL parameter
+  if(new URLSearchParams(window.location.search).get('expo') === '1'){
+    toggleExhibitionMode();
+  }
   try{
     const count = await loadSessionCount();
     document.getElementById('sessionCount').textContent = i18n[state.lang].sessions(count);
