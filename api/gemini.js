@@ -1,18 +1,30 @@
 // Nafas — Gemini AI Secure Proxy (Vercel Serverless Function)
 // © Munira Ali Al Marri 2026
 // Purpose: Keeps API key server-side only — never exposed to the browser
+// Security: Rate limiting, CORS, input validation, request tracing
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '*').split(',').map(s => s.trim());
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
 
-// Rate limiting (in-memory per serverless instance)
+// ══════════════════════════════════════════════
+// 🛡️ Rate Limiting (in-memory per serverless instance)
+// ══════════════════════════════════════════════
 const rateMap = new Map();
 const RATE_LIMIT = 20;       // requests per window
 const RATE_WINDOW = 60000;   // 1 minute
+const MAX_RATE_MAP = 10000;  // prevent memory leak
 
 function isRateLimited(ip) {
   const now = Date.now();
+
+  // Garbage collect old entries to prevent memory leak
+  if (rateMap.size > MAX_RATE_MAP) {
+    for (const [key, val] of rateMap) {
+      if (now - val.start > RATE_WINDOW) rateMap.delete(key);
+    }
+  }
+
   const entry = rateMap.get(ip);
   if (!entry || now - entry.start > RATE_WINDOW) {
     rateMap.set(ip, { start: now, count: 1 });
@@ -22,17 +34,81 @@ function isRateLimited(ip) {
   return entry.count > RATE_LIMIT;
 }
 
+// ══════════════════════════════════════════════
+// 🔒 CORS — strict origin checking (no wildcard)
+// ══════════════════════════════════════════════
 function getCorsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.includes(origin);
+  // SECURITY FIX: Never allow wildcard — only whitelisted origins
+  if (!origin || ALLOWED_ORIGINS.length === 0) {
+    return {
+      'Access-Control-Allow-Origin': '',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    };
+  }
+  const allowed = ALLOWED_ORIGINS.includes(origin);
   return {
-    'Access-Control-Allow-Origin': allowed ? (origin || '*') : '',
+    'Access-Control-Allow-Origin': allowed ? origin : '',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
   };
 }
 
+// ══════════════════════════════════════════════
+// 🛡️ Security Headers for API responses
+// ══════════════════════════════════════════════
+function setSecurityHeaders(res) {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+}
+
+// ══════════════════════════════════════════════
+// 🧹 Input Sanitization
+// ══════════════════════════════════════════════
+function sanitizeInput(contents) {
+  if (!Array.isArray(contents)) return null;
+
+  return contents.map(item => {
+    if (!item || typeof item !== 'object') return null;
+
+    // Only allow 'role' and 'parts' keys
+    const sanitized = {};
+    if (item.role && typeof item.role === 'string') {
+      // Only allow valid roles
+      if (!['user', 'model'].includes(item.role)) return null;
+      sanitized.role = item.role;
+    }
+    if (item.parts && Array.isArray(item.parts)) {
+      sanitized.parts = item.parts.map(part => {
+        if (!part || typeof part !== 'object') return null;
+        // Only allow text parts (no executable code injection)
+        if (typeof part.text === 'string') {
+          return { text: part.text };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+    return sanitized;
+  }).filter(Boolean);
+}
+
+// ══════════════════════════════════════════════
+// 🚀 Main Handler
+// ══════════════════════════════════════════════
 export default async function handler(req, res) {
+  // Generate request ID for tracing
+  const requestId = `nfs-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  res.setHeader('X-Request-Id', requestId);
+
+  // Set security headers on ALL responses
+  setSecurityHeaders(res);
+
   const origin = req.headers.origin || '';
   const cors = getCorsHeaders(origin);
   Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
@@ -44,18 +120,26 @@ export default async function handler(req, res) {
 
   // Only POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed', requestId });
+  }
+
+  // CORS enforcement — reject requests from non-whitelisted origins
+  if (origin && ALLOWED_ORIGINS.length > 0 && !ALLOWED_ORIGINS.includes(origin)) {
+    console.warn(`[${requestId}] Blocked request from unauthorized origin: ${origin}`);
+    return res.status(403).json({ error: 'Origin not allowed', requestId });
   }
 
   // Check API key configured
   if (!GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY not configured on server' });
+    console.error(`[${requestId}] GEMINI_API_KEY not configured`);
+    return res.status(500).json({ error: 'Service configuration error', requestId });
   }
 
   // Rate limit by IP
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
   if (isRateLimited(ip)) {
-    return res.status(429).json({ error: 'Rate limit exceeded. Please wait a moment.' });
+    console.warn(`[${requestId}] Rate limited IP: ${ip}`);
+    return res.status(429).json({ error: 'Rate limit exceeded. Please wait a moment.', requestId });
   }
 
   try {
@@ -63,18 +147,24 @@ export default async function handler(req, res) {
 
     // Validate request structure
     if (!body || !body.contents || !Array.isArray(body.contents)) {
-      return res.status(400).json({ error: 'Invalid request: contents array required' });
+      return res.status(400).json({ error: 'Invalid request: contents array required', requestId });
     }
 
     // Validate content length (prevent abuse — max 50KB)
     const totalLength = JSON.stringify(body).length;
     if (totalLength > 50000) {
-      return res.status(400).json({ error: 'Request too large (max 50KB)' });
+      return res.status(400).json({ error: 'Request too large (max 50KB)', requestId });
     }
 
-    // Build Gemini request — forward all supported fields
+    // Sanitize input contents
+    const sanitizedContents = sanitizeInput(body.contents);
+    if (!sanitizedContents || sanitizedContents.length === 0) {
+      return res.status(400).json({ error: 'Invalid content format', requestId });
+    }
+
+    // Build Gemini request with sanitized data
     const geminiBody = {
-      contents: body.contents,
+      contents: sanitizedContents,
       generationConfig: body.generationConfig || {
         temperature: 0.85,
         topP: 0.95,
@@ -95,7 +185,7 @@ export default async function handler(req, res) {
 
     // Call Gemini API with server-side key
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-    
+
     const geminiRes = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -104,20 +194,22 @@ export default async function handler(req, res) {
 
     if (!geminiRes.ok) {
       const errText = await geminiRes.text();
-      console.error('Gemini API error:', geminiRes.status, errText);
-      return res.status(geminiRes.status).json({ 
+      // SECURITY: Log error server-side but don't expose details to client
+      console.error(`[${requestId}] Gemini API error: ${geminiRes.status}`, errText);
+      return res.status(502).json({
         error: 'AI service temporarily unavailable',
-        status: geminiRes.status 
+        requestId,
       });
     }
 
     const data = await geminiRes.json();
-    
-    // Strip any sensitive info before returning to client
+
+    // Strip any sensitive metadata before returning to client
     return res.status(200).json(data);
 
   } catch (err) {
-    console.error('Proxy error:', err.message);
-    return res.status(500).json({ error: 'Internal server error' });
+    // SECURITY: Never expose stack traces or internal details
+    console.error(`[${requestId}] Proxy error:`, err.message);
+    return res.status(500).json({ error: 'Internal server error', requestId });
   }
 }
