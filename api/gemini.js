@@ -5,7 +5,14 @@
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+// Default allowed origins (always included) + env var can add more
+const DEFAULT_ORIGINS = [
+  'https://nafas-app-blush.vercel.app',
+  'https://nafas-app.com',
+  'https://www.nafas-app.com'
+];
+const envOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+const ALLOWED_ORIGINS = [...new Set([...DEFAULT_ORIGINS, ...envOrigins])];
 
 // ══════════════════════════════════════════════
 // 🛡️ Rate Limiting (in-memory per serverless instance)
