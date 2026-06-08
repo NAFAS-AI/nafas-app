@@ -915,13 +915,13 @@ function saveLearnedWord(word, meaning, teacherJourney) {
     learnedAt: new Date().toISOString()
   };
   // Save to Supabase if available
-  if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL) {
-    fetch(SUPABASE_URL + '/rest/v1/nafas_dictionary', {
+  if (typeof SUPA_URL !== 'undefined' && SUPA_URL) {
+    fetch(SUPA_URL + '/rest/v1/nafas_dictionary', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON,
-        'Authorization': 'Bearer ' + SUPABASE_ANON,
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
         'Prefer': 'resolution=merge-duplicates'
       },
       body: JSON.stringify({
@@ -945,11 +945,11 @@ function checkLearnedDictionary(text) {
 }
 
 function loadDictionaryFromSupabase() {
-  if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL) {
-    fetch(SUPABASE_URL + '/rest/v1/nafas_dictionary?select=word,meaning&order=times_seen.desc&limit=200', {
+  if (typeof SUPA_URL !== 'undefined' && SUPA_URL) {
+    fetch(SUPA_URL + '/rest/v1/nafas_dictionary?select=word,meaning&order=times_seen.desc&limit=200', {
       headers: {
-        'apikey': SUPABASE_ANON,
-        'Authorization': 'Bearer ' + SUPABASE_ANON
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY
       }
     })
     .then(function(r) { return r.json(); })
