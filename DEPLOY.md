@@ -24,21 +24,21 @@ git push -u origin main
 
 | Key | Value |
 |-----|-------|
-| `GEMINI_API_KEY` | `AIzaSyBHpFuoVrjwAzrHnP42HIpsnPypXlrMDzw` |
+| `GEMINI_API_KEY` | `⚠️ أضيفي المفتاح من Google AI Studio — لا تكتبيه هنا` |
 | `GEMINI_MODEL` | `gemini-2.5-flash` |
-| `ALLOWED_ORIGINS` | `https://nafas-app.vercel.app` |
+| `ALLOWED_ORIGINS` | `https://nafas-app.com` |
 
 3. **Save** → **Redeploy**
 
 ### 4. اختبار
 ```
-curl -X POST https://nafas-app.vercel.app/api/gemini \
+curl -X POST https://YOUR-DOMAIN/api/gemini \
   -H "Content-Type: application/json" \
   -d '{"contents":[{"role":"user","parts":[{"text":"مرحبا"}]}]}'
 ```
 
-### 5. ربط الدومين (اختياري)
-- **Settings** → **Domains** → أضيفي `nafas.app` أو أي دومين
+### 5. ربط الدومين
+- **Settings** → **Domains** → أضيفي `nafas-app.com`
 
 ---
 
@@ -60,6 +60,8 @@ nafas-app/
 - ✅ Rate Limiting: 20 طلب/دقيقة لكل IP
 - ✅ CORS: يقبل فقط من الدومين المحدد
 - ✅ CSP: Content Security Policy في الـ HTML
+
+> ⚠️ **تنبيه أمني:** لا تكتبي مفاتيح API أبداً في ملفات الكود — استخدمي Environment Variables فقط
 
 ---
 *© منيرة علي المري 2026*
