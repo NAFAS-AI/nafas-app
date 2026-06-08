@@ -1,68 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.json",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.png",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "brand/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "strategy/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "api/gemini.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/gemini",
-      "dest": "/api/gemini.js"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
-    },
-    {
-      "src": "/sw.js",
-      "dest": "/sw.js"
-    },
-    {
-      "src": "/icon-192.png",
-      "dest": "/icon-192.png"
-    },
-    {
-      "src": "/icon-512.png",
-      "dest": "/icon-512.png"
-    },
-    {
-      "src": "/brand/(.*)",
-      "dest": "/brand/$1"
-    },
-    {
-      "src": "/strategy/(.*)",
-      "dest": "/strategy/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/api/gemini", "destination": "/api/gemini.js" }
   ],
   "headers": [
     {
