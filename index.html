@@ -605,6 +605,208 @@ a.skip-link:focus{top:0}
 .welcome{background:radial-gradient(ellipse at 50% 20%,rgba(14,165,160,.05),transparent 55%),radial-gradient(ellipse at 50% 90%,rgba(232,168,124,.03),transparent 40%)}
 
 /* ===== END DESIGN OVERHAUL ===== */
+
+
+/* ===== PHASE 2: SMART EXPERIENCE ===== */
+
+/* --- Welcome Screen: Breathing Aura behind logo --- */
+.nafas-logo-container::before{
+  content:'';position:absolute;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(14,165,160,0.15),rgba(14,165,160,0.05),transparent 70%);
+  animation:auraBreath 6s ease-in-out infinite;z-index:-1;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.nafas-logo-container::after{
+  content:'';position:absolute;width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,168,124,0.08),transparent 65%);
+  animation:auraBreath 6s ease-in-out infinite 3s;z-index:-1;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+@keyframes auraBreath{
+  0%,100%{transform:translate(-50%,-50%) scale(0.85);opacity:0.4}
+  50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}
+}
+
+/* --- Mode Cards: Staggered Entrance --- */
+.modes-grid .mode-card{opacity:0;animation:cardSlideIn 0.5s cubic-bezier(.22,1,.36,1) forwards}
+.modes-grid .mode-card:nth-child(1){animation-delay:0.1s}
+.modes-grid .mode-card:nth-child(2){animation-delay:0.2s}
+.modes-grid .mode-card:nth-child(3){animation-delay:0.3s}
+.modes-grid .mode-card:nth-child(4){animation-delay:0.4s}
+@keyframes cardSlideIn{
+  from{opacity:0;transform:translateY(20px) scale(0.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* --- Mode Card: Colored left glow on hover --- */
+.mode-card:nth-child(1):hover{box-shadow:var(--shadow-glow),inset 3px 0 12px rgba(14,165,160,0.1)}
+.mode-card:nth-child(2):hover{box-shadow:0 4px 30px rgba(20,184,166,0.15),inset 3px 0 12px rgba(20,184,166,0.1)}
+.mode-card:nth-child(3):hover{box-shadow:0 4px 30px rgba(45,212,191,0.15),inset 3px 0 12px rgba(45,212,191,0.1)}
+.mode-card:nth-child(4):hover{box-shadow:0 4px 30px rgba(232,168,124,0.15),inset 3px 0 12px rgba(232,168,124,0.1)}
+
+/* --- Messages: Better entrance animation --- */
+@keyframes msgSlideIn{
+  0%{opacity:0;transform:translateY(16px) scale(0.96)}
+  60%{opacity:1;transform:translateY(-2px) scale(1.005)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.msg{animation:msgSlideIn 0.45s cubic-bezier(.22,1,.36,1)}
+
+/* --- User message: subtle gradient overlay --- */
+.msg.user{background:linear-gradient(135deg,rgba(99,179,237,0.1),rgba(14,165,160,0.06))}
+.msg.bot{background:linear-gradient(135deg,rgba(14,165,160,0.06),rgba(14,165,160,0.03))}
+
+/* --- Typing indicator: Premium pulsing dots --- */
+.typing-indicator{
+  background:linear-gradient(135deg,rgba(14,165,160,0.06),rgba(14,165,160,0.03));
+  border:1px solid rgba(14,165,160,0.06);border-radius:20px;padding:14px 20px;
+}
+.typing-indicator span{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent-primary);opacity:0.4;
+}
+@keyframes typingDot{
+  0%,100%{opacity:0.3;transform:translateY(0) scale(1)}
+  50%{opacity:0.9;transform:translateY(-6px) scale(1.2)}
+}
+
+/* --- Chat Header: subtle gradient bar --- */
+.burnout-bar{height:2px;background:rgba(14,165,160,0.06);position:relative;overflow:hidden}
+.burnout-bar::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(14,165,160,0.15),transparent);
+  animation:barShimmer 3s ease-in-out infinite;
+}
+@keyframes barShimmer{
+  0%{transform:translateX(-100%)}100%{transform:translateX(100%)}
+}
+
+/* --- Input textarea: subtle glow when typing --- */
+.input-area textarea:not(:placeholder-shown){
+  border-color:rgba(14,165,160,0.2);
+  box-shadow:0 0 0 2px rgba(14,165,160,0.06);
+}
+
+/* --- Send button: ripple effect --- */
+.send-btn{position:relative;overflow:hidden}
+.send-btn::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(255,255,255,0.3),transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.send-btn:active::after{opacity:1}
+
+/* --- Screen transitions: smoother --- */
+.screen{transition:opacity 0.5s cubic-bezier(.22,1,.36,1),transform 0.5s cubic-bezier(.22,1,.36,1)}
+.screen.hidden{transform:translateY(12px) scale(0.99)}
+
+/* --- Welcome elements: fade in sequence --- */
+.nafas-logo-container{opacity:0;animation:logoFadeIn 0.8s cubic-bezier(.22,1,.36,1) 0s forwards,logoFloat 8s ease-in-out 0.8s infinite}
+@keyframes logoFadeIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+
+.app-name{opacity:0;animation:textFadeIn 0.6s cubic-bezier(.22,1,.36,1) 0.2s forwards,shimmerText 6s linear 0.8s infinite}
+.app-slogan{opacity:0;animation:textFadeIn 0.5s ease 0.35s forwards}
+.tagline{opacity:0;animation:textFadeIn 0.5s ease 0.45s forwards}
+@keyframes textFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* --- Session count & buttons: fade in --- */
+.session-count{opacity:0;animation:textFadeIn 0.4s ease 0.6s forwards}
+.tour-btn{opacity:0;animation:textFadeIn 0.4s ease 0.7s forwards}
+.copyright{opacity:0;animation:textFadeIn 0.4s ease 0.8s forwards}
+
+/* --- Consent box: entrance --- */
+.consent-box{animation:consentIn 0.6s cubic-bezier(.22,1,.36,1)}
+@keyframes consentIn{from{opacity:0;transform:scale(0.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* --- Settings panel: glass entrance --- */
+.settings-panel.open{animation:settingsIn 0.25s cubic-bezier(.22,1,.36,1)}
+@keyframes settingsIn{from{opacity:0;transform:translateY(-8px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* --- SOS: gentler presence --- */
+.help-fab.visible{animation:fabSlideIn 0.5s cubic-bezier(.22,1,.36,1) 1s backwards}
+@keyframes fabSlideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* --- Drawer: smoother slide --- */
+.drawer{transition:transform 0.4s cubic-bezier(.22,1,.36,1)}
+.drawer-overlay{transition:opacity 0.3s ease}
+
+/* --- Quick Result Card: premium entrance --- */
+.quick-result-card{animation:resultCardIn 0.5s cubic-bezier(.22,1,.36,1)}
+@keyframes resultCardIn{
+  from{opacity:0;transform:translateY(16px) scale(0.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* --- Profile Card: glow border animation --- */
+.profile-card{position:relative}
+.profile-card::before{
+  content:'';position:absolute;inset:-1px;border-radius:calc(var(--radius-lg) + 1px);
+  background:linear-gradient(135deg,rgba(14,165,160,0.3),rgba(232,168,124,0.2),rgba(14,165,160,0.3));
+  background-size:200% auto;animation:borderGlow 4s linear infinite;z-index:-1;opacity:0.5;
+}
+@keyframes borderGlow{0%{background-position:0% center}100%{background-position:200% center}}
+
+/* --- Journey Screen: staggered stats --- */
+.journey-stats .journey-stat{opacity:0;animation:cardSlideIn 0.4s cubic-bezier(.22,1,.36,1) forwards}
+.journey-stats .journey-stat:nth-child(1){animation-delay:0.1s}
+.journey-stats .journey-stat:nth-child(2){animation-delay:0.2s}
+.journey-stats .journey-stat:nth-child(3){animation-delay:0.3s}
+.journey-stats .journey-stat:nth-child(4){animation-delay:0.4s}
+
+/* --- Scrollbar: premium thin style --- */
+.messages::-webkit-scrollbar{width:4px}
+.messages::-webkit-scrollbar-track{background:transparent}
+.messages::-webkit-scrollbar-thumb{background:rgba(14,165,160,0.15);border-radius:2px}
+.messages::-webkit-scrollbar-thumb:hover{background:rgba(14,165,160,0.3)}
+
+/* --- Survey stars: hover glow --- */
+.survey-star{border:1.5px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(8px)}
+.survey-star:hover{border-color:var(--accent-warm);background:rgba(232,168,124,0.08);box-shadow:0 4px 20px rgba(232,168,124,0.2)}
+
+/* --- QR share button --- */
+.qr-share-btn{background:var(--gradient-primary);box-shadow:0 4px 20px var(--glow-primary)}
+.qr-share-btn:hover{box-shadow:0 8px 32px var(--glow-primary)}
+
+/* --- Exhibition banner: glass --- */
+.exhibition-banner{background:linear-gradient(135deg,rgba(14,165,160,0.9),rgba(11,140,135,0.95));backdrop-filter:blur(12px)}
+
+/* --- Breathing overlay: Enhanced immersion --- */
+.breath-overlay{background:radial-gradient(ellipse at center,rgba(8,15,26,0.95),rgba(8,15,26,0.98))}
+.breath-glow-ring{border-color:rgba(14,165,160,0.3);box-shadow:0 0 40px rgba(14,165,160,0.15),inset 0 0 40px rgba(14,165,160,0.08)}
+@keyframes glowPulse{
+  0%,100%{transform:scale(0.85);border-color:rgba(14,165,160,0.2);box-shadow:0 0 20px rgba(14,165,160,0.08)}
+  50%{transform:scale(1.15);border-color:rgba(14,165,160,0.5);box-shadow:0 0 60px rgba(14,165,160,0.25),inset 0 0 50px rgba(14,165,160,0.12)}
+}
+.breath-phase-text{color:var(--accent-primary);text-shadow:0 0 24px rgba(14,165,160,0.4)}
+.breath-timer-text{color:var(--accent-primary);opacity:0.5}
+
+/* --- Crisis banner: glass with urgency --- */
+.crisis-banner{background:linear-gradient(135deg,rgba(220,38,38,0.08),rgba(248,81,73,0.1));backdrop-filter:blur(20px)}
+
+/* --- Tooltip-like mode badge glow --- */
+.mode-badge{transition:all 0.3s}
+
+/* --- Empty chat state: warmer --- */
+.empty-chat-state{opacity:0.5}
+.empty-chat-state .empty-icon{font-size:3.5rem;margin-bottom:16px;filter:grayscale(0.3)}
+
+/* --- Journey code input: premium --- */
+.journey-entry input{background:var(--glass);border:1.5px solid var(--glass-border);backdrop-filter:blur(8px)}
+.journey-entry input:focus{border-color:var(--accent-primary);box-shadow:0 0 0 3px var(--glow-primary)}
+.journey-entry button{background:var(--gradient-primary);box-shadow:0 2px 12px var(--glow-primary)}
+
+/* --- Live stats badge: glass --- */
+.live-stats{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(12px)}
+.live-dot{background:var(--level-1);box-shadow:0 0 8px rgba(52,211,153,0.4)}
+
+/* --- Mode Card press feedback --- */
+.mode-card:active .mode-icon{transform:scale(0.92)}
+
+/* --- Copyright: warm accent on hover link --- */
+.copyright a:hover{color:var(--accent-warm)!important}
+
+/* ===== END PHASE 2 ===== */
+
 </style>
 </head>
 <body>
