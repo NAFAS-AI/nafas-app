@@ -1944,8 +1944,11 @@ async function callGeminiAI(userMessage, mode) {
       try {
         parsed = JSON.parse(text);
       } catch(e) {
-        // If JSON parsing fails, use the raw text as response
-        parsed = { response: text.replace(/[{}"]/g, ''), vak: 'mixed', score: 5, crisis: false, mood: 'exhausted' };
+        // If JSON parsing fails, extract response intelligently
+        let cleanText = text.replace(/[{}"]/g, '').trim();
+        cleanText = cleanText.replace(/^response\s*:?\s*/i, '').replace(/,?\s*vak\s*:.*/is, '').trim();
+        if(!cleanText || cleanText.toLowerCase() === 'response') cleanText = null;
+        parsed = { response: cleanText, vak: 'mixed', score: 5, crisis: false, mood: 'exhausted' };
       }
 
       // Add model response to history
@@ -7322,7 +7325,7 @@ async function sendMessage(){
     ];
     
     hideTyping();
-    addMessage('ai', genderAdapt(thankResponses[Math.floor(Math.random() * thankResponses.length)], gender));
+    addMessage('bot', genderAdapt(thankResponses[Math.floor(Math.random() * thankResponses.length)], gender));
     return;
   }
 
@@ -7345,7 +7348,7 @@ async function sendMessage(){
   // Try Gemini AI first
   const aiResult = await callGeminiAI(text, state.mode);
 
-  if(aiResult) {
+  if(aiResult && aiResult.response && aiResult.response !== 'response' && aiResult.response.trim().length > 3) {
 
         // ---- AI-POWERED RESPONSE PATH ----
     hideTyping();
