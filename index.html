@@ -303,6 +303,39 @@
 </div>
 
 <script src="js/app.js"></script>
-<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    // فحص التحديثات كل 30 دقيقة
+    setInterval(() => reg.update(), 30 * 60 * 1000);
+    
+    // عند وجود تحديث جاهز
+    reg.addEventListener('updatefound', () => {
+      const newSW = reg.installing;
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'activated') {
+          showUpdateBanner();
+        }
+      });
+    });
+  }).catch(() => {});
+  
+  // استقبال رسالة التحديث من SW
+  navigator.serviceWorker.addEventListener('message', e => {
+    if (e.data && e.data.type === 'SW_UPDATED') {
+      showUpdateBanner();
+    }
+  });
+}
+
+function showUpdateBanner() {
+  if (document.getElementById('updateBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'updateBanner';
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg,#0EA5A0,#0d8a86);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:Tajawal,sans-serif;font-size:.95rem;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideDown .4s ease';
+  banner.innerHTML = '✨ تحديث جديد متاح! <button onclick="location.reload()" style="background:#fff;color:#0EA5A0;border:none;padding:6px 18px;border-radius:20px;font-family:Tajawal;font-weight:700;cursor:pointer;font-size:.9rem">تحديث الآن</button>';
+  document.body.prepend(banner);
+}
+</script>
 </body>
 </html>
