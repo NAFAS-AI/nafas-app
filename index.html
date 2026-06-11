@@ -150,6 +150,8 @@
 
 <!-- Welcome Screen -->
 <div id="welcomeScreen" class="screen welcome" role="main">
+
+  <!-- 1. Logo Area -->
   <div class="welcome-header">
     <div class="nafas-logo-container">
       <img src="brand/nafas-logo-color.png" alt="Nafas Logo" class="nafas-logo-img" onerror="this.style.display='none'">
@@ -158,25 +160,49 @@
   <div class="app-name" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
   <div class="app-slogan">CALM IS HALF THE CURE</div>
   <div class="tagline" id="tagline">يفهمكِ من كلامكِ</div>
+
   <div class="returning-welcome" id="returningWelcome" style="display:none"></div>
-  <div class="modes-grid" id="modesGrid" role="group" aria-label="Modes">
-    <div class="mode-card" onclick="startMode('quick')" role="button" tabindex="0" aria-label="Quick Check"><div class="mode-icon">⚡</div><div class="mode-text"><h3 id="modeQuick">تحقق سريع</h3><p id="modeQuickDesc">سؤال واحد &bull; 30 ثانية</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('vent')" role="button" tabindex="0" aria-label="Free Venting"><div class="mode-icon">🌙</div><div class="mode-text"><h3 id="modeVent">فضفضة حرة</h3><p id="modeVentDesc">أنا أسمع &bull; بلا أسئلة</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('deep')" role="button" tabindex="0" aria-label="Deep Assessment"><div class="mode-icon">📊</div><div class="mode-text"><h3 id="modeDeep">تقييم عميق</h3><p id="modeDeepDesc">محادثة &bull; 5-10 دقائق</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('demo')" role="button" tabindex="0" aria-label="Demo Mode"><div class="mode-icon">🎪</div><div class="mode-text"><h3 id="modeDemo">وضع العرض</h3><p id="modeDemoDesc">عرض سريع &bull; للمعارض</p></div><span class="mode-arrow">&#8592;</span></div>
+
+  <!-- 2. HERO: Breathing Circle -->
+  <div class="breath-hero">
+    <div class="breath-hero-circle">
+      <span class="breath-hero-text">خذ نفَس</span>
+    </div>
+    <div class="breath-hero-subtitle">تنفّس معي...</div>
   </div>
-  <div class="session-count" id="sessionCount" aria-live="polite">...</div>
-  <div class="live-stats" id="liveStats" style="display:none">
-    <span class="live-dot"></span>
-    <span id="liveStatsText">0 شخص فحص اليوم</span>
+
+  <!-- 3. Primary CTA -->
+  <button class="cta-primary" onclick="startMode('vent')" role="button" aria-label="Free Venting">🌙 فضفض لي</button>
+
+  <!-- 4. Two Secondary Buttons -->
+  <div class="cta-row">
+    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check">⚡ تحقق سريع</button>
+    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment">📊 تقييم عميق</button>
   </div>
-  <button class="journey-link" id="journeyLink" onclick="showJourneyEntry()" style="display:none" aria-label="Enter journey code">&#128273; لديّ رمز رحلة</button>
-  <div class="journey-entry" id="journeyEntry">
-    <input type="text" id="journeyCodeInput" maxlength="6" placeholder="ABC123" aria-label="Journey code">
-    <button onclick="loadJourneyByCode()" aria-label="Load journey">&#128269;</button>
+
+  <!-- Hidden modesGrid: kept for app.js compatibility -->
+  <div class="modes-grid" id="modesGrid" role="group" aria-label="Modes" style="display:none!important">
+    <div class="mode-card" onclick="startMode('quick')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">⚡</div><div class="mode-text"><h3 id="modeQuick">تحقق سريع</h3><p id="modeQuickDesc">سؤال واحد &bull; 30 ثانية</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('vent')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">🌙</div><div class="mode-text"><h3 id="modeVent">فضفضة حرة</h3><p id="modeVentDesc">أنا أسمع &bull; بلا أسئلة</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('deep')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">📊</div><div class="mode-text"><h3 id="modeDeep">تقييم عميق</h3><p id="modeDeepDesc">محادثة &bull; 5-10 دقائق</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('demo')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">🎪</div><div class="mode-text"><h3 id="modeDemo">وضع العرض</h3><p id="modeDemoDesc">عرض سريع &bull; للمعارض</p></div><span class="mode-arrow">&#8592;</span></div>
   </div>
-  <button class="tour-btn" id="tourBtn" onclick="startTour()" aria-label="App tour">&#127919; جولة تعريفية</button>
-  <div class="copyright" id="copyrightWelcome">&copy; منيرة علي المري 2026 &mdash; بوابة الجود الذكية<br><a onclick="showPrivacyPolicy()" style="color:var(--text-secondary);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
+
+  <!-- 5. Bottom Section -->
+  <div class="welcome-bottom">
+    <div class="session-count" id="sessionCount" aria-live="polite">...</div>
+    <div class="live-stats" id="liveStats" style="display:none">
+      <span class="live-dot"></span>
+      <span id="liveStatsText">0 شخص فحص اليوم</span>
+    </div>
+    <button class="journey-link" id="journeyLink" onclick="showJourneyEntry()" style="display:none" aria-label="Enter journey code">&#128273; لديّ رمز رحلة</button>
+    <div class="journey-entry" id="journeyEntry">
+      <input type="text" id="journeyCodeInput" maxlength="6" placeholder="ABC123" aria-label="Journey code">
+      <button onclick="loadJourneyByCode()" aria-label="Load journey">&#128269;</button>
+    </div>
+    <button class="tour-btn" id="tourBtn" onclick="startTour()" aria-label="App tour">&#127919; جولة تعريفية</button>
+    <div class="copyright" id="copyrightWelcome">&copy; منيرة علي المري 2026 &mdash; بوابة الجود الذكية<br><a onclick="showPrivacyPolicy()" style="color:var(--text-secondary);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
+  </div>
 </div>
 
 <!-- Journey Screen -->

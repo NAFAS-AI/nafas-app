@@ -928,3 +928,279 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 /* Candle Glow Effect */
 .screen::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120%;height:120%;background:radial-gradient(ellipse at center,rgba(196,149,106,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
 .welcome::after,.chat-screen::after{z-index:0}
+
+
+/* ===== PHASE 3 — الحضن الأخاذ: Welcome Screen Redesign ===== */
+
+/* --- Breathing Circle Animations --- */
+@keyframes breathPulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes breathGlow {
+  0%, 100% { box-shadow: 0 0 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.1); }
+  50% { box-shadow: 0 0 50px rgba(196,149,106,0.35), 0 0 100px rgba(196,149,106,0.15); }
+}
+
+@keyframes breathText {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- Breathing Hero Section --- */
+.breath-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.breath-hero-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C4956A 0%, #E8C07A 50%, #D4A574 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breathPulse 6s ease-in-out infinite, breathGlow 6s ease-in-out infinite;
+  position: relative;
+  cursor: default;
+  /* Soft inner glow */
+  box-shadow: 0 0 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.1),
+              inset 0 0 40px rgba(255,255,255,0.08);
+}
+
+.breath-hero-circle::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,149,106,0.12), transparent 70%);
+  animation: breathPulse 6s ease-in-out infinite;
+  z-index: -1;
+}
+
+.breath-hero-text {
+  font-size: 1.35rem;
+  font-weight: 300;
+  color: #0F1A2E;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.2);
+  font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
+  user-select: none;
+}
+
+.breath-hero-subtitle {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  animation: breathText 6s ease-in-out infinite;
+}
+
+/* --- Primary CTA: "فضفض لي" --- */
+.cta-primary {
+  width: 85%;
+  max-width: 380px;
+  height: 64px;
+  border: none;
+  border-radius: 24px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+  /* Glassmorphism with warm amber */
+  background: linear-gradient(135deg, rgba(196,149,106,0.35), rgba(232,192,122,0.25));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(196,149,106,0.35);
+  box-shadow: 0 4px 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.08);
+  transition: all 0.4s cubic-bezier(.22,1,.36,1);
+  letter-spacing: 1px;
+  /* Entrance animation */
+  opacity: 0;
+  animation: ctaFadeIn 0.5s ease 0.55s forwards;
+}
+.cta-primary:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 40px rgba(196,149,106,0.35), 0 0 80px rgba(196,149,106,0.12);
+  border-color: rgba(196,149,106,0.55);
+  background: linear-gradient(135deg, rgba(196,149,106,0.5), rgba(232,192,122,0.35));
+}
+.cta-primary:active {
+  transform: translateY(-1px) scale(0.98);
+  transition: transform 0.1s;
+}
+
+/* --- Secondary CTA Row --- */
+.cta-row {
+  display: flex;
+  gap: 12px;
+  width: 85%;
+  max-width: 380px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  /* Entrance animation */
+  opacity: 0;
+  animation: ctaFadeIn 0.5s ease 0.7s forwards;
+}
+
+.cta-secondary {
+  flex: 1;
+  height: 56px;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+  /* Glassmorphism — lighter */
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s cubic-bezier(.22,1,.36,1);
+  letter-spacing: 0.5px;
+}
+.cta-secondary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-glow), 0 8px 32px rgba(0,0,0,0.15);
+  border-color: rgba(196,149,106,0.3);
+  background: rgba(196,149,106,0.08);
+}
+.cta-secondary:active {
+  transform: translateY(-1px) scale(0.97);
+  transition: transform 0.1s;
+}
+
+/* --- Welcome Bottom Section --- */
+.welcome-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  padding-bottom: 8px;
+  width: 100%;
+  /* Entrance animation */
+  opacity: 0;
+  animation: ctaFadeIn 0.4s ease 0.85s forwards;
+}
+.welcome-bottom .session-count {
+  font-size: 0.78rem;
+  margin-bottom: 2px;
+}
+.welcome-bottom .tour-btn {
+  font-size: 0.82rem;
+  padding: 8px 20px;
+  margin-bottom: 6px;
+  opacity: 1;
+  animation: none;
+}
+.welcome-bottom .copyright {
+  opacity: 0.3;
+  animation: none;
+}
+.welcome-bottom .journey-link {
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  margin-bottom: 6px;
+}
+
+/* --- CTA Entrance Animation --- */
+@keyframes ctaFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Breathing Hero Entrance Animation --- */
+.breath-hero {
+  opacity: 0;
+  animation: breathHeroIn 0.8s cubic-bezier(.22,1,.36,1) 0.4s forwards;
+}
+@keyframes breathHeroIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- Desktop Responsive: Larger breathing circle --- */
+@media (min-width: 769px) {
+  .breath-hero-circle {
+    width: 260px;
+    height: 260px;
+  }
+  .breath-hero-text {
+    font-size: 1.6rem;
+  }
+  .breath-hero-subtitle {
+    font-size: 1.05rem;
+  }
+  .cta-primary {
+    max-width: 420px;
+    height: 68px;
+    font-size: 1.3rem;
+  }
+  .cta-row {
+    max-width: 420px;
+  }
+  .cta-secondary {
+    height: 60px;
+    font-size: 1rem;
+  }
+}
+
+/* --- Small mobile adjustments --- */
+@media (max-width: 480px) {
+  .breath-hero-circle {
+    width: 180px;
+    height: 180px;
+  }
+  .breath-hero-text {
+    font-size: 1.15rem;
+  }
+  .breath-hero {
+    margin: 4px 0 20px;
+  }
+  .cta-primary {
+    height: 58px;
+    font-size: 1.15rem;
+    width: 90%;
+  }
+  .cta-row {
+    width: 90%;
+  }
+  .cta-secondary {
+    height: 50px;
+    font-size: 0.88rem;
+  }
+}
+
+/* --- Welcome layout: reduce padding to fit new layout --- */
+.welcome {
+  justify-content: flex-start;
+  padding-top: max(env(safe-area-inset-top, 20px), 20px);
+  gap: 0;
+}
+
+/* --- Override old modes-grid visibility in CSS too (belt & suspenders) --- */
+#modesGrid {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ===== END PHASE 3 ===== */
