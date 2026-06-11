@@ -934,18 +934,28 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 
 /* --- Breathing Circle Animations --- */
 @keyframes breathPulse {
-  0%, 100% { transform: scale(0.95); opacity: 0.85; }
-  50% { transform: scale(1.05); opacity: 1; }
+  0%, 100% { transform: scale(0.96); }
+  50% { transform: scale(1.04); }
 }
 
 @keyframes breathGlow {
-  0%, 100% { box-shadow: 0 0 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.1); }
-  50% { box-shadow: 0 0 50px rgba(196,149,106,0.35), 0 0 100px rgba(196,149,106,0.15); }
+  0%, 100% { box-shadow: 0 0 25px rgba(196,149,106,0.2), 0 0 50px rgba(196,149,106,0.08); }
+  50% { box-shadow: 0 0 40px rgba(196,149,106,0.35), 0 0 80px rgba(196,149,106,0.12); }
 }
 
 @keyframes breathText {
-  0%, 100% { opacity: 0.5; }
+  0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
+}
+
+@keyframes breathHeroIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ctaFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* --- Breathing Hero Section --- */
@@ -954,14 +964,16 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 8px 0 28px;
+  margin: 4px 0 16px;
   position: relative;
   z-index: 1;
+  opacity: 0;
+  animation: breathHeroIn 0.8s cubic-bezier(.22,1,.36,1) 0.3s forwards;
 }
 
 .breath-hero-circle {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   background: linear-gradient(135deg, #C4956A 0%, #E8C07A 50%, #D4A574 100%);
   display: flex;
@@ -970,23 +982,22 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   animation: breathPulse 6s ease-in-out infinite, breathGlow 6s ease-in-out infinite;
   position: relative;
   cursor: default;
-  /* Soft inner glow */
-  box-shadow: 0 0 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.1),
-              inset 0 0 40px rgba(255,255,255,0.08);
+  box-shadow: 0 0 25px rgba(196,149,106,0.2), 0 0 50px rgba(196,149,106,0.08),
+              inset 0 0 30px rgba(255,255,255,0.08);
 }
 
 .breath-hero-circle::before {
   content: '';
   position: absolute;
-  inset: -12px;
+  inset: -8px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(196,149,106,0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(196,149,106,0.1), transparent 70%);
   animation: breathPulse 6s ease-in-out infinite;
   z-index: -1;
 }
 
 .breath-hero-text {
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 300;
   color: #0F1A2E;
   letter-spacing: 2px;
@@ -996,8 +1007,8 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 }
 
 .breath-hero-subtitle {
-  margin-top: 16px;
-  font-size: 0.95rem;
+  margin-top: 10px;
+  font-size: 0.88rem;
   color: var(--text-secondary);
   font-weight: 300;
   letter-spacing: 1.5px;
@@ -1008,34 +1019,37 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 .cta-primary {
   width: 85%;
   max-width: 380px;
-  height: 64px;
-  border: none;
+  min-height: 58px !important;
+  padding: 14px 24px !important;
+  border: 1.5px solid rgba(196,149,106,0.35) !important;
   border-radius: 24px;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
   font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
   color: #fff;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  margin-bottom: 16px;
-  /* Glassmorphism with warm amber */
-  background: linear-gradient(135deg, rgba(196,149,106,0.35), rgba(232,192,122,0.25));
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, rgba(196,149,106,0.45), rgba(232,192,122,0.3)) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(196,149,106,0.35);
   box-shadow: 0 4px 30px rgba(196,149,106,0.2), 0 0 60px rgba(196,149,106,0.08);
   transition: all 0.4s cubic-bezier(.22,1,.36,1);
   letter-spacing: 1px;
-  /* Entrance animation */
+  line-height: 1.3;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
-  animation: ctaFadeIn 0.5s ease 0.55s forwards;
+  animation: ctaFadeIn 0.5s ease 0.5s forwards;
 }
 .cta-primary:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 8px 40px rgba(196,149,106,0.35), 0 0 80px rgba(196,149,106,0.12);
-  border-color: rgba(196,149,106,0.55);
-  background: linear-gradient(135deg, rgba(196,149,106,0.5), rgba(232,192,122,0.35));
+  border-color: rgba(196,149,106,0.55) !important;
+  background: linear-gradient(135deg, rgba(196,149,106,0.55), rgba(232,192,122,0.4)) !important;
 }
 .cta-primary:active {
   transform: translateY(-1px) scale(0.98);
@@ -1045,40 +1059,43 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 /* --- Secondary CTA Row --- */
 .cta-row {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   width: 85%;
   max-width: 380px;
   justify-content: space-between;
-  margin-bottom: 24px;
-  /* Entrance animation */
+  margin-bottom: 12px;
   opacity: 0;
-  animation: ctaFadeIn 0.5s ease 0.7s forwards;
+  animation: ctaFadeIn 0.5s ease 0.65s forwards;
 }
 
 .cta-secondary {
   flex: 1;
-  height: 56px;
-  border: none;
+  min-height: 50px !important;
+  padding: 12px 10px !important;
+  border: 1px solid var(--glass-border, rgba(196,149,106,0.15)) !important;
   border-radius: 20px;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
   color: var(--text-primary);
   cursor: pointer;
-  /* Glassmorphism — lighter */
-  background: var(--glass);
+  background: var(--glass, rgba(196,149,106,0.06)) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 2px 16px rgba(140,120,100,.06);
   transition: all 0.4s cubic-bezier(.22,1,.36,1);
   letter-spacing: 0.5px;
+  line-height: 1.3;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .cta-secondary:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: var(--shadow-glow), 0 8px 32px rgba(0,0,0,0.15);
-  border-color: rgba(196,149,106,0.3);
-  background: rgba(196,149,106,0.08);
+  box-shadow: 0 4px 24px rgba(196,149,106,0.15), 0 8px 32px rgba(0,0,0,0.1);
+  border-color: rgba(196,149,106,0.3) !important;
+  background: rgba(196,149,106,0.1) !important;
 }
 .cta-secondary:active {
   transform: translateY(-1px) scale(0.97);
@@ -1090,111 +1107,76 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   margin-top: auto;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   width: 100%;
-  /* Entrance animation */
   opacity: 0;
-  animation: ctaFadeIn 0.4s ease 0.85s forwards;
+  animation: ctaFadeIn 0.4s ease 0.8s forwards;
 }
 .welcome-bottom .session-count {
-  font-size: 0.78rem;
-  margin-bottom: 2px;
+  font-size: 0.75rem;
+  margin-bottom: 0;
 }
 .welcome-bottom .tour-btn {
-  font-size: 0.82rem;
-  padding: 8px 20px;
-  margin-bottom: 6px;
+  font-size: 0.78rem;
+  padding: 6px 16px;
+  margin-bottom: 4px;
   opacity: 1;
   animation: none;
 }
 .welcome-bottom .copyright {
-  opacity: 0.3;
+  opacity: 0.25;
   animation: none;
+  font-size: 0.65rem;
 }
 .welcome-bottom .journey-link {
-  font-size: 0.8rem;
-  padding: 8px 16px;
-  margin-bottom: 6px;
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  margin-bottom: 4px;
 }
 
-/* --- CTA Entrance Animation --- */
-@keyframes ctaFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+/* --- Welcome layout: compact for new design --- */
+#welcomeScreen.welcome {
+  justify-content: flex-start !important;
+  padding-top: max(env(safe-area-inset-top, 12px), 12px) !important;
+  gap: 0 !important;
 }
 
-/* --- Breathing Hero Entrance Animation --- */
-.breath-hero {
-  opacity: 0;
-  animation: breathHeroIn 0.8s cubic-bezier(.22,1,.36,1) 0.4s forwards;
-}
-@keyframes breathHeroIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
+/* Reduce logo and header spacing */
+#welcomeScreen .welcome-header { margin-bottom: 0; }
+#welcomeScreen .nafas-logo-container { margin-bottom: 8px; }
+#welcomeScreen .nafas-logo-img { width: 100px; }
+#welcomeScreen .app-name { font-size: 2.8rem; margin-bottom: 0; }
+#welcomeScreen .app-slogan { margin-bottom: 0; font-size: 0.7rem; }
+#welcomeScreen .tagline { margin-bottom: 12px; font-size: 0.95rem; }
 
-/* --- Desktop Responsive: Larger breathing circle --- */
+/* --- Desktop Responsive --- */
 @media (min-width: 769px) {
-  .breath-hero-circle {
-    width: 260px;
-    height: 260px;
-  }
-  .breath-hero-text {
-    font-size: 1.6rem;
-  }
-  .breath-hero-subtitle {
-    font-size: 1.05rem;
-  }
-  .cta-primary {
-    max-width: 420px;
-    height: 68px;
-    font-size: 1.3rem;
-  }
-  .cta-row {
-    max-width: 420px;
-  }
-  .cta-secondary {
-    height: 60px;
-    font-size: 1rem;
-  }
+  .breath-hero-circle { width: 220px; height: 220px; }
+  .breath-hero-text { font-size: 1.5rem; }
+  .breath-hero-subtitle { font-size: 1rem; }
+  .cta-primary { max-width: 420px; min-height: 64px !important; font-size: 1.3rem; }
+  .cta-row { max-width: 420px; }
+  .cta-secondary { min-height: 56px !important; font-size: 1rem; }
+  #welcomeScreen .app-name { font-size: 3.5rem; }
+  #welcomeScreen .nafas-logo-img { width: 130px; }
 }
 
 /* --- Small mobile adjustments --- */
 @media (max-width: 480px) {
-  .breath-hero-circle {
-    width: 180px;
-    height: 180px;
-  }
-  .breath-hero-text {
-    font-size: 1.15rem;
-  }
-  .breath-hero {
-    margin: 4px 0 20px;
-  }
-  .cta-primary {
-    height: 58px;
-    font-size: 1.15rem;
-    width: 90%;
-  }
-  .cta-row {
-    width: 90%;
-  }
-  .cta-secondary {
-    height: 50px;
-    font-size: 0.88rem;
-  }
+  .breath-hero-circle { width: 140px; height: 140px; }
+  .breath-hero-text { font-size: 1.05rem; }
+  .breath-hero { margin: 2px 0 10px; }
+  .cta-primary { min-height: 52px !important; font-size: 1.1rem; width: 90%; padding: 12px 20px !important; }
+  .cta-row { width: 90%; }
+  .cta-secondary { min-height: 46px !important; font-size: 0.85rem; }
+  #welcomeScreen .app-name { font-size: 2.2rem; }
+  #welcomeScreen .nafas-logo-img { width: 80px; }
+  #welcomeScreen .tagline { margin-bottom: 8px; font-size: 0.88rem; }
 }
 
-/* --- Welcome layout: reduce padding to fit new layout --- */
-.welcome {
-  justify-content: flex-start;
-  padding-top: max(env(safe-area-inset-top, 20px), 20px);
-  gap: 0;
-}
-
-/* --- Override old modes-grid visibility in CSS too (belt & suspenders) --- */
+/* --- Override old modes-grid --- */
 #modesGrid {
   display: none !important;
   height: 0 !important;
