@@ -1,1 +1,69 @@
-Y29uc3QgQ0FDSEVfTkFNRSA9ICduYWZhcy12NC4xJzsKY29uc3QgUFJFQ0FDSEUgPSBbCiAgJy8nLAogICcvaW5kZXguaHRtbCcsCiAgJy9jc3Mvc3R5bGVzLmNzcycsCiAgJy9qcy9hcHAuanMnLAogICcvbWFuaWZlc3QuanNvbicKXTsKCi8vID09PSBJTlNUQUxMOiDYrdmB2Lgg2KfZhNmF2YTZgdin2Kog2KfZhNij2LPYp9iz2YrYqSArINiq2YHYudmK2YQg2YHZiNix2YogPT09CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignaW5zdGFsbCcsIGUgPT4gewogIGUud2FpdFVudGlsKAogICAgY2FjaGVzLm9wZW4oQ0FDSEVfTkFNRSkKICAgICAgLnRoZW4oY2FjaGUgPT4gY2FjaGUuYWRkQWxsKFBSRUNBQ0hFKSkKICAgICAgLnRoZW4oKCkgPT4gc2VsZi5za2lwV2FpdGluZygpKQogICk7Cn0pOwoKLy8gPT09IEFDVElWQVRFOiDYrdiw2YEg2YPZhCDYp9mE2YPYp9i0INin2YTZgtiv2YrZhSArINin2YTYs9mK2LfYsdipINmB2YjYsdin2YsgPT09CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignYWN0aXZhdGUnLCBlID0+IHsKICBlLndhaXRVbnRpbCgKICAgIGNhY2hlcy5rZXlzKCkudGhlbihrZXlzID0+CiAgICAgIFByb21pc2UuYWxsKGtleXMuZmlsdGVyKGsgPT4gayAhPT0gQ0FDSEVfTkFNRSkubWFwKGsgPT4gY2FjaGVzLmRlbGV0ZShrKSkpCiAgICApLnRoZW4oKCkgPT4gc2VsZi5jbGllbnRzLmNsYWltKCkpCiAgICAgLnRoZW4oKCkgPT4gewogICAgICAgLy8g2KXYtNi52KfYsSDZg9mEINin2YTZhtmI2KfZgdiwINin2YTZhdmB2KrZiNit2Kkg2KjYp9mE2KrYrdiv2YrYqwogICAgICAgcmV0dXJuIHNlbGYuY2xpZW50cy5tYXRjaEFsbCh7IHR5cGU6ICd3aW5kb3cnIH0pLnRoZW4oY2xpZW50cyA9PiB7CiAgICAgICAgIGNsaWVudHMuZm9yRWFjaChjbGllbnQgPT4gY2xpZW50LnBvc3RNZXNzYWdlKHsgdHlwZTogJ1NXX1VQREFURUQnLCB2ZXJzaW9uOiBDQUNIRV9OQU1FIH0pKTsKICAgICAgIH0pOwogICAgIH0pCiAgKTsKfSk7CgovLyA9PT0gRkVUQ0g6IE5ldHdvcmstRmlyc3Qg2YTZhNmAIEhUTUwvQ1NTL0pTIOKAlCDYp9mE2KrYrdiv2YrYqyDZitmI2LXZhCDYr9in2YrZhdin2YsgPT09CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBlID0+IHsKICBpZiAoZS5yZXF1ZXN0Lm1ldGhvZCAhPT0gJ0dFVCcpIHJldHVybjsKCiAgLy8gQVBJIGNhbGxzIOKAlCDYtNio2YPYqSDZgdmC2LfYjCDYqNmE2Kcg2YPYp9i0CiAgaWYgKGUucmVxdWVzdC51cmwuaW5jbHVkZXMoJ3N1cGFiYXNlLmNvJykgfHwgZS5yZXF1ZXN0LnVybC5pbmNsdWRlcygnZ29vZ2xlYXBpcy5jb20nKSB8fCBlLnJlcXVlc3QudXJsLmluY2x1ZGVzKCcvYXBpLycpKSB7CiAgICBlLnJlc3BvbmRXaXRoKAogICAgICBmZXRjaChlLnJlcXVlc3QpLmNhdGNoKCgpID0+CiAgICAgICAgbmV3IFJlc3BvbnNlKEpTT04uc3RyaW5naWZ5KHsgZXJyb3I6ICdvZmZsaW5lJyB9KSwgeyBoZWFkZXJzOiB7ICdDb250ZW50LVR5cGUnOiAnYXBwbGljYXRpb24vanNvbicgfSB9KQogICAgICApCiAgICApOwogICAgcmV0dXJuOwogIH0KCiAgLy8gSFRNTC9DU1MvSlMg4oCUIE5ldHdvcmstRmlyc3Q6INit2KfZiNmEINin2YTYtNio2YPYqSDYo9mI2YTYp9mL2Iwg2KfZhNmD2KfYtCDZg9mAIGZhbGxiYWNrCiAgZS5yZXNwb25kV2l0aCgKICAgIGZldGNoKGUucmVxdWVzdCkudGhlbihyZXNwID0+IHsKICAgICAgaWYgKHJlc3Aub2spIHsKICAgICAgICBjb25zdCBjbG9uZSA9IHJlc3AuY2xvbmUoKTsKICAgICAgICBjYWNoZXMub3BlbihDQUNIRV9OQU1FKS50aGVuKGNhY2hlID0+IGNhY2hlLnB1dChlLnJlcXVlc3QsIGNsb25lKSk7CiAgICAgIH0KICAgICAgcmV0dXJuIHJlc3A7CiAgICB9KS5jYXRjaCgoKSA9PgogICAgICBjYWNoZXMubWF0Y2goZS5yZXF1ZXN0KS50aGVuKHIgPT4KICAgICAgICByIHx8IChlLnJlcXVlc3QubW9kZSA9PT0gJ25hdmlnYXRlJyA/IGNhY2hlcy5tYXRjaCgnLycpIDogbmV3IFJlc3BvbnNlKCcnLCB7IHN0YXR1czogNTAzIH0pKQogICAgICApCiAgICApCiAgKTsKfSk7CgovLyA9PT0gTUVTU0FHRTog2KfZhNiz2YXYp9itINio2KrYrdiv2YrYqyDZitiv2YjZiiDZhdmGINin2YTYqti32KjZitmCID09PQpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ21lc3NhZ2UnLCBlID0+IHsKICBpZiAoZS5kYXRhICYmIGUuZGF0YS50eXBlID09PSAnU0tJUF9XQUlUSU5HJykgewogICAgc2VsZi5za2lwV2FpdGluZygpOwogIH0KfSk7Cg==
+const CACHE_NAME = 'nafas-v5.0';
+const PRECACHE = [
+  '/',
+  '/index.html',
+  '/css/styles.css',
+  '/js/app.js',
+  '/manifest.json'
+];
+
+// === INSTALL: حفظ الملفات الأساسية + تفعيل فوري ===
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// === ACTIVATE: حذف كل الكاش القديم + السيطرة فوراً ===
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+     .then(() => {
+       // إشعار كل النوافذ المفتوحة بالتحديث
+       return self.clients.matchAll({ type: 'window' }).then(clients => {
+         clients.forEach(client => client.postMessage({ type: 'SW_UPDATED', version: CACHE_NAME }));
+       });
+     })
+  );
+});
+
+// === FETCH: Network-First للـ HTML/CSS/JS — التحديث يوصل دايماً ===
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+
+  // API calls — شبكة فقط، بلا كاش
+  if (e.request.url.includes('supabase.co') || e.request.url.includes('googleapis.com') || e.request.url.includes('/api/')) {
+    e.respondWith(
+      fetch(e.request).catch(() =>
+        new Response(JSON.stringify({ error: 'offline' }), { headers: { 'Content-Type': 'application/json' } })
+      )
+    );
+    return;
+  }
+
+  // HTML/CSS/JS — Network-First: حاول الشبكة أولاً، الكاش كـ fallback
+  e.respondWith(
+    fetch(e.request).then(resp => {
+      if (resp.ok) {
+        const clone = resp.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+      }
+      return resp;
+    }).catch(() =>
+      caches.match(e.request).then(r =>
+        r || (e.request.mode === 'navigate' ? caches.match('/') : new Response('', { status: 503 }))
+      )
+    )
+  );
+});
+
+// === MESSAGE: السماح بتحديث يدوي من التطبيق ===
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
