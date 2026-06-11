@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="نَفَس">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230F1A2E'/><text x='90' y='120' text-anchor='middle' font-size='100'>🌙</text></svg>">
+<link rel="apple-touch-icon" sizes="180x180" href="logos/nafas_new/favicon_iphone.png">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
@@ -34,6 +34,16 @@
   }
 })();
 </script>
+<!-- Splash Screen -->
+<div id="splashScreen" class="splash-screen">
+  <div class="splash-content">
+    <div class="splash-logo-container">
+      <img src="logos/nafas_new/white_nobg.png" alt="نَفَس" class="splash-logo" />
+      <div class="splash-glow"></div>
+    </div>
+    <div class="splash-tagline">CALM IS HALF THE CURE</div>
+  </div>
+</div>
 <!-- Consent + Disclaimer Overlay -->
 <div class="consent-overlay" id="consentOverlay" style="display:none">
   <div class="consent-box">
@@ -151,12 +161,8 @@
 <!-- Welcome Screen -->
 <div id="welcomeScreen" class="screen welcome" role="main">
 
-  <!-- 1. Logo Area -->
-  <div class="welcome-header">
-    <div class="nafas-logo-container">
-      <span class="nafas-text-logo">نَفَس</span>
-    </div>
-  </div>
+  <!-- 1. Logo Area (removed — logo shown in splash screen only) -->
+  <div class="welcome-header" style="padding-top:env(safe-area-inset-top, 12px);margin-bottom:0;height:12px"></div>
   <div class="app-name" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
   <div class="app-slogan">CALM IS HALF THE CURE</div>
   <div class="tagline" id="tagline">يفهمكِ من كلامكِ</div>
@@ -366,6 +372,8 @@
 </div>
 
 <script src="js/nafas_audio.js"></script>
+<script src="js/nafas_splash.js"></script>
+<script src="js/nafas_emotions.js"></script>
 <script src="js/app.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
