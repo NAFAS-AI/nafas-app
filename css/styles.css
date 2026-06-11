@@ -1185,4 +1185,251 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   padding: 0 !important;
 }
 
+/* ===== TEXT LOGO ===== */
+.nafas-text-logo {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-primary, #C4956A), var(--accent-gold, #E8C07A));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+  user-select: none;
+  text-shadow: none;
+}
+
+/* ===== SOUND SYSTEM UI ===== */
+
+/* Sound FAB */
+.sound-fab {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(196, 149, 106, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(196, 149, 106, 0.25);
+  color: var(--accent-primary, #C4956A);
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-fab:hover, .sound-fab.active {
+  background: rgba(196, 149, 106, 0.3);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(196, 149, 106, 0.3);
+}
+
+/* Sound Panel */
+.sound-panel {
+  position: fixed;
+  bottom: 80px;
+  left: 24px;
+  width: 280px;
+  max-height: 400px;
+  background: rgba(15, 26, 46, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(196, 149, 106, 0.2);
+  border-radius: 24px;
+  padding: 20px;
+  z-index: 101;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.sound-panel.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.sound-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #E8C07A;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.sound-panel-close {
+  background: none;
+  border: none;
+  color: #F5EDE0;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.sound-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-y: auto;
+  max-height: 260px;
+}
+
+.sound-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(196, 149, 106, 0.08);
+  border: 1px solid rgba(196, 149, 106, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #F5EDE0;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 0.9rem;
+}
+
+.sound-option:hover {
+  background: rgba(196, 149, 106, 0.15);
+}
+
+.sound-option.active {
+  background: rgba(196, 149, 106, 0.2);
+  border-color: rgba(196, 149, 106, 0.4);
+  box-shadow: 0 0 15px rgba(196, 149, 106, 0.15);
+}
+
+.sound-option-icon {
+  font-size: 1.4rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(196, 149, 106, 0.12);
+  border-radius: 12px;
+}
+
+.sound-option-name {
+  flex: 1;
+}
+
+.sound-option-eq {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.sound-option.active .sound-option-eq {
+  opacity: 1;
+}
+
+.sound-eq-bar {
+  width: 3px;
+  background: #C4956A;
+  border-radius: 2px;
+  animation: eqBounce 0.8s ease-in-out infinite alternate;
+}
+
+.sound-eq-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+.sound-eq-bar:nth-child(2) { height: 12px; animation-delay: 0.2s; }
+.sound-eq-bar:nth-child(3) { height: 6px; animation-delay: 0.4s; }
+
+@keyframes eqBounce {
+  from { transform: scaleY(0.4); }
+  to { transform: scaleY(1); }
+}
+
+/* Volume slider */
+.sound-volume {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(196, 149, 106, 0.15);
+}
+
+.sound-volume span {
+  font-size: 1.1rem;
+}
+
+.sound-volume input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(196, 149, 106, 0.2);
+  border-radius: 2px;
+  outline: none;
+}
+
+.sound-volume input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #C4956A;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(196, 149, 106, 0.4);
+}
+
+/* "No sound" option */
+.sound-option-none {
+  color: var(--text-secondary, #A0A8B8);
+  font-size: 0.85rem;
+}
+
+/* Dark mode adjustments - the panel already looks great in dark */
+.dark .sound-panel {
+  background: rgba(10, 15, 30, 0.95);
+}
+
+/* Light mode adjustments for sound panel */
+:root.light .sound-panel,
+:root:not(.dark) .sound-panel {
+  background: rgba(253, 248, 240, 0.95);
+  border-color: rgba(196, 149, 106, 0.25);
+}
+:root.light .sound-panel-header,
+:root:not(.dark) .sound-panel-header {
+  color: #A67B5B;
+}
+:root.light .sound-option,
+:root:not(.dark) .sound-option {
+  color: #2A1F1A;
+}
+:root.light .sound-panel-close,
+:root:not(.dark) .sound-panel-close {
+  color: #7A6B5E;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .sound-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    bottom: 76px;
+  }
+
+  .sound-fab {
+    bottom: 16px;
+    left: 16px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
 /* ===== END PHASE 3 ===== */
