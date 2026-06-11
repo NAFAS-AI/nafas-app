@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nafas-v5.0';
+const CACHE_NAME = 'nafas-v5.1';
 const PRECACHE = [
   '/',
   '/index.html',
