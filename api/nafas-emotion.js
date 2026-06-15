@@ -151,7 +151,10 @@ Return JSON with exactly these fields:
 
 // ──────── Local Fallback Analysis ────────
 function localAnalysis(text, lang) {
-  const lower = text.toLowerCase();
+  const decoded = decodeFrancoArabic(text);
+  const lower = normalizeArabicForMatching(decoded.toLowerCase());
+  // ذكاء إملائي — نفس الذكاء المستخدم في checkChildSafety
+  const match = (w) => safeIncludes(lower, w);
   let emotion = 'neutral';
   let intensity = 5;
   let crisis = false;
