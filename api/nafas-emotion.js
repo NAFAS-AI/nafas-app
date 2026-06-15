@@ -45,13 +45,20 @@ export default async function handler(req, res) {
     // Add product-specific enrichment
     if (product === 'atheer') {
       analysis.child_safety = checkChildSafety(text);
+      // Override action if safety flags are critical
+      if (analysis.child_safety.alert_level >= 4) {
+        analysis.emotion = analysis.emotion === 'neutral' ? 'scared' : analysis.emotion;
+        analysis.tone = 'urgent';
+      }
     }
 
     // Add recommendations
     analysis.recommendations = {
       breathing: suggestBreathing(analysis.emotion),
       color: suggestColor(analysis.emotion),
-      action: suggestAction(analysis.emotion, product)
+      action: (product === 'atheer' && analysis.child_safety && analysis.child_safety.alert_level >= 3)
+        ? 'activate_blind_guardian'
+        : suggestAction(analysis.emotion, product)
     };
 
     analysis.meta = {
