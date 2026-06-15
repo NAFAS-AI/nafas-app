@@ -1534,3 +1534,454 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 }
 
 /* ===== END PHASE 4 ===== */
+/* ============================================================
+   NAFAS UPGRADE STYLES — Phase 5+
+   Hug System + Adaptive Breathing + Life Pulse + Ecosystem
+   
+   © منيرة علي المري 2026 — نَفَس للذكاء الاصطناعي
+   ============================================================ */
+
+/* ──────── HUG OVERLAY ──────── */
+.hug-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: radial-gradient(ellipse at center, #1a140a 0%, #0a0805 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2s ease-in-out, visibility 0s 2s;
+  overflow: hidden;
+}
+.hug-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 2s ease-in-out;
+}
+.hug-overlay.releasing {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.hug-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hug-warmth {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,192,122,0.15) 0%, rgba(196,149,106,0.05) 50%, transparent 70%);
+  animation: hugWarmthPulse 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hugWarmthPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.3; }
+}
+
+.hug-breath-guide {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  border-radius: 50%;
+  border: 1px solid rgba(232,192,122,0.1);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.hug-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 340px;
+  padding: 20px;
+}
+
+.hug-glow-circle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,192,122,0.12) 0%, transparent 70%);
+  animation: hugGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hugGlow {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+.hug-emoji {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  animation: hugEmojiBounce 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(232,192,122,0.3));
+}
+
+@keyframes hugEmojiBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.hug-message {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #E8C07A;
+  opacity: 0;
+  min-height: 60px;
+  direction: rtl;
+  text-align: center;
+  transition: opacity 1s ease-in-out;
+}
+
+.hug-sub {
+  font-size: 0.85rem;
+  color: rgba(232,192,122,0.4);
+  margin-top: 12px;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  direction: rtl;
+}
+
+.hug-release {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(232,192,122,0.1);
+  border: 1px solid rgba(232,192,122,0.2);
+  color: rgba(232,192,122,0.6);
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  z-index: 3;
+  opacity: 0;
+  animation: hugReleaseAppear 1s ease-in-out 5s forwards;
+}
+.hug-release:hover {
+  background: rgba(232,192,122,0.2);
+  color: #E8C07A;
+}
+
+@keyframes hugReleaseAppear {
+  to { opacity: 1; }
+}
+
+/* ──────── HUG TRIGGER BUTTON ──────── */
+.hug-trigger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: calc(100% - 40px);
+  max-width: 360px;
+  margin: 20px auto 0;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, rgba(232,192,122,0.08) 0%, rgba(196,149,106,0.05) 100%);
+  border: 1px solid rgba(232,192,122,0.15);
+  border-radius: 16px;
+  color: #C4956A;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  animation: hugBtnPulse 4s ease-in-out infinite;
+}
+.hug-trigger-btn:hover {
+  background: linear-gradient(135deg, rgba(232,192,122,0.15) 0%, rgba(196,149,106,0.1) 100%);
+  border-color: rgba(232,192,122,0.3);
+  transform: scale(1.02);
+}
+
+.hug-btn-emoji {
+  font-size: 1.5rem;
+  animation: hugBtnEmojiWave 3s ease-in-out infinite;
+}
+
+@keyframes hugBtnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,192,122,0); }
+  50% { box-shadow: 0 0 20px rgba(232,192,122,0.08); }
+}
+
+@keyframes hugBtnEmojiWave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+/* ──────── BREATHING PATTERN SELECTOR ──────── */
+.breath-pattern-selector {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(10,18,32,0.95);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0s 0.4s;
+}
+.breath-pattern-selector.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease;
+}
+
+.bps-content {
+  width: 90%;
+  max-width: 380px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.bps-title {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  color: #E8C07A;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.bps-subtitle {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bps-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  transition: all 0.3s ease;
+  text-align: right;
+}
+.bps-option:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateX(-3px);
+}
+.bps-option.recommended {
+  border-color: rgba(232,192,122,0.3);
+  background: rgba(232,192,122,0.06);
+}
+
+.bps-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.bps-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bps-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.bps-desc {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.bps-timing {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(196,149,106,0.6);
+  flex-shrink: 0;
+}
+
+.bps-close {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 24px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  transition: all 0.3s;
+}
+.bps-close:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+}
+
+/* ──────── ECOSYSTEM PANEL ──────── */
+.ecosystem-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 800;
+  background: rgba(15,26,46,0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.95);
+  transition: all 0.4s ease;
+  max-width: 300px;
+  width: 280px;
+}
+.ecosystem-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.eco-content {
+  padding: 20px;
+}
+.eco-content h3 {
+  color: #E8C07A;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.eco-subtitle {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+  margin-bottom: 16px;
+}
+
+.eco-product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+.eco-product:hover {
+  background: rgba(255,255,255,0.03);
+}
+.eco-nafas {
+  background: rgba(232,192,122,0.06);
+  border: 1px solid rgba(232,192,122,0.1);
+}
+
+.eco-icon {
+  font-size: 1.3rem;
+}
+
+.eco-info {
+  font-size: 0.85rem;
+  color: #fff;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.eco-trend {
+  margin-top: 14px;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  text-align: center;
+}
+
+.eco-close {
+  display: block;
+  margin: 14px auto 0;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.3);
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+.eco-close:hover {
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+}
+
+/* ──────── FIREFLY CANVAS ──────── */
+#fireflyCanvas {
+  pointer-events: none;
+  opacity: 0;
+  animation: fireflyFadeIn 3s ease-in-out 2s forwards;
+}
+
+@keyframes fireflyFadeIn {
+  to { opacity: 0.6; }
+}
+
+/* ──────── MOOD-BASED GLOW VARS ──────── */
+:root {
+  --glow-primary: rgba(196,149,106,0.2);
+  --glow-warm: rgba(232,192,122,0.15);
+}
+
+/* ──────── ORGANIC ANIMATIONS ──────── */
+@keyframes organicFloat {
+  0%, 100% { transform: translateY(0); }
+  33% { transform: translateY(-2px); }
+  66% { transform: translateY(1px); }
+}
+
+/* Pulse moon */
+.pulse-moon {
+  animation: moonGlow 8s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+  0%, 100% { opacity: 0.35; filter: drop-shadow(0 0 0 transparent); }
+  50% { opacity: 0.55; filter: drop-shadow(0 0 8px rgba(232,192,122,0.2)); }
+}
+
+/* ──────── RESPONSIVE ──────── */
+@media (max-width: 480px) {
+  .hug-message { font-size: 1rem; }
+  .hug-emoji { font-size: 3rem; }
+  .hug-release { bottom: 30px; padding: 10px 22px; font-size: 0.85rem; }
+  .ecosystem-panel { right: 10px; left: 10px; width: auto; max-width: none; }
+  .bps-content { padding: 16px; }
+  .bps-option { padding: 12px; }
+}

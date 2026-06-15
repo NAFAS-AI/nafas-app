@@ -1,9 +1,16 @@
-const CACHE_NAME = 'nafas-v5.1';
+const CACHE_NAME = 'nafas-v6.0';
 const PRECACHE = [
   '/',
   '/index.html',
   '/css/styles.css',
   '/js/app.js',
+  '/js/nafas_audio.js',
+  '/js/nafas_splash.js',
+  '/js/nafas_emotions.js',
+  '/js/nafas_hug.js',
+  '/js/nafas_breathing_smart.js',
+  '/js/nafas_pulse.js',
+  '/js/nafas_ecosystem.js',
   '/manifest.json'
 ];
 
