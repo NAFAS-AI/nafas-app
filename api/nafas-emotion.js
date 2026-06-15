@@ -169,14 +169,14 @@ function localAnalysis(text, lang) {
   const crisisAr = ['انتحار','أبي أموت','أتمنى الموت','أقتل نفسي','ما أبي أعيش'];
   const crisisEn = ['suicide','want to die','kill myself','end my life','end it all'];
   for (const w of crisisAr.concat(crisisEn)) {
-    if (lower.includes(w)) { crisis = true; emotion = 'crisis'; intensity = 10; break; }
+    if (match(w)) { crisis = true; emotion = 'crisis'; intensity = 10; break; }
   }
 
   if (!crisis) {
     for (const [emo, words] of Object.entries(emotionMap)) {
       const allWords = words.ar.concat(words.en);
       for (const w of allWords) {
-        if (lower.includes(w)) {
+        if (match(w)) {
           emotion = emo;
           intensity = emo === 'happy' ? 7 : (emo === 'sad' || emo === 'anxious' ? 3 : 4);
           break;
@@ -206,6 +206,8 @@ function checkChildSafety(text) {
   const lower = speech.normalized; // النسخة المُطبّعة عربياً
   const originalLower = text.toLowerCase(); // النسخة الأصلية
   const lang = speech.detectedLang;
+  // ذكاء إملائي — يفهم الأخطاء + الأحرف المتشابهة + الفرانكو عربي
+  const match = (w) => safeIncludes(lower, w);
   let level = 0;
   const flags = [];
   let response_type = 'normal';
@@ -220,7 +222,7 @@ function checkChildSafety(text) {
     'want to die','kill myself','suicide','end my life','better off dead'
   ];
   for (const w of emergency) {
-    if (lower.includes(w)) {
+    if (match(w)) {
       level = 5;
       flags.push('emergency_crisis:' + w);
       response_type = 'immediate_intervention';
@@ -232,12 +234,13 @@ function checkChildSafety(text) {
   // المستوى 5 — تحرش / اعتداء جنسي (طوارئ مطلقة)
   // ══════════════════════════════════════════════════════════
   const sexual = [
-    'يتحرش','تحرش','يلمس جسمي','لمس مكان','عورتي','يخلع ملابسي',
+    'يتحرش','تحرش','يلمس جسمي','يلمسني','لمسني','لمس مكان','عورتي','يخلع ملابسي',
     'يبوسني بطريقة','يجبرني أخلع','يدخل غرفتي بالليل',
-    'molest','sexual','inappropriate touch','private parts','forces me to undress'
+    'molest','sexual','inappropriate touch','private parts','forces me to undress',
+    'touched me','touches me','touched my body','touches my private'
   ];
   for (const w of sexual) {
-    if (lower.includes(w)) {
+    if (match(w)) {
       level = 5;
       flags.push('sexual_abuse:' + w);
       response_type = 'immediate_intervention';
@@ -259,7 +262,7 @@ function checkChildSafety(text) {
       'belt on face','bruises','bleeding','stitches','hospital'
     ];
     for (const w of severeAbuse) {
-      if (lower.includes(w)) {
+      if (match(w)) {
         level = 4;
         flags.push('severe_physical:' + w);
         response_type = 'activate_blind_guardian';
@@ -278,7 +281,7 @@ function checkChildSafety(text) {
       'don\'t tell anyone','our secret','if you tell','threatened me','nobody knows'
     ];
     for (const w of isolation) {
-      if (lower.includes(w)) {
+      if (match(w)) {
         level = Math.max(level, 4);
         flags.push('isolation_threat:' + w);
         response_type = 'activate_blind_guardian';
@@ -300,7 +303,7 @@ function checkChildSafety(text) {
       'hits me for no reason','scared of my dad','scared of my mom','hate my home'
     ];
     for (const w of persistentFear) {
-      if (lower.includes(w)) {
+      if (match(w)) {
         level = 3;
         flags.push('persistent_concern:' + w);
         response_type = 'alert_specialist_soft';
@@ -321,8 +324,8 @@ function checkChildSafety(text) {
     let hasDiscipline = false;
     let hasDistress = false;
     
-    for (const w of disciplineWords) { if (lower.includes(w)) hasDiscipline = true; }
-    for (const w of distressWords) { if (lower.includes(w)) hasDistress = true; }
+    for (const w of disciplineWords) { if (match(w)) hasDiscipline = true; }
+    for (const w of distressWords) { if (match(w)) hasDistress = true; }
     
     if (hasDiscipline && hasDistress) {
       level = 2;
@@ -344,8 +347,8 @@ function checkChildSafety(text) {
     let hasDiscipline = false;
     let hasContext = false;
     
-    for (const w of normalDiscipline) { if (lower.includes(w)) hasDiscipline = true; }
-    for (const w of disciplineContext) { if (lower.includes(w)) hasContext = true; }
+    for (const w of normalDiscipline) { if (match(w)) hasDiscipline = true; }
+    for (const w of disciplineContext) { if (match(w)) hasContext = true; }
     
     if (hasDiscipline) {
       if (hasContext) {
@@ -374,7 +377,7 @@ function checkChildSafety(text) {
       'bullied','bully me','kids hit me','nobody plays with me','they hate me','steal my stuff'
     ];
     for (const w of bullying) {
-      if (lower.includes(w)) {
+      if (match(w)) {
         level = Math.max(level, 2);
         flags.push('school_bullying:' + w);
         if (response_type === 'normal') response_type = 'comfort_and_empower';
@@ -507,9 +510,143 @@ function detectLanguage(text) {
   return 'ar'; // Default
 }
 
+// ──────── Spelling Intelligence — الذكاء الإملائي ────────
+// نور سألت: "هل نفس يفهم الأخطاء الإملائية؟"
+// الجواب: نعم! ٣ طبقات ذكاء إملائي
+
+// طبقة 1: تطبيع عربي أساسي (همزات + تشكيل + تاء مربوطة + ألف مقصورة)
+// "أبوي" = "ابوي" = "إبوي" ← كلهم نفس الشي
+// "خايفة" = "خايفه" ← نفس الشي
+function normalizeArabicForMatching(text) {
+  let n = text;
+  n = n.replace(/[\u064B-\u065F\u0670]/g, '');  // إزالة التشكيل (فتحة، كسرة، ضمة...)
+  n = n.replace(/[أإآٱ]/g, 'ا');                 // توحيد الهمزات → ا
+  n = n.replace(/ؤ/g, 'و');                      // همزة على واو → و
+  n = n.replace(/ئ/g, 'ي');                      // همزة على ياء → ي
+  n = n.replace(/ى/g, 'ي');                      // ألف مقصورة → ياء
+  n = n.replace(/ة/g, 'ه');                      // تاء مربوطة → هاء (للمطابقة)
+  return n;
+}
+
+// طبقة 2: فك شفرة الفرانكو عربي
+// المراهقين يكتبون: "5ayf" = خايف، "ydrbni" = يضربني، "7azeen" = حزين
+function decodeFrancoArabic(text) {
+  let t = text.toLowerCase();
+  
+  // كلمات كاملة أولاً (الأدق — قبل فك الأحرف المفردة)
+  const francoWords = {
+    // ── أفعال حرجة (سلامة الطفل) ──
+    'ydrbni': 'يضربني', 'ydrbny': 'يضربني', 'ydrbnee': 'يضربني',
+    'drabni': 'ضربني', 'drbni': 'ضربني', 'drabny': 'ضربني', 'drabtni': 'ضربتني',
+    'y7bsni': 'يحبسني', 'ya7bsni': 'يحبسني', '7absni': 'حبسني',
+    'ya7r2ni': 'يحرقني', 'y7r8ni': 'يحرقني', 'y7rgni': 'يحرقني',
+    'yet7arash': 'يتحرش', 'yt7rsh': 'يتحرش', 'yit7arash': 'يتحرش', 'ta7arosh': 'تحرش',
+    'ylmsni': 'يلمسني', 'yalmsni': 'يلمسني', 'yilmsni': 'يلمسني', 'lamsni': 'لمسني',
+    
+    // ── طوارئ ──
+    'abi amoot': 'ابي اموت', 'aby amot': 'ابي اموت', 'aby amoot': 'ابي اموت',
+    'abee amoot': 'ابي اموت', 'abi amot': 'ابي اموت',
+    'a8tl nafsi': 'اقتل نفسي', 'aqtl nafsi': 'اقتل نفسي', 'aqtol nafsi': 'اقتل نفسي',
+    'inti7ar': 'انتحار', 'inta7ar': 'انتحار',
+    'ma aby a3eesh': 'ما ابي اعيش', 'maaby a3esh': 'ما ابي اعيش',
+    
+    // ── مشاعر ──
+    '5ayf': 'خايف', '5ayef': 'خايف', 'khayf': 'خايف', 'khayef': 'خايف', '5ayfa': 'خايفه',
+    '7azeen': 'حزين', '7azen': 'حزين', 'hazeen': 'حزين', '7azeena': 'حزينه',
+    'za3lan': 'زعلان', 'z3lan': 'زعلان', 'za3lana': 'زعلانه',
+    'wa7eed': 'وحيد', 'w7eed': 'وحيد', 'wa7eeda': 'وحيده',
+    'abchy': 'ابكي', 'abki': 'ابكي', 'abakee': 'ابكي',
+    'ta3ban': 'تعبان', 't3ban': 'تعبان',
+    
+    // ── عائلة (غير موجودة في English map) ──
+    'abooy': 'ابوي', 'aboi': 'ابوي', 'aboy': 'ابوي', 'abuy': 'ابوي',
+    'omi': 'امي', 'ommi': 'امي', 'ummi': 'امي', 'ummy': 'امي',
+    'a5oi': 'اخوي', 'a5ooy': 'اخوي', 'akhoi': 'اخوي',
+    '5alti': 'خالتي', 'khalti': 'خالتي',
+    
+    // ── أماكن ──
+    'el bait': 'البيت', 'el beit': 'البيت', 'el bayt': 'البيت',
+    'el madrasa': 'المدرسه', 'el madrsa': 'المدرسه',
+    'akrh': 'اكره', 'akrah': 'اكره', 'akrh el bait': 'اكره البيت'
+  };
+  
+  for (const [franco, arabic] of Object.entries(francoWords)) {
+    t = t.replace(new RegExp(franco.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), arabic);
+  }
+  
+  // فك أحرف مفردة (فقط إذا بقي نص فرانكو — لاتيني مخلوط بأرقام)
+  if (/[a-z].*\d|\d.*[a-z]/i.test(t)) {
+    t = t.replace(/3/g, 'ع');
+    t = t.replace(/7/g, 'ح');
+    t = t.replace(/5/g, 'خ');
+    t = t.replace(/6/g, 'ط');
+    t = t.replace(/8/g, 'غ');
+    t = t.replace(/9/g, 'ص');
+    t = t.replace(/2/g, 'ء');
+  }
+  
+  return t;
+}
+
+// طبقة 3: فحص ذكي مع متغيرات إملائية
+// بدل البحث عن كلمة وحدة — يبحث عنها + كل أخطائها الشائعة
+// "يضربني" يلاقيها حتى لو المستخدم كتب "يدربني" أو "يظربني" أو "يضربوني"
+function safeIncludes(normalizedText, keyword) {
+  const normText = normalizeArabicForMatching(normalizedText);
+  const normKw = normalizeArabicForMatching(keyword);
+  
+  // ── فحص مباشر ──
+  if (normText.includes(normKw)) return true;
+  
+  // ── فحص مع تبديل أحرف متشابهة ──
+  // الأطفال يخلطون: ض↔د، ظ↔ز، ث↔س، ص↔س...
+  const confusionPairs = [
+    ['ض', 'د'], ['ض', 'ظ'],   // يضربني ↔ يدربني ↔ يظربني
+    ['ظ', 'ز'],                 // ظلم ↔ زلم
+    ['ذ', 'ز'], ['ذ', 'د'],   // ذهب ↔ زهب ↔ دهب
+    ['ث', 'س'], ['ث', 'ت'],   // ثعبان ↔ سعبان ↔ تعبان
+    ['ص', 'س'],                 // صرخ ↔ سرخ
+    ['ط', 'ت'],                 // طفل ↔ تفل
+    ['ق', 'ك'], ['ق', 'ج'],   // قال ↔ كال ↔ جال (لهجات)
+    ['غ', 'ق'],                 // غرفه ↔ قرفه
+  ];
+  
+  for (const [a, b] of confusionPairs) {
+    if (normKw.includes(a)) {
+      if (normText.includes(normKw.replaceAll(a, b))) return true;
+    }
+    if (normKw.includes(b)) {
+      if (normText.includes(normKw.replaceAll(b, a))) return true;
+    }
+  }
+  
+  // ── فحص مع واو الجماعة ──
+  // "يضربني" ↔ "يضربوني" (لهجة شائعة)
+  if (normKw.endsWith('ني')) {
+    if (normText.includes(normKw.replace(/ني$/, 'وني'))) return true;
+  }
+  if (normKw.endsWith('وني')) {
+    if (normText.includes(normKw.replace(/وني$/, 'ني'))) return true;
+  }
+  
+  // ── فحص مع تاء الفاعل (يضربني ↔ تضربني، ضربني ↔ ضربتني) ──
+  if (normKw.startsWith('ي')) {
+    const femForm = 'ت' + normKw.slice(1);
+    if (normText.includes(femForm)) return true;
+  }
+  if (normKw.startsWith('ت') && normKw.length > 3) {
+    const mascForm = 'ي' + normKw.slice(1);
+    if (normText.includes(mascForm)) return true;
+  }
+  
+  return false;
+}
+
 // تطبيع الكلام المخلوط — يحوّل كلمات الأطفال الإماراتيين اللي يتكلمون إنجليزي
 function normalizeChildSpeech(text) {
-  const lower = text.toLowerCase();
+  // Step 0: فك شفرة الفرانكو (ydrbni → يضربني، 5ayf → خايف)
+  const decoded = decodeFrancoArabic(text);
+  const lower = decoded.toLowerCase();
   
   // الأطفال يقولون "baba" مو "father" + "mama/yumma" مو "mother"
   const familyMap = {
@@ -526,7 +663,7 @@ function normalizeChildSpeech(text) {
     'driver': 'السواق', 'maid': 'الخدامة', 'nanny': 'المربية'
   };
 
-  // أفعال بكلام الأطفال
+  // أفعال بكلام الأطفال — مع كل الأشكال (بدون apostrophe كمان لأن الأطفال يكتبون كذا)
   const actionMap = {
     'hit me': 'ضربني', 'hits me': 'يضربني', 'beat me': 'ضربني',
     'beats me': 'يضربني', 'slapped me': 'لطمني', 'slaps me': 'يلطمني',
@@ -534,17 +671,36 @@ function normalizeChildSpeech(text) {
     'pinched me': 'قرصني', 'pulled my hair': 'شد شعري',
     'pushed me': 'دفّني', 'bit me': 'عضّني',
     'locked me': 'حبسني', 'locks me': 'يحبسني',
+    'locked me in': 'حبسني في الغرفة', 'locks me in': 'يحبسني في الغرفة',
     'yelled at me': 'صرخ علي', 'yells at me': 'يصرخ علي',
     'screamed at me': 'صرخ علي', 'scares me': 'يخوّفني',
-    'touched me': 'لمسني', 'touches me': 'يلمسني',
-    'i\'m scared': 'أنا خايف', 'i\'m afraid': 'أنا خايف',
-    'i\'m sad': 'أنا حزين', 'i\'m crying': 'أنا أبكي',
+    'touched me': 'يلمس جسمي', 'touches me': 'يلمس جسمي',
+    'touched my body': 'يلمس جسمي', 'touches my body': 'يلمس جسمي',
+    'i\'m scared': 'أنا خايف', 'im scared': 'أنا خايف',
+    'i\'m afraid': 'أنا خايف', 'im afraid': 'أنا خايف',
+    'i\'m sad': 'أنا حزين', 'im sad': 'أنا حزين',
+    'i\'m crying': 'أنا أبكي', 'im crying': 'أنا أبكي',
     'don\'t want to go home': 'ما أبي أرجع البيت',
+    'dont want to go home': 'ما أبي أرجع البيت',
     'don\'t want to go back': 'ما أبي أرجع',
+    'dont want to go back': 'ما أبي أرجع',
+    'don\'t tell anyone': 'لا تقول لأحد',
+    'dont tell anyone': 'لا تقول لأحد',
+    'don\'t tell': 'لا تقول لأحد',
+    'dont tell': 'لا تقول لأحد',
+    'our secret': 'سر بيني وبينك',
+    'every day': 'كل يوم', 'everyday': 'كل يوم', 'always': 'دايم',
     'hate school': 'أكره المدرسة', 'hate home': 'أكره البيت',
+    'hate my life': 'أكره حياتي',
     'nobody likes me': 'ما أحد يحبني', 'no friends': 'ما عندي أصدقاء',
+    'nobody loves me': 'ما أحد يحبني',
     'bullied': 'يتنمرون علي', 'bully me': 'يتنمرون علي',
-    'make fun of me': 'يسخرون مني', 'laugh at me': 'يضحكون علي'
+    'make fun of me': 'يسخرون مني', 'laugh at me': 'يضحكون علي',
+    'broke my arm': 'كسر يدي', 'broke my hand': 'كسر يدي',
+    'burns me': 'يحرقني', 'burned me': 'حرقني',
+    'starves me': 'يجوعني', 'no food': 'ما يعطيني أكل',
+    'want to die': 'أبي أموت', 'wanna die': 'أبي أموت',
+    'kill myself': 'أقتل نفسي'
   };
 
   // نبني نسخة مُطبّعة عربياً للتحليل
@@ -555,6 +711,9 @@ function normalizeChildSpeech(text) {
   for (const [en, ar] of Object.entries(actionMap)) {
     normalized = normalized.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), ar);
   }
+  
+  // Step final: تطبيع إملائي عربي (همزات + تاء مربوطة + ألف مقصورة)
+  normalized = normalizeArabicForMatching(normalized);
   
   return { normalized, detectedLang: detectLanguage(text), isCodeSwitching: detectLanguage(text) === 'mixed' };
 }
