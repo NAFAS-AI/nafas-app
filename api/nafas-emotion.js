@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Text too long (max 5000 chars)' });
     }
 
-    const inputLang = lang || (isArabic(text) ? 'ar' : 'en');
+    const inputLang = lang || detectLanguage(text);
     const apiKey = process.env.GEMINI_KEY;
 
     let analysis;
@@ -94,8 +94,13 @@ async function geminiAnalysis(text, product, lang, context, apiKey) {
     umq: 'This text is from a CLIENT in a consultation session. Detect emotional state for consultant matching.'
   };
 
+  const langNote = lang === 'mixed' 
+    ? 'IMPORTANT: This text is CODE-SWITCHING (mixing Arabic and English). This is very common for UAE children who attend English-medium nurseries. Analyze the emotional content regardless of language mixing. Respond in the same style the child uses.' 
+    : '';
+
   const prompt = `You are Nafas, an emotional analysis engine. Analyze the following text and return ONLY valid JSON.
 ${product && productContext[product] ? productContext[product] : ''}
+${langNote}
 ${context ? 'Additional context: ' + context : ''}
 
 Text to analyze: "${text}"
@@ -196,8 +201,11 @@ function localAnalysis(text, lang) {
 // المستويات: 0 = عادي | 1 = تأديب طبيعي | 2 = يحتاج مراقبة | 3 = مُقلق | 4 = خطر | 5 = طوارئ
 
 function checkChildSafety(text) {
-  const lower = text.toLowerCase();
-  const original = text;
+  // تطبيع الكلام — يحوّل "baba hit me" إلى "أبوي ضربني" للتحليل
+  const speech = normalizeChildSpeech(text);
+  const lower = speech.normalized; // النسخة المُطبّعة عربياً
+  const originalLower = text.toLowerCase(); // النسخة الأصلية
+  const lang = speech.detectedLang;
   let level = 0;
   const flags = [];
   let response_type = 'normal';
@@ -386,68 +394,170 @@ function checkChildSafety(text) {
     requires_specialist: level >= 3,
     requires_parent_alert: level >= 4,
     is_emergency: level >= 5,
-    cultural_context: getCulturalNote(level),
-    recommended_response: getRecommendedResponse(level, response_type)
+    language: lang,
+    is_code_switching: speech.isCodeSwitching,
+    cultural_context: getCulturalNote(level, lang),
+    recommended_response: getRecommendedResponse(level, response_type, lang)
   };
 }
 
-function getCulturalNote(level) {
-  if (level <= 1) return 'تأديب الوالدين حق شرعي وثقافي — لا تنبيه. الدعم العاطفي فقط.';
-  if (level === 2) return 'الطفل متأثر عاطفياً — نراقب النمط دون إثارة قلق.';
-  if (level === 3) return 'مؤشرات تتجاوز التأديب الطبيعي — يحتاج متابعة مختص.';
-  if (level === 4) return 'إساءة واضحة تتجاوز كل حدود التأديب المقبول.';
-  return 'طوارئ — تدخل فوري بلا تأخير.';
+function getCulturalNote(level, lang) {
+  const isEn = lang === 'en' || lang === 'mixed';
+  const notes = {
+    0: { ar: 'لا يوجد مؤشر — محادثة عادية.', en: 'No indicators — normal conversation.' },
+    1: { ar: 'تأديب الوالدين حق شرعي وثقافي — لا تنبيه. الدعم العاطفي فقط.', en: 'Parental discipline is culturally and religiously normal — no alert. Emotional support only.' },
+    2: { ar: 'الطفل متأثر عاطفياً — نراقب النمط دون إثارة قلق.', en: 'Child is emotionally affected — monitor pattern without raising alarm.' },
+    3: { ar: 'مؤشرات تتجاوز التأديب الطبيعي — يحتاج متابعة مختص.', en: 'Indicators beyond normal discipline — specialist follow-up needed.' },
+    4: { ar: 'إساءة واضحة تتجاوز كل حدود التأديب المقبول.', en: 'Clear abuse beyond all acceptable discipline boundaries.' },
+    5: { ar: 'طوارئ — تدخل فوري بلا تأخير.', en: 'EMERGENCY — immediate intervention, no delay.' }
+  };
+  const note = notes[Math.min(level, 5)] || notes[0];
+  return isEn ? note.en : note.ar;
 }
 
-function getRecommendedResponse(level, type) {
+function getRecommendedResponse(level, type, lang) {
+  const isEn = lang === 'en' || lang === 'mixed';
+  
   const responses = {
     'normal': { action: 'continue_conversation', tone: 'normal' },
     'emotional_support_only': {
       action: 'empathize_only',
       tone: 'gentle',
-      say: 'كيف حسّيت لما صار هالشي؟',
-      dont: 'لا تحقق — لا تسأل "ليش ضربك". الطفل يحتاج أحد يسمعه.'
+      say: isEn ? 'How did that make you feel?' : 'كيف حسّيت لما صار هالشي؟',
+      say_ar: 'كيف حسّيت لما صار هالشي؟',
+      say_en: 'How did that make you feel?',
+      dont: isEn
+        ? 'Don\'t investigate. Don\'t ask "why did they hit you". The child needs someone to listen.'
+        : 'لا تحقق — لا تسأل "ليش ضربك". الطفل يحتاج أحد يسمعه.'
     },
     'emotional_support_explore': {
       action: 'gentle_explore',
       tone: 'gentle',
-      say: 'تبي تحكيلي أكثر عن اللي صار؟',
-      dont: 'لا تضغط. إذا ما باغى يكمّل، طنّش بلطف.'
+      say: isEn ? 'Do you want to tell me more about what happened?' : 'تبي تحكيلي أكثر عن اللي صار؟',
+      say_ar: 'تبي تحكيلي أكثر عن اللي صار؟',
+      say_en: 'Do you want to tell me more about what happened?',
+      dont: isEn
+        ? 'Don\'t push. If they don\'t want to continue, gently move on.'
+        : 'لا تضغط. إذا ما باغى يكمّل، طنّش بلطف.'
     },
     'emotional_support_monitor': {
       action: 'support_and_log',
       tone: 'warm',
-      say: 'أنا معك وأسمعك دايماً.',
+      say: isEn ? 'I\'m here for you. I\'m always listening.' : 'أنا معك وأسمعك دايماً.',
+      say_ar: 'أنا معك وأسمعك دايماً.',
+      say_en: 'I\'m here for you. I\'m always listening.',
       log: 'سجّل الحدث + المشاعر — راقب التكرار خلال أسبوع.'
     },
     'comfort_and_empower': {
       action: 'comfort_then_empower',
       tone: 'warm',
-      say: 'إنت ما سويت شي غلط. وأنا دايماً معك.',
-      follow_up: 'إذا تكرر → أبلغ المعلمة / الأخصائية.'
+      say: isEn ? 'You didn\'t do anything wrong. And I\'m always with you.' : 'إنت ما سويت شي غلط. وأنا دايماً معك.',
+      say_ar: 'إنت ما سويت شي غلط. وأنا دايماً معك.',
+      say_en: 'You didn\'t do anything wrong. And I\'m always with you.',
+      follow_up: isEn
+        ? 'If it happens again → notify teacher/counselor.'
+        : 'إذا تكرر → أبلغ المعلمة / الأخصائية.'
     },
     'alert_specialist_soft': {
       action: 'soft_alert',
       tone: 'careful',
-      say: 'يدعم الطفل عاطفياً + يسجّل بصمت + ينبّه الأخصائية برسالة خاصة',
-      dont: 'لا يقول للطفل "بنبلّغ" — لا يخوّفه.'
+      say: isEn
+        ? 'Support the child emotionally + log silently + notify specialist privately'
+        : 'يدعم الطفل عاطفياً + يسجّل بصمت + ينبّه الأخصائية برسالة خاصة',
+      dont: isEn
+        ? 'Don\'t tell the child "we\'ll report". Don\'t scare them.'
+        : 'لا يقول للطفل "بنبلّغ" — لا يخوّفه.'
     },
     'activate_blind_guardian': {
       action: 'activate_blind_guardian',
       tone: 'urgent',
-      protocol: 'الحارس الأعمى — تنبيه صامت للأخصائية + تسجيل + حماية الطفل.'
+      protocol: isEn
+        ? 'Blind Guardian — silent specialist alert + logging + child protection.'
+        : 'الحارس الأعمى — تنبيه صامت للأخصائية + تسجيل + حماية الطفل.',
+      protocol_ar: 'الحارس الأعمى — تنبيه صامت للأخصائية + تسجيل + حماية الطفل.',
+      protocol_en: 'Blind Guardian — silent specialist alert + logging + child protection.'
     },
     'immediate_intervention': {
       action: 'emergency_protocol',
       tone: 'urgent',
-      protocol: 'طوارئ — إبلاغ فوري + خط ساخن + لا يُترك الطفل وحده.'
+      protocol: isEn
+        ? 'EMERGENCY — immediate report + hotline + do NOT leave child alone.'
+        : 'طوارئ — إبلاغ فوري + خط ساخن + لا يُترك الطفل وحده.',
+      protocol_ar: 'طوارئ — إبلاغ فوري + خط ساخن + لا يُترك الطفل وحده.',
+      protocol_en: 'EMERGENCY — immediate report + hotline + do NOT leave child alone.'
     }
   };
   return responses[type] || responses['normal'];
 }
 
-// ──────── Helpers ────────
+// ──────── Language Intelligence ────────
+// أطفال الإمارات يخلطون — "Baba ضربني because ما سويت homework"
+// لازم نفهم كل شي
+
 function isArabic(text) { return /[\u0600-\u06FF]/.test(text); }
+function isEnglish(text) { return /[a-zA-Z]{3,}/.test(text); }
+
+function detectLanguage(text) {
+  const hasArabic = isArabic(text);
+  const hasEnglish = isEnglish(text);
+  
+  if (hasArabic && hasEnglish) return 'mixed';  // Code-switching
+  if (hasArabic) return 'ar';
+  if (hasEnglish) return 'en';
+  return 'ar'; // Default
+}
+
+// تطبيع الكلام المخلوط — يحوّل كلمات الأطفال الإماراتيين اللي يتكلمون إنجليزي
+function normalizeChildSpeech(text) {
+  const lower = text.toLowerCase();
+  
+  // الأطفال يقولون "baba" مو "father" + "mama/yumma" مو "mother"
+  const familyMap = {
+    'baba': 'أبوي', 'papa': 'أبوي', 'daddy': 'أبوي', 'dad': 'أبوي',
+    'my father': 'أبوي', 'my baba': 'أبوي',
+    'mama': 'أمي', 'mommy': 'أمي', 'mom': 'أمي', 'mum': 'أمي',
+    'yumma': 'أمي', 'my mama': 'أمي', 'my mother': 'أمي',
+    'my uncle': 'عمي', 'uncle': 'عمي', '3ammi': 'عمي', 'ammi': 'عمي',
+    'my brother': 'أخوي', 'bro': 'أخوي',
+    'my sister': 'أختي', 'sis': 'أختي',
+    'teacher': 'المعلمة', 'miss': 'المعلمة', 'mister': 'الأستاذ',
+    'khala': 'خالتي', 'aunty': 'خالتي', 'auntie': 'خالتي',
+    'grandma': 'يدتي', 'grandpa': 'يدي', 'teta': 'يدتي', 'jiddo': 'يدي',
+    'driver': 'السواق', 'maid': 'الخدامة', 'nanny': 'المربية'
+  };
+
+  // أفعال بكلام الأطفال
+  const actionMap = {
+    'hit me': 'ضربني', 'hits me': 'يضربني', 'beat me': 'ضربني',
+    'beats me': 'يضربني', 'slapped me': 'لطمني', 'slaps me': 'يلطمني',
+    'spanked me': 'ضربني', 'punched me': 'لكمني', 'kicked me': 'ركلني',
+    'pinched me': 'قرصني', 'pulled my hair': 'شد شعري',
+    'pushed me': 'دفّني', 'bit me': 'عضّني',
+    'locked me': 'حبسني', 'locks me': 'يحبسني',
+    'yelled at me': 'صرخ علي', 'yells at me': 'يصرخ علي',
+    'screamed at me': 'صرخ علي', 'scares me': 'يخوّفني',
+    'touched me': 'لمسني', 'touches me': 'يلمسني',
+    'i\'m scared': 'أنا خايف', 'i\'m afraid': 'أنا خايف',
+    'i\'m sad': 'أنا حزين', 'i\'m crying': 'أنا أبكي',
+    'don\'t want to go home': 'ما أبي أرجع البيت',
+    'don\'t want to go back': 'ما أبي أرجع',
+    'hate school': 'أكره المدرسة', 'hate home': 'أكره البيت',
+    'nobody likes me': 'ما أحد يحبني', 'no friends': 'ما عندي أصدقاء',
+    'bullied': 'يتنمرون علي', 'bully me': 'يتنمرون علي',
+    'make fun of me': 'يسخرون مني', 'laugh at me': 'يضحكون علي'
+  };
+
+  // نبني نسخة مُطبّعة عربياً للتحليل
+  let normalized = lower;
+  for (const [en, ar] of Object.entries(familyMap)) {
+    normalized = normalized.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), ar);
+  }
+  for (const [en, ar] of Object.entries(actionMap)) {
+    normalized = normalized.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), ar);
+  }
+  
+  return { normalized, detectedLang: detectLanguage(text), isCodeSwitching: detectLanguage(text) === 'mixed' };
+}
 
 function suggestBreathing(emotion) {
   const map = { anxious: '4-7-8', stressed: 'box', angry: 'box', sad: '6-2-8', tired: 'coherent', happy: 'energize', crisis: '2-4' };
