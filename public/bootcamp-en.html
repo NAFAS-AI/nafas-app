@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nafas — Complete Bootcamp Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#F8F7FF;color:#1E1B4B;line-height:1.8}
+.header{background:linear-gradient(135deg,#1E1B4B,#312E81);color:#fff;padding:20px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.header-left{display:flex;align-items:center;gap:15px}
+.nafas-logo{width:50px;height:50px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.header h1{font-size:22px;font-weight:800}
+.header .sub{font-size:13px;opacity:.8}
+.header-right{text-align:right;font-size:11px;opacity:.7}
+.products-bar{display:flex;gap:8px;background:#312E81;padding:8px 30px;flex-wrap:wrap}
+.products-bar span{padding:4px 12px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15)}
+.products-bar span.active{background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border-color:transparent;font-weight:700}
+.container{max-width:1000px;margin:0 auto;padding:25px}
+.tab-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:25px;position:sticky;top:0;background:#F8F7FF;padding:10px 0;z-index:10}
+.tab-btn{padding:8px 16px;border:2px solid #E5E7EB;border-radius:25px;cursor:pointer;font-family:'Inter';font-size:13px;font-weight:600;background:#fff;transition:.3s;color:#6B7280}
+.tab-btn.active,.tab-btn:hover{background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border-color:transparent}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:5px solid #7C3AED}
+.card h2{color:#7C3AED;font-size:20px;margin-bottom:12px;font-weight:800}
+.card h3{color:#4F46E5;font-size:16px;margin:12px 0 8px;font-weight:700}
+.highlight{background:linear-gradient(135deg,#7C3AED08,#4F46E508);border:1px solid #7C3AED30;border-radius:12px;padding:16px;margin:10px 0}
+.highlight.warn{border-color:#F59E0B;background:#FFFBEB}
+.highlight.green{border-color:#10B981;background:#ECFDF5}
+.highlight.red{border-color:#EF4444;background:#FEF2F2}
+.stage{background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;padding:16px;border-radius:12px;margin:10px 0;font-size:15px;line-height:2;font-weight:500}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+th{background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:10px;font-size:13px;text-align:left}
+td{padding:10px;border-bottom:1px solid #E5E7EB;font-size:13px}
+tr:hover{background:#F5F3FF}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge.green{background:#ECFDF5;color:#059669}
+.badge.red{background:#FEF2F2;color:#DC2626}
+.badge.blue{background:#EFF6FF;color:#2563EB}
+.badge.yellow{background:#FFFBEB;color:#D97706}
+.badge.purple{background:#F5F3FF;color:#7C3AED}
+.source-tag{display:inline-block;background:#EFF6FF;color:#2563EB;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;margin:2px}
+.qa-num{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;background:#7C3AED;color:#fff;border-radius:50%;font-size:12px;font-weight:800;margin-right:8px}
+.footer{background:linear-gradient(135deg,#1E1B4B,#312E81);color:#fff;padding:20px 30px;text-align:center;font-size:12px;line-height:2}
+.footer .products{display:flex;justify-content:center;gap:15px;margin:10px 0;flex-wrap:wrap}
+.footer .products span{font-size:12px;opacity:.7}
+@media(max-width:768px){.container{padding:15px}.card{padding:16px}.tab-btn{padding:6px 10px;font-size:11px}}
+
+a.source-tag{text-decoration:none;cursor:pointer;transition:all 0.2s}
+a.source-tag:hover{background:#2563EB;color:#fff;transform:scale(1.05)}
+a.source-tag{text-decoration:none;cursor:pointer;transition:all 0.2s}
+a.source-tag:hover{background:#2563EB;color:#fff;transform:scale(1.05)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="nafas-logo">🧠</div>
+    <div><h1>Nafas — Complete Bootcamp Guide</h1><div class="sub">Khalifa Fund Entrepreneurship Bootcamp | June 2026</div></div>
+  </div>
+  <div class="header-right">NAFAS FOR ARTIFICIAL INTELLIGENCE<br>CN-6573712 | Abu Dhabi</div>
+</div>
+<div class="products-bar">
+  <span>🏫 AlJood</span>
+  <span class="active">🧠 Nafas</span>
+  <span>✏️ Midad</span>
+  <span>🔬 Umq</span>
+  <span>👶 Atheer</span>
+</div>
+
+<div class="container">
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('problem')">1️⃣ Problem</button>
+  <button class="tab-btn" onclick="showTab('customer')">2️⃣ Customer</button>
+  <button class="tab-btn" onclick="showTab('discovery')">3️⃣ Discovery Questions</button>
+  <button class="tab-btn" onclick="showTab('alternatives')">4️⃣ Alternatives</button>
+  <button class="tab-btn" onclick="showTab('abudhabi')">5️⃣ Abu Dhabi Relevance</button>
+  <button class="tab-btn" onclick="showTab('market')">📊 Market Size</button>
+  <button class="tab-btn" onclick="showTab('credible')">🔢 Credible Numbers</button>
+  <button class="tab-btn" onclick="showTab('demand')">✅ Validate Demand</button>
+  <button class="tab-btn" onclick="showTab('competition')">🏟️ Competition</button>
+  <button class="tab-btn" onclick="showTab('why')">💎 Why Nafas</button>
+  <button class="tab-btn" onclick="showTab('qa')">❓ Q&A</button>
+  <button class="tab-btn" onclick="showTab('mentor')">🔄 Mentor Sprint</button>
+  <button class="tab-btn" onclick="showTab('revenue')">💰 Revenue Model</button>
+</div>
+
+<!-- TAB 1: Problem -->
+<div id="problem" class="tab-content active">
+<div class="card">
+  <h2>1️⃣ The Specific Problem</h2>
+  
+  <div class="highlight red">
+    <h3>❌ Too Broad — Avoid:</h3>
+    <p><s>"Mental health is a crisis"</s> — <s>"People need therapy"</s> — <s>"Burnout is increasing"</s></p>
+  </div>
+  
+  <div class="highlight green">
+    <h3>✅ Specific — Say This:</h3>
+  </div>
+  
+  <div class="stage">
+    🎤 "75 to 90% of people with mental illness in the Arab world never receive treatment. Why? Therapy costs 500+ AED per session. There are almost no Arabic-speaking therapists. And culturally, asking for help is seen as weakness. The problem isn't that people don't suffer — it's that there's no solution that fits them."
+  </div>
+  
+  <h3>📊 Verified Statistics:</h3>
+  <table>
+    <tr><th>Statistic</th><th>Source</th><th>Verified</th></tr>
+    <tr><td><strong>75-90%</strong> of mentally ill people in developing countries receive no treatment</td><td><a href="https://www.who.int/news/item/02-09-2025-over-a-billion-people-living-with-mental-health-conditions-services-require-urgent-scale-up" target="_blank" class="source-tag">WHO ↗</a> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5398308/" target="_blank" class="source-tag">Ngui et al. ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+    <tr><td><strong>1+ billion</strong> people worldwide suffer from mental disorders</td><td><a href="https://www.who.int/news/item/02-09-2025-over-a-billion-people-living-with-mental-health-conditions-services-require-urgent-scale-up" target="_blank" class="source-tag">WHO Sep 2025 ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+    <tr><td><strong>48%</strong> of Middle East employees experience high daily stress</td><td><a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" class="source-tag">Gallup 2024 ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+    <tr><td><strong>82%</strong> of employees globally at risk of burnout</td><td><a href="https://fortune.com/2024/03/14/employees-at-risk-burnout-disconnect-bosses-well-being/" target="_blank" class="source-tag">Mercer Global Talent Trends ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+    <tr><td><strong>66%</strong> global burnout rate in 2025</td><td><a href="https://www.forbes.com/sites/bryanrobinson/2025/02/08/job-burnout-at-66-in-2025-new-study-shows/" target="_blank" class="source-tag">Forbes 2025 ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+    <tr><td><strong>30%</strong> increase in mental health treatment seekers — Abu Dhabi</td><td><a href="https://www.oliverwyman.com/our-expertise/insights/2025/apr/transform-mental-healthcare-gcc.html" target="_blank" class="source-tag">Abu Dhabi Gov (Oliver Wyman) ↗</a></td><td><span class="badge green">✅ Confirmed</span></td></tr>
+  </table>
+  
+  <h3>🧱 The Three Walls:</h3>
+  <table>
+    <tr><th>Wall</th><th>Description</th></tr>
+    <tr><td>💰 Cost</td><td>500+ AED per session — unaffordable for most working professionals</td></tr>
+    <tr><td>🗣️ Language</td><td>Severe shortage of Arabic-speaking therapists — culturally and linguistically</td></tr>
+    <tr><td>🤫 Stigma</td><td>"Going to a therapist = you're crazy" — culture prevents help-seeking</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- TAB 2: Customer -->
+<div id="customer" class="tab-content">
+<div class="card">
+  <h2>2️⃣ Primary Customer</h2>
+  
+  <div class="highlight">
+    <h3>🎯 First Segment:</h3>
+    <p><strong>Arabic-speaking professionals in the UAE (25-45 years)</strong> — experiencing daily mental stress and not seeking help.</p>
+  </div>
+  
+  <h3>4 Reasons They're Our Ideal Customer:</h3>
+  <table>
+    <tr><th>#</th><th>Reason</th><th>Explanation</th></tr>
+    <tr><td>1</td><td>🔥 Greatest Pain</td><td>48% experience high daily stress (Gallup) — and existing alternatives don't fit them</td></tr>
+    <tr><td>2</td><td>💰 Ability to Pay</td><td>They can afford 500+ AED per session — Nafas is far cheaper and smarter</td></tr>
+    <tr><td>3</td><td>🔍 Already Searching</td><td>They use generic ChatGPT or confide in friends — they're actively seeking solutions</td></tr>
+    <tr><td>4</td><td>🚀 Fast Adoption</td><td>Digital-native generation — they use apps daily and are ready to adopt</td></tr>
+  </table>
+  
+  <div class="stage">
+    🎤 "Our customer: a 32-year-old teacher in Abu Dhabi. She goes to work, comes home exhausted. She wants someone to listen — but not family, because they judge. Not a therapist, because it's expensive and in English. Nafas is the one who listens — in her language, in her culture, anytime."
+  </div>
+</div>
+</div>
+
+<!-- TAB 3: Discovery Questions -->
+<div id="discovery" class="tab-content">
+<div class="card">
+  <h2>3️⃣ Customer Discovery Questions</h2>
+  <p style="color:#6B7280;margin-bottom:15px">5 questions we ask potential customers to understand their real behavior:</p>
+  
+  <table>
+    <tr><th>#</th><th>Question</th><th>🎯 Purpose</th></tr>
+    <tr><td>1</td><td>Last time you felt extreme stress — what did you actually do?</td><td>Understand real behavior</td></tr>
+    <tr><td>2</td><td>Ever considered seeing a therapist? Why or why not?</td><td>Reveal barriers</td></tr>
+    <tr><td>3</td><td>If there was an app that listens to you in Arabic — would you use it? When?</td><td>Measure desire + usage timing</td></tr>
+    <tr><td>4</td><td>How much do you spend monthly on physical health? And on mental health?</td><td>Spending gap</td></tr>
+    <tr><td>5</td><td>If someone told you "You have a therapy appointment" — what's your first feeling?</td><td>Measure real stigma</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- TAB 4: Alternatives -->
+<div id="alternatives" class="tab-content">
+<div class="card">
+  <h2>4️⃣ Current Alternatives</h2>
+  
+  <table>
+    <tr><th>Alternative</th><th>Problem</th></tr>
+    <tr><td>🏥 Traditional Therapist</td><td>Expensive (500+ AED), English-only, stigma, long scheduling</td></tr>
+    <tr><td>🧘 Calm / Headspace</td><td>English-only, superficial, no cultural context for Arabs</td></tr>
+    <tr><td>🤖 Woebot / Wysa</td><td>English, cold CBT scripts, no empathy, no Arabic</td></tr>
+    <tr><td>💬 ChatGPT</td><td>Generic, no continuity, no crisis protocol, no specialization</td></tr>
+    <tr><td>👨‍👩‍👧 Family & Friends</td><td>Judgment, unsolicited advice, no privacy or confidentiality</td></tr>
+  </table>
+  
+  <div class="highlight green">
+    <h3>🌬️ Nafas Fills Every Gap:</h3>
+    <p><strong>Native Arabic</strong> + <strong>8 AI Layers</strong> + <strong>Voice + Text</strong> + <strong>Crisis Protocol</strong> + <strong>Available 24/7</strong> + <strong>Free</strong></p>
+  </div>
+  
+  <div class="stage">
+    🎤 "Existing solutions are either expensive, English-only, or culturally disconnected. Nafas is the only one that combines: native Arabic + specialized AI + crisis protocol + free 24/7."
+  </div>
+</div>
+</div>
+
+<!-- TAB 5: Abu Dhabi Relevance -->
+<div id="abudhabi" class="tab-content">
+<div class="card">
+  <h2>5️⃣ Abu Dhabi Relevance</h2>
+  
+  <table>
+    <tr><th>Factor</th><th>Details</th></tr>
+    <tr><td>🏢 UAE Company</td><td>NAFAS FOR AI registered in Abu Dhabi — CN-6573712</td></tr>
+    <tr><td>👩‍💻 Emirati Founder</td><td>Munira Al Mari — born and based in Abu Dhabi</td></tr>
+    <tr><td>🏛️ Government Supplier</td><td>Registered in ADERP — Supplier #205962</td></tr>
+    <tr><td>📋 National Strategy</td><td>Aligned with UAE National Mental Health Policy</td></tr>
+    <tr><td>📈 Local Demand</td><td>Abu Dhabi recorded 30% increase in mental health treatment seekers</td></tr>
+    <tr><td>🎯 First Market</td><td>Abu Dhabi first → Gulf → Arab World</td></tr>
+  </table>
+  
+  <div class="stage">
+    🎤 "We're not a foreign startup — we're Abu Dhabi-born. Registered company, government supplier, aligned with the UAE National Mental Health Policy. Abu Dhabi itself recorded a 30% increase in mental health treatment seekers — demand is here, and so is the solution."
+  </div>
+</div>
+</div>
+
+<!-- TAB 6: Market Size -->
+<div id="market" class="tab-content">
+<div class="card">
+  <h2>📊 Market Size — TAM / SAM / SOM</h2>
+  <div class="highlight warn">
+    <strong>⚠️ All numbers from verified sources — source cited next to each figure</strong>
+  </div>
+  
+  <h3>🌍 TAM — Total Addressable Market</h3>
+  <div class="highlight">
+    <p><strong style="font-size:28px;color:#7C3AED">$5.55 Billion (2025)</strong></p>
+    <p>Behavioral health market in the Middle East & Africa → reaching $9.99 Billion by 2034</p>
+    <p><a href="https://www.towardshealthcare.com/insights/middle-east-and-africa-behavioral-health-market-sizing" target="_blank" class="source-tag">Towards Healthcare — April 2026 ↗</a> <a href="https://www.towardshealthcare.com/insights/middle-east-and-africa-behavioral-health-market-sizing" target="_blank" class="source-tag">CAGR 6.75% ↗</a></p>
+  </div>
+  
+  <h3>🇦🇪 SAM — Serviceable Available Market</h3>
+  <div class="highlight">
+    <p><strong style="font-size:28px;color:#4F46E5">GCC — Dominant Market Share</strong></p>
+    <p>GCC countries hold the largest share of the MEA behavioral health market. Digital/remote platforms are the fastest-growing segment. Corporate & employer wellness is the highest-growth category.</p>
+    <p><a href="https://www.towardshealthcare.com/insights/middle-east-and-africa-behavioral-health-market-sizing" target="_blank" class="source-tag">Towards Healthcare 2026 ↗</a> <a href="https://www.towardshealthcare.com/insights/middle-east-and-africa-behavioral-health-market-sizing" target="_blank" class="source-tag">GCC Dominant Share ↗</a></p>
+  </div>
+  
+  <h3>🎯 SOM — Serviceable Obtainable Market</h3>
+  <div class="highlight">
+    <p><strong style="font-size:28px;color:#059669">Abu Dhabi First — B2B + B2G</strong></p>
+    <p>Starting with Abu Dhabi: government employees + corporations + universities. We're a registered government supplier (ADERP #205962). Pricing built on actual user data from pilot.</p>
+    <p><span class="source-tag" style="background:#ECFDF5;color:#065F46">Bottom-Up Approach</span> <span class="source-tag" style="background:#ECFDF5;color:#065F46">ADERP Registered</span></p>
+  </div>
+  
+  <div class="stage">
+    🎤 "The behavioral health market in the Middle East is $5.55 billion in 2025 — reaching $10 billion by 2034. GCC countries dominate. Digital platforms are the fastest-growing segment — and there's zero Arabic-native AI product. We start in Abu Dhabi — corporate and government — and we're already a registered government supplier."
+  </div>
+</div>
+</div>
+
+<!-- TAB 7: Credible Numbers -->
+<div id="credible" class="tab-content">
+<div class="card">
+  <h2>🔢 Make the Numbers Credible</h2>
+  
+  <table>
+    <tr><th>Evidence Type</th><th>Our Evidence</th><th>Source</th></tr>
+    <tr>
+      <td>🏛️ Government Data</td>
+      <td>UAE National Mental Health Policy + 30% increase in treatment seekers in Abu Dhabi</td>
+      <td><a href="https://www.oliverwyman.com/our-expertise/insights/2025/apr/transform-mental-healthcare-gcc.html" target="_blank" class="source-tag">UAE Gov (Oliver Wyman) ↗</a></td>
+    </tr>
+    <tr>
+      <td>📊 Industry Reports</td>
+      <td>MEA behavioral health market = $5.55B (2025) + Global market = $185B</td>
+      <td><a href="https://www.towardshealthcare.com/insights/middle-east-and-africa-behavioral-health-market-sizing" target="_blank" class="source-tag">Towards Healthcare 2026 ↗</a></td>
+    </tr>
+    <tr>
+      <td>📈 Workplace Data</td>
+      <td>48% daily stress in the Middle East + 82% at risk of burnout globally</td>
+      <td><a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" class="source-tag">Gallup 2024 ↗</a> <a href="https://fortune.com/2024/03/14/employees-at-risk-burnout-disconnect-bosses-well-being/" target="_blank" class="source-tag">Mercer ↗</a></td>
+    </tr>
+    <tr>
+      <td>🔬 Academic Research</td>
+      <td>75-90% treatment gap in low- and middle-income countries</td>
+      <td><a href="https://www.who.int/news/item/02-09-2025-over-a-billion-people-living-with-mental-health-conditions-services-require-urgent-scale-up" target="_blank" class="source-tag">WHO ↗</a> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5398308/" target="_blank" class="source-tag">Ngui et al. ↗</a></td>
+    </tr>
+    <tr>
+      <td>👥 Customer Conversations</td>
+      <td>"I need someone to listen without judging me" — real feedback from teachers and users</td>
+      <td><span class="source-tag" style="background:#FEF3C7;color:#92400E">Primary Research</span></td>
+    </tr>
+    <tr>
+      <td>🔍 Competitor Signals</td>
+      <td>Calm valued at $2B — but zero Arabic support. Shezlong launched AI in April 2025 = market is moving</td>
+      <td><a href="https://www.forbes.com/sites/bryanrobinson/2025/02/08/job-burnout-at-66-in-2025-new-study-shows/" target="_blank" class="source-tag">Forbes ↗</a> <a href="https://www.shezlong.com/" target="_blank" class="source-tag">Shezlong ↗</a></td>
+    </tr>
+  </table>
+  
+  <div class="highlight warn">
+    <h3>💡 If Asked About Pricing:</h3>
+    <p><strong>"Our pricing model will be built on actual user data from our pilot phase — that's the scientific approach."</strong></p>
+  </div>
+</div>
+</div>
+
+<!-- TAB 8: Validate Demand -->
+<div id="demand" class="tab-content">
+<div class="card">
+  <h2>✅ Validate Demand</h2>
+  
+  <table>
+    <tr><th>Element</th><th>Our Evidence</th></tr>
+    <tr>
+      <td>🔍 Search Activity</td>
+      <td>Growing searches for "Arabic mental health support" — near-zero results available</td>
+    </tr>
+    <tr>
+      <td>💬 Customer Conversations</td>
+      <td>Teachers: "I need someone to listen without judging me"</td>
+    </tr>
+    <tr>
+      <td>🔄 Current Workarounds</td>
+      <td>Talk to friends / suppress feelings / use generic ChatGPT</td>
+    </tr>
+    <tr>
+      <td>💰 Willingness to Pay</td>
+      <td>People already pay 500+ AED per session — ability exists. Nafas is the cheaper, smarter alternative</td>
+    </tr>
+    <tr>
+      <td>📈 Market Signals</td>
+      <td>Abu Dhabi: 30% increase in treatment seekers + Shezlong launched AI = market is moving</td>
+    </tr>
+  </table>
+  
+  <div class="stage">
+    🎤 "People are searching for Arabic mental health support — and finding nothing. They talk to friends or suppress it. Abu Dhabi itself recorded a 30% increase in treatment demand. The demand is real — the solution is missing."
+  </div>
+</div>
+</div>
+
+<!-- TAB 9: Competition -->
+<div id="competition" class="tab-content">
+<div class="card">
+  <h2>🏟️ Competitive Landscape</h2>
+  
+  <table>
+    <tr><th>Type</th><th>Who?</th><th>Why Nafas Wins</th></tr>
+    <tr>
+      <td>👥 Direct</td>
+      <td><strong>None</strong> — zero Arabic-native AI mental health product</td>
+      <td><span class="badge green">We're First 🏆</span></td>
+    </tr>
+    <tr>
+      <td>🧩 Indirect</td>
+      <td>Calm ($2B) · Headspace · Woebot</td>
+      <td>English-only, no cultural context for Arabs</td>
+    </tr>
+    <tr>
+      <td>🆕 Regional Emerging</td>
+      <td>Shezlong (Egypt) · O7 Therapy · MindTales · Takalam</td>
+      <td>Recently launched AI — we're ahead with 8 layers + 50K lines of code</td>
+    </tr>
+    <tr>
+      <td>🔄 Current Alternatives</td>
+      <td>Traditional therapist + ChatGPT + Family</td>
+      <td>Expensive / Generic / Judgmental</td>
+    </tr>
+  </table>
+  
+  <div class="highlight green">
+    <h3>🛡️ Our Competitive Moat:</h3>
+    <table>
+      <tr><th>Advantage</th></tr>
+      <tr><td>🗣️ Native Arabic — not translated</td></tr>
+      <tr><td>🧠 8 AI layers working together</td></tr>
+      <tr><td>📦 50,000 lines of production code — live and running</td></tr>
+      <tr><td>🚨 Crisis protocol + escalation system</td></tr>
+      <tr><td>🏛️ Registered government supplier (ADERP #205962)</td></tr>
+      <tr><td>🌐 Ecosystem of 5 products feeding into each other</td></tr>
+    </table>
+  </div>
+  
+  <div class="stage">
+    🎤 "There's zero direct Arabic AI competitor. Calm and Headspace are billion-dollar companies — all English. Regional startups are emerging, but we're ahead — 50,000 lines of production code and 8 AI layers, live and running."
+  </div>
+</div>
+</div>
+
+<!-- TAB 10: Why Nafas -->
+<div id="why" class="tab-content">
+<div class="card">
+  <h2>💎 Why Nafas is Different</h2>
+  
+  <table>
+    <tr><th>Others</th><th>Nafas</th></tr>
+    <tr><td>🌐 Translated</td><td>🗣️ <strong>Native Arabic — built from scratch</strong></td></tr>
+    <tr><td>1️⃣ Single layer</td><td>8️⃣ <strong>8 AI layers working together</strong></td></tr>
+    <tr><td>📝 Text only</td><td>🎙️ <strong>Voice + Text + Emotion detection</strong></td></tr>
+    <tr><td>🤖 Generic</td><td>🧠 <strong>Psychologically specialized</strong></td></tr>
+    <tr><td>⚠️ No safety net</td><td>🚨 <strong>Crisis protocol + escalation</strong></td></tr>
+    <tr><td>💳 Monthly subscription</td><td>🆓 <strong>Free</strong></td></tr>
+  </table>
+  
+  <h3>🧠 The 8 AI Layers:</h3>
+  <table>
+    <tr><th>#</th><th>Layer</th></tr>
+    <tr><td>1</td><td>Text emotion analysis</td></tr>
+    <tr><td>2</td><td>Voice tone detection (ElevenLabs)</td></tr>
+    <tr><td>3</td><td>Behavioral pattern tracking</td></tr>
+    <tr><td>4</td><td>Psychologically specialized responses</td></tr>
+    <tr><td>5</td><td>Breathing & meditation exercises</td></tr>
+    <tr><td>6</td><td>Crisis protocol + escalation</td></tr>
+    <tr><td>7</td><td>Intelligent silence detection</td></tr>
+    <tr><td>8</td><td>Real Arabic voice output</td></tr>
+  </table>
+  
+  <div class="stage">
+    🎤 "Nafas is the first AI mental health platform built natively in Arabic — not translated. It understands your dialect, detects your vocal tone, and responds within your culture. 8 AI layers — from emotion analysis to crisis intervention. Available 24/7 for free, no appointments, no stigma."
+  </div>
+</div>
+</div>
+
+<!-- TAB 11: Q&A -->
+<div id="qa" class="tab-content">
+<div class="card">
+  <h2>❓ Expected Questions & Answers</h2>
+  
+  <h3 style="color:#DC2626">🔴 Problem & Customer</h3>
+  
+  <p><span class="qa-num">1</span> <strong>How do you know this is a real problem?</strong></p>
+  <div class="stage">
+    "WHO data shows 75-90% of people with mental illness in developing countries never receive treatment. Gallup 2024 confirms the Middle East has the highest workplace stress globally — 48%. And Abu Dhabi recorded a 30% increase in people seeking mental health treatment. The data speaks for itself."
+  </div>
+  
+  <p><span class="qa-num">2</span> <strong>Who exactly is your customer?</strong></p>
+  <div class="stage">
+    "Arabic-speaking professionals aged 25-45 in the UAE. Teachers, nurses, corporate employees. They experience daily stress but don't seek help — because of cost, language, and stigma. We start B2B and B2G: selling to organizations that care about employee wellbeing."
+  </div>
+  
+  <p><span class="qa-num">3</span> <strong>Why won't they just use ChatGPT?</strong></p>
+  <div class="stage">
+    "ChatGPT is a general tool — it has no crisis protocol, no emotion detection, no voice analysis, no therapeutic framework. If someone types 'I want to end it' — ChatGPT gives a generic response. Nafas activates an emergency protocol with hotline numbers and safety planning. That difference saves lives."
+  </div>
+  
+  <h3 style="color:#D97706">🟡 Solution & Technology</h3>
+  
+  <p><span class="qa-num">4</span> <strong>Is AI safe for mental health?</strong></p>
+  <div class="stage">
+    "That's exactly why we built a crisis protocol. Nafas doesn't replace therapists — it fills the gap where no therapist exists. When it detects risk, it escalates: crisis hotline numbers, safety planning, and a recommendation to seek professional help. AI without safety is dangerous. AI with safety saves lives."
+  </div>
+  
+  <p><span class="qa-num">5</span> <strong>What technology do you use?</strong></p>
+  <div class="stage">
+    "8 AI layers built from scratch: text emotion analysis, voice tone detection via ElevenLabs, behavioral pattern tracking, specialized psychological responses, breathing exercises, crisis protocol, silence detection, and real Arabic voice output. 50,000 lines of production code — live and running at nafas-app.com."
+  </div>
+  
+  <p><span class="qa-num">6</span> <strong>Can you show a demo?</strong></p>
+  <div class="stage">
+    "Absolutely. Open nafas-app.com right now — it's live. Tell it you're stressed in Arabic, and watch it respond with empathy, in your dialect, with your cultural context. Try the breathing exercise. Try voice mode. This isn't a prototype — it's a working product."
+  </div>
+  
+  <h3 style="color:#2563EB">🔵 Market & Numbers</h3>
+  
+  <p><span class="qa-num">7</span> <strong>How big is the market?</strong></p>
+  <div class="stage">
+    "The behavioral health market in the Middle East and Africa is $5.55 billion in 2025, reaching $10 billion by 2034 — from the Towards Healthcare report, April 2026. GCC countries dominate. Digital platforms are the fastest-growing segment. And there's zero Arabic-native AI product in the market."
+  </div>
+  
+  <p><span class="qa-num">8</span> <strong>What's your business model?</strong></p>
+  <div class="stage">
+    "B2B and B2G. We sell to organizations — governments, schools, hospitals, corporations — who provide Nafas as an employee wellness benefit. The individual app is free. Revenue comes from enterprise licenses and government contracts. We're already a registered government supplier — ADERP number 205962."
+  </div>
+  
+  <p><span class="qa-num">9</span> <strong>What's your pricing?</strong></p>
+  <div class="stage">
+    "Our pricing model will be built on actual user data from our pilot phase. That's the scientific approach — price based on evidence, not assumptions. What we know: organizations currently pay 500+ AED per employee per therapy session. We'll be a fraction of that with 24/7 availability."
+  </div>
+  <div class="highlight warn">
+    <strong>⚠️ Do NOT give specific pricing numbers — this is the only answer to use</strong>
+  </div>
+  
+  <h3 style="color:#059669">🟢 Team & Execution</h3>
+  
+  <p><span class="qa-num">10</span> <strong>Who's on your team?</strong></p>
+  <div class="stage">
+    "3 humans + AI agents. I'm the founder — I built the entire ecosystem. Our model is lean by design: 3 people managing what normally takes 30. AI agents handle development, testing, documentation, and monitoring. This isn't a future plan — it's how we built 50,000 lines of code across 5 products."
+  </div>
+  
+  <p><span class="qa-num">11</span> <strong>You built 5 products alone?</strong></p>
+  <div class="stage">
+    "That's the power of our model. 3 humans + AI agents. We built Nafas, EduOS, Midad, Umq, and Atheer — nearly 50,000 lines of production code. All live, all running. This proves two things: our technology works, and our team model scales."
+  </div>
+  
+  <p><span class="qa-num">12</span> <strong>What's your progress so far?</strong></p>
+  <div class="stage">
+    "Nafas is live at nafas-app.com — 8 AI layers, voice and text, working right now. We have a registered company, government supplier status, 5 products built, and copyrights registered. We're not pitching an idea — we're pitching a running product."
+  </div>
+  
+  <h3 style="color:#DC2626">🔴 Tough Questions / Traps</h3>
+  
+  <p><span class="qa-num">13</span> <strong>What if Google/Apple enters this market?</strong></p>
+  <div class="stage">
+    "Big tech will build in English first — always. Arabic mental health requires cultural understanding that can't be copied overnight. We have 50,000 lines of Arabic-native code and deep cultural context. By the time they localize, we'll have the user base, the data, and the trust."
+  </div>
+  
+  <p><span class="qa-num">14</span> <strong>How do you handle data privacy?</strong></p>
+  <div class="stage">
+    "Privacy is foundational — not an afterthought. No conversation data is stored permanently. No personal identifiers are linked to emotional data. We comply with UAE data protection laws. Trust is everything in mental health — one breach and you lose users forever."
+  </div>
+  
+  <p><span class="qa-num">15</span> <strong>What if someone has a real crisis?</strong></p>
+  <div class="stage">
+    "That's exactly what Layer 6 handles — our crisis protocol. When Nafas detects high-risk language, it immediately: shows emergency hotline numbers, activates safety planning, recommends professional help, and logs the event for follow-up. We don't replace emergency services — we bridge the gap until help arrives."
+  </div>
+  
+  <p><span class="qa-num">16</span> <strong>What's your unfair advantage?</strong></p>
+  <div class="stage">
+    "Three things no competitor can easily replicate: One — native Arabic AI, not translated. Two — a 5-product ecosystem that feeds data across platforms. Three — we're Abu Dhabi-born, government-registered, and culturally embedded. You can't Google Translate your way into trust."
+  </div>
+  
+  <p><span class="qa-num">17</span> <strong>What do you need from us?</strong></p>
+  <div class="stage">
+    "Strategic support and access to Abu Dhabi's ecosystem — government partnerships, pilot opportunities, and mentorship. We've built the product. Now we need doors opened to scale it. Khalifa Fund is the perfect launchpad because you understand Abu Dhabi, you understand entrepreneurs, and you understand impact."
+  </div>
+  
+  <p><span class="qa-num">18</span> <strong>Where do you see Nafas in 3 years?</strong></p>
+  <div class="stage">
+    "Year 1: Abu Dhabi — government and corporate pilots. Year 2: UAE-wide expansion + first GCC market. Year 3: Pan-Gulf presence with Arabic as our moat. The behavioral health market in the region is growing at 6.75% annually — we're riding a wave, not creating one."
+  </div>
+</div>
+</div>
+
+<!-- TAB: Revenue Model -->
+<div id="revenue" class="tab-content">
+  <h2>💰 Your Revenue Model on One Page</h2>
+  <p style="color:#6B7280;margin-bottom:20px">Slide 14 — Khalifa Fund Entrepreneurship Competition</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:20px">
+    <div class="card" style="border-top:4px solid #6C3DD6">
+      <h3>👤 Who Pays?</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>User / Buyer / Payer — are they the same person?</em></p>
+      <div style="background:#F3F0FF;padding:12px;border-radius:8px;line-height:1.8">
+        <strong>No — three different payers:</strong><br>
+        <strong>1) 🏛️ Government (B2G):</strong> Abu Dhabi entities pay → employees/citizens use. We're already ADERP registered supplier #205962.<br>
+        <strong>2) 🏢 Corporates (B2B):</strong> Employers pay → employees use. Part of workplace wellness programs.<br>
+        <strong>3) 👤 Individuals (B2C):</strong> User = Payer. Free tier → Premium subscription.
+      </div>
+    </div>
+
+    <div class="card" style="border-top:4px solid #2563EB">
+      <h3>🎯 What For?</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>What specific outcome or access are they buying?</em></p>
+      <div style="background:#EFF6FF;padding:12px;border-radius:8px;line-height:1.8">
+        <strong>B2G:</strong> Arabic-native mental health support for citizens — aligned with Abu Dhabi Wellbeing Strategy. Measurable outcomes: reduced crisis calls, improved public health metrics.<br><br>
+        <strong>B2B:</strong> Employee wellness platform — reduces burnout, lowers absenteeism, improves productivity. ROI: every $1 spent on mental health returns $4 in productivity (WHO).<br><br>
+        <strong>B2C:</strong> 24/7 AI mental health companion — instant emotional support, crisis detection, cultural awareness. What therapy gives you — without the 500 AED/session.
+      </div>
+    </div>
+
+    <div class="card" style="border-top:4px solid #059669">
+      <h3>💵 How Much?</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>Price point. Why that number? What's your anchor?</em></p>
+      <div style="background:#ECFDF5;padding:12px;border-radius:8px;line-height:1.8">
+        <strong>The anchor is clear:</strong> Traditional therapy = <strong>500+ AED/session</strong><br><br>
+        <strong>B2G:</strong> Custom pilot-based pricing — already a registered government supplier (ADERP #205962)<br>
+        <strong>B2B:</strong> Fraction of therapy cost — enterprise wellness subscription<br>
+        <strong>B2C:</strong> Freemium model — free core + premium features<br><br>
+        <em style="color:#6C3DD6">"Our pricing is built on real pilot data — not assumptions. That's the scientific approach. What's clear: we deliver 24/7 support at a fraction of what one therapy session costs."</em>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px">
+    <div class="card" style="border-top:4px solid #DC2626">
+      <h3>🔄 Revenue Mechanism</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>One-time / Recurring / Usage / Hybrid</em></p>
+      <div style="background:#FEF2F2;padding:12px;border-radius:8px;line-height:1.8">
+        <strong style="color:#DC2626">Hybrid — primarily Recurring:</strong><br><br>
+        <strong>📅 Recurring (primary):</strong> Monthly/annual subscriptions for B2B & B2C<br>
+        <strong>🏛️ Contract-based:</strong> Annual government contracts for B2G<br>
+        <strong>📊 Usage-based (secondary):</strong> Per-session pricing for enterprise overflow or pay-as-you-go<br><br>
+        <strong>Why recurring wins:</strong> Mental health is ongoing, not one-time. Users need consistent support = predictable revenue.
+      </div>
+    </div>
+
+    <div class="card" style="border-top:4px solid #F59E0B">
+      <h3>📊 Unit Economics</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>CAC · LTV · LTV:CAC · Payback period</em></p>
+      <div style="background:#FEF3C7;padding:12px;border-radius:8px;line-height:1.8">
+        <strong>Pre-revenue — here's why the economics are powerful:</strong><br><br>
+        <strong>🔥 Near-zero marginal cost:</strong> AI doesn't charge by the hour. Each new user costs almost nothing to serve.<br><br>
+        <strong>🏛️ B2G acquisition cost:</strong> Near-zero — existing government relationships + ADERP registration.<br><br>
+        <strong>📈 Recurring revenue:</strong> Mental health is ongoing = predictable subscription revenue.<br><br>
+        <strong>💡 Key insight:</strong> Therapy scales linearly. Nafas scales exponentially — same AI serves 100 or 100,000.<br><br>
+        <em style="color:#F59E0B">"Exact CAC/LTV from pilot data. What's certain: our cost structure is fundamentally different."</em>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:4px solid #7C3AED">
+      <h3>⚡ Biggest Assumption</h3>
+      <p style="color:#6B7280;font-size:12px;margin-bottom:8px"><em>The one thing that must be true for this model to work</em></p>
+      <div style="background:#F3F0FF;padding:12px;border-radius:8px;line-height:1.8">
+        <strong style="color:#7C3AED">"People will trust an AI with their mental health — especially in a culture where stigma is the #1 barrier."</strong><br><br>
+        <strong>Our hypothesis:</strong> AI's privacy + anonymity + zero judgment will OVERCOME stigma, not add to it.<br><br>
+        <strong>Evidence supporting this:</strong><br>
+        ✅ 75–90% don't seek help due to stigma — AI removes the human barrier <a href="https://pubmed.ncbi.nlm.nih.gov/20864465/" target="_blank" style="color:#6C3DD6">↗ WHO/Ngui</a><br>
+        ✅ Abu Dhabi saw 30% increase in people seeking mental health support <a href="https://www.oliverwymanforum.com/global-consumer-sentiment/2023/jun/how-the-uae-is-prioritizing-mental-health.html" target="_blank" style="color:#6C3DD6">↗ Oliver Wyman</a><br>
+        ✅ Cultural stigma is the #1 barrier in MENA — AI anonymity is the solution<br><br>
+        <em>The question isn't "will people use AI therapy?" — it's "how fast will they switch?"</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:#F0FDF4;border-left:4px solid #059669;margin-top:20px">
+    <h3>🎤 If Asked on Stage — One-Liner:</h3>
+    <div class="stage-script" style="background:#fff;padding:15px;border-radius:10px">
+      "Three revenue streams: government contracts — we're already a registered supplier; corporate wellness; and consumer freemium. Our pricing comes from real pilot data, not assumptions. But one thing is certain: our cost structure is fundamentally different — AI doesn't charge by the hour."
+    </div>
+  </div>
+</div>
+
+<!-- TAB 11: Mentor Rotation Sprint -->
+<div id="mentor" class="tab-content">
+  <h2>🔄 Mentor Rotation Sprint</h2>
+  <p style="color:#6B7280;margin-bottom:20px">Mentors rotate between tables every 5-10 minutes. Each focuses on one area. Here are your answers:</p>
+
+  <div class="card" style="border-left:4px solid #6C3DD6">
+    <h3>1️⃣ Round 1: Solution Clarity (5 min)</h3>
+    <p style="color:#6B7280;margin-bottom:10px"><em>"What are you building and how does it work?"</em></p>
+    <div class="stage-script">
+      🎤 "Nafas is an AI-powered mental health companion — fully Arabic-native, not translated. The user opens the app, talks or types, and Nafas responds with emotional intelligence. 8 AI layers work together: emotion detection, dialect understanding, voice tone analysis, therapeutic response, crisis protocol, and more. It runs 24/7, free, no appointment needed."
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid #2563EB">
+    <h3>2️⃣ Round 2: Customer Value (10 min)</h3>
+    <p style="color:#6B7280;margin-bottom:10px"><em>"What's the real benefit for your customer?"</em></p>
+    <div class="stage-script">
+      🎤 "A 32-year-old teacher in Abu Dhabi — stressed, exhausted, can't afford 500 AED therapy, won't find an Arabic-speaking therapist. Nafas gives her instant, free, culturally-aware support in her dialect. No judgment, no waiting, no cost barrier. For the first time, someone listens — in her language."
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid #059669">
+    <h3>3️⃣ Round 3: Differentiation (10 min)</h3>
+    <p style="color:#6B7280;margin-bottom:10px"><em>"What makes your solution different and meaningful?"</em></p>
+    <div class="stage-script">
+      🎤 "Three things no competitor has:<br>
+      <strong>1)</strong> Arabic-native AI — not translated, built from scratch in Arabic.<br>
+      <strong>2)</strong> 8 specialized therapeutic layers — not generic ChatGPT.<br>
+      <strong>3)</strong> Crisis detection — if someone is in danger, Nafas escalates immediately.<br><br>
+      Calm and Headspace don't speak Arabic. ChatGPT isn't a therapist. We're the only Arabic AI mental health platform — built by an Emirati founder, in Abu Dhabi."
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid #DC2626">
+    <h3>4️⃣ Final Refinement (5 min)</h3>
+    <p style="color:#6B7280;margin-bottom:10px"><em>Your strongest version — the three statements:</em></p>
+    <table>
+      <tr><th style="width:35%">Required Output</th><th>Your Answer</th></tr>
+      <tr>
+        <td><strong>✅ Solution Statement</strong></td>
+        <td>"AI-powered Arabic mental health companion — 8 therapeutic layers, 24/7, free, no stigma"</td>
+      </tr>
+      <tr>
+        <td><strong>✅ Value Proposition</strong></td>
+        <td>"The first culturally-aware mental health AI for 400M+ Arabic speakers — understands their dialect, culture, and pain"</td>
+      </tr>
+      <tr>
+        <td><strong>✅ Differentiation Point</strong></td>
+        <td>"Arabic-native + 8 AI layers + crisis protocol — no competitor in the world has all three"</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card" style="background:#FEF3C7;border-left:4px solid #F59E0B">
+    <h3>💡 Tips for the Sprint:</h3>
+    <ul>
+      <li>🎯 <strong>Be concise</strong> — mentors have 5-10 min max, don't ramble</li>
+      <li>👀 <strong>Watch their eyes</strong> — if they nod, you're on track; if they frown, pivot</li>
+      <li>📝 <strong>Write feedback down</strong> — you'll need it for Final Refinement</li>
+      <li>🔥 <strong>Lead with the problem</strong> — "82% burnout, 7 out of 10 don't seek help" grabs attention</li>
+      <li>💪 <strong>End with proof</strong> — "50,000 lines of code, live product, government supplier"</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<div class="footer">
+  NAFAS FOR ARTIFICIAL INTELLIGENCE | CN-6573712 | Abu Dhabi
+  <div class="products">
+    <span>🏫 AlJood</span>
+    <span>🧠 Nafas</span>
+    <span>✏️ Midad</span>
+    <span>🔬 Umq</span>
+    <span>👶 Atheer</span>
+  </div>
+  © 2026 NAFAS FOR ARTIFICIAL INTELLIGENCE. All Rights Reserved.
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:200,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
