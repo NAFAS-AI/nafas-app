@@ -9,14 +9,57 @@
    © منيرة علي المري 2026 — نَفَس للذكاء الاصطناعي
    ============================================================ */
 
+// Rate limiting for emotion API
+const emotionRateMap = new Map();
+function isEmotionRateLimited(ip) {
+  const now = Date.now();
+  if (emotionRateMap.size > 10000) {
+    for (const [key, val] of emotionRateMap) {
+      if (now - val.start > 60000) emotionRateMap.delete(key);
+    }
+  }
+  const entry = emotionRateMap.get(ip);
+  if (!entry || now - entry.start > 60000) {
+    emotionRateMap.set(ip, { start: now, count: 1 });
+    return false;
+  }
+  entry.count++;
+  return entry.count > 15;
+}
+
 export default async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS — Restricted to allowed origins
+  const EMOTION_ORIGINS = [
+    'https://nafas-app-blush.vercel.app',
+    'https://nafas-app.com',
+    'https://www.nafas-app.com'
+  ];
+  const extraOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+  const ALL_ORIGINS = [...new Set([...EMOTION_ORIGINS, ...extraOrigins])];
+  
+  const reqOrigin = req.headers.origin || '';
+  const corsOrigin = ALL_ORIGINS.includes(reqOrigin) ? reqOrigin : '';
+  
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Nafas-Product');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Cache-Control', 'no-store');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Origin validation
+  if (reqOrigin && ALL_ORIGINS.length > 0 && !ALL_ORIGINS.includes(reqOrigin)) {
+    return res.status(403).json({ error: 'Origin not allowed' });
+  }
+
+  // Rate limiting
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (isEmotionRateLimited(clientIp)) {
+    return res.status(429).json({ error: 'Rate limit exceeded. Please wait.' });
+  }
 
   try {
     const { text, product, lang, context } = req.body || {};
