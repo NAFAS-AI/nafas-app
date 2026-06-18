@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     }
 
     const inputLang = lang || detectLanguage(text);
-    const apiKey = process.env.GEMINI_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     let analysis;
 
