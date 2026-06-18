@@ -764,8 +764,9 @@ function getVoiceParams(lvl,vak){
 let recognition = null;
 let isRecording = false;
 let selectedVoiceIndex = -1; // -1 = auto
-const TTS_PROVIDER = 'server'; // 'server' (ElevenLabs via /api/tts) or 'web' (browser)
-// API keys stored server-side in Vercel env vars — never exposed to frontend
+const TTS_PROVIDER = 'web'; // 'web' or 'elevenlabs'
+const ELEVENLABS_API_KEY = ''; // Add when ready
+const ELEVENLABS_VOICE_ID = ''; // Add when ready
 
 function initSpeechRecognition(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -829,62 +830,147 @@ function changeVoice(v){selectedVoiceIndex=parseInt(v)}
 
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=populateVoiceList;setTimeout(populateVoiceList,500)}
 
-async function speakServerTTS(text){
+async function speakElevenLabs(text){
+  if(!ELEVENLABS_API_KEY||!ELEVENLABS_VOICE_ID)return false;
   try{
-    const r=await fetch('/api/tts',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:text.substring(0,2000),lang:state.lang})
+    const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+ELEVENLABS_VOICE_ID,{
+      method:'POST',headers:{'xi-api-key':ELEVENLABS_API_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.6,similarity_boost:.75}})
     });
     if(!r.ok)return false;
-    const ct=r.headers.get('content-type')||'';
-    if(ct.includes('application/json')){const j=await r.json();return !j.fallback}
-    const blob=await r.blob();
-    if(blob.size<100)return false;
-    const url=URL.createObjectURL(blob);const audio=new Audio(url);
+    const blob=await r.blob();const url=URL.createObjectURL(blob);const audio=new Audio(url);
     state.isSpeaking=true;const msgs=document.querySelectorAll('.msg.bot');const last=msgs[msgs.length-1];
     if(last)last.classList.add('speaking');
     audio.onended=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    audio.onerror=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    await audio.play();return true;
-  }catch(e){console.warn('Server TTS:',e);return false}
+    audio.play();return true;
+  }catch(e){console.warn('ElevenLabs:',e);return false}
 }
 
 async function speak(text){
   if(!state.voiceEnabled)return;
-  if(TTS_PROVIDER==='server'){const ok=await speakServerTTS(text);if(ok)return}
+  // Try server-side ElevenLabs first (realistic voice)
+  const serverOk = await speakServerTTS(text);
+  if(serverOk) return;
+  // Fallback to Web Speech API
   if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
-  const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆]/g,'').replace(/<[^>]*>/g,'');
+  const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆🫁]/g,'').replace(/<[^>]*>/g,'');
   const utt=new SpeechSynthesisUtterance(clean);
   const p=getVoiceParams(state.burnoutLevel,state.vakPattern);
-  utt.rate=Math.min(p.rate,0.95);utt.pitch=p.pitch;utt.volume=Math.min(p.volume,0.92);
+  utt.rate=p.rate;utt.pitch=p.pitch;utt.volume=p.volume;
   const voices=speechSynthesis.getVoices();
   if(selectedVoiceIndex>=0&&selectedVoiceIndex<voices.length){
     utt.voice=voices[selectedVoiceIndex];utt.lang=voices[selectedVoiceIndex].lang;
+  }else if(state.lang==='ar'){
+    const arV=voices.find(v=>v.lang.startsWith('ar'));if(arV){utt.voice=arV;utt.lang='ar-SA'}
   }else{
-    // Smart voice selection — pick most natural voice available
-    const pickBest=(prefix)=>{
-      const lv=voices.filter(v=>v.lang.startsWith(prefix));
-      if(!lv.length)return null;
-      const pk=['premium','enhanced','natural','neural','samira','majed','laila','maged'];
-      const p=lv.find(v=>pk.some(k=>v.name.toLowerCase().includes(k)));
-      if(p)return p;
-      const g=lv.find(v=>v.name.toLowerCase().includes('google'));
-      if(g)return g;
-      return lv[0];
-    };
-    if(state.lang==='ar'){
-      const best=pickBest('ar');if(best){utt.voice=best;utt.lang=best.lang}
-    }else{
-      const best=pickBest('en');if(best){utt.voice=best;utt.lang=best.lang}
-    }
+    const enF=voices.find(v=>v.lang.startsWith('en')&&v.name.toLowerCase().includes('female'));if(enF)utt.voice=enF;utt.lang='en-US';
   }
   const botMsgs=document.querySelectorAll('.msg.bot');const last=botMsgs[botMsgs.length-1];
   utt.onstart=()=>{state.isSpeaking=true;if(last)last.classList.add('speaking')};
   utt.onend=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking')};
   speechSynthesis.speak(utt);
 }
+
+/* ============================================================
+   SERVER-SIDE TTS (ElevenLabs via /api/tts)
+   ============================================================ */
+async function speakServerTTS(text){
+  try{
+    const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆🫁]/g,'').replace(/<[^>]*>/g,'').trim();
+    if(!clean)return false;
+    const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})});
+    if(!r.ok)return false;
+    const blob=await r.blob();
+    if(blob.size<200)return false;
+    const url=URL.createObjectURL(blob);
+    const audio=new Audio(url);
+    state.isSpeaking=true;
+    const msgs=document.querySelectorAll('.msg.bot');const last=msgs[msgs.length-1];
+    if(last)last.classList.add('speaking');
+    audio.onended=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
+    audio.onerror=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
+    await audio.play();
+    return true;
+  }catch(e){console.warn('Server TTS fallback:',e);return false}
+}
+
+/* ============================================================
+   SILENCE DETECTOR — "أنا هني معك"
+   Detects when user goes silent while still on page.
+   Stage 1 (30s): Text check-in
+   Stage 2 (+30s): Voice check-in  
+   Stage 3 (+45s): Deeper voice
+   ============================================================ */
+const SilenceDetector = {
+  timer1:null, timer2:null, timer3:null,
+  isUserOnPage:true, silenceStage:0, active:false,
+
+  messages:{
+    ar:{
+      stage1:['أنا هني معك... تبي تكمل؟ 💙','خذ وقتك... أنا ما راح أروح 💙','لا تستعجل... أنا معك في هالمكان الآمن 💙'],
+      stage2:['وينك؟ أنا أسمعك... خذ وقتك','أنا لسّا هني... تكلّم متى ما تبي','ما عليك... أنا معك حتى لو بالسكوت 💙'],
+      stage3:['أنت مو لحالك... أنا معك 💙','السكوت أحياناً يقول أكثر من الكلام... أنا أسمعك حتى بصمتك','خذ نَفَس عميق معي... شهيق 4 ثوانٍ... زفير 8 ثوانٍ 🫁']
+    },
+    en:{
+      stage1:["I'm still here with you... want to continue? 💙","Take your time... I'm not going anywhere 💙","No rush... this is your safe space 💙"],
+      stage2:["Hey... I'm listening... take your time","I'm still here... talk whenever you're ready","It's okay... I'm with you even in silence 💙"],
+      stage3:["You're not alone... I'm here with you 💙","Sometimes silence says more than words... I hear you","Take a deep breath with me... inhale 4... exhale 8 🫁"]
+    }
+  },
+
+  init(){
+    const self=this;
+    document.addEventListener('visibilitychange',()=>{
+      self.isUserOnPage=!document.hidden;
+      if(document.hidden){self.clearAll()}
+      else if(self.active&&state.mode){self.startWatching()}
+    });
+    window.addEventListener('blur',()=>{self.isUserOnPage=false;self.clearAll()});
+    window.addEventListener('focus',()=>{self.isUserOnPage=true;if(self.active&&state.mode)self.startWatching()});
+  },
+
+  startWatching(){
+    this.clearAll();
+    this.silenceStage=0;
+    this.active=true;
+    const self=this;
+    const msgs=self.messages[state.lang]||self.messages.ar;
+
+    self.timer1=setTimeout(()=>{
+      if(!self.isUserOnPage||!state.mode)return;
+      self.silenceStage=1;
+      const msg=msgs.stage1[Math.floor(Math.random()*msgs.stage1.length)];
+      addMessage('bot',msg);
+      // Stage 1 = text only, no voice
+
+      self.timer2=setTimeout(()=>{
+        if(!self.isUserOnPage||!state.mode)return;
+        self.silenceStage=2;
+        const msg2=msgs.stage2[Math.floor(Math.random()*msgs.stage2.length)];
+        addMessage('bot',msg2);
+        speak(msg2);
+
+        self.timer3=setTimeout(()=>{
+          if(!self.isUserOnPage||!state.mode)return;
+          self.silenceStage=3;
+          const msg3=msgs.stage3[Math.floor(Math.random()*msgs.stage3.length)];
+          addMessage('bot',msg3);
+          speak(msg3);
+        },45000);
+      },30000);
+    },30000);
+  },
+
+  userSpoke(){this.clearAll();this.silenceStage=0},
+  botSpoke(){if(state.mode){this.startWatching()}},
+  clearAll(){
+    if(this.timer1)clearTimeout(this.timer1);
+    if(this.timer2)clearTimeout(this.timer2);
+    if(this.timer3)clearTimeout(this.timer3);
+    this.timer1=this.timer2=this.timer3=null;
+  }
+};
 
 /* ============================================================
    SUPABASE (fetch-based, no runCommand) — Enhancement #2
@@ -1296,6 +1382,8 @@ function addMessage(role, text, isHTML){
   div.appendChild(content);
   container.appendChild(div);
   requestAnimationFrame(() => { container.scrollTop = container.scrollHeight; });
+  // Silence Detector hooks
+  if(role==='bot'&&typeof SilenceDetector!=='undefined'&&SilenceDetector.silenceStage===0){SilenceDetector.botSpoke()}
   return div;
 }
 
@@ -5654,6 +5742,7 @@ async function sendMessage(){
   input.value = ''; input.style.height = 'auto';
   haptic('light');
   if (typeof SoundFX !== 'undefined') SoundFX.play('send');
+  if(typeof SilenceDetector!=='undefined')SilenceDetector.userSpoke();
   addMessage('user', text);
 
   // === LEARN NEW WORD ===
@@ -6020,6 +6109,10 @@ function updateOnlineStatus() {
 }
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
+
+// Initialize Silence Detector
+if(typeof SilenceDetector!=='undefined')SilenceDetector.init();
+console.log('🤫 Silence Detector initialized — أنا هني معك');
 
 // Auto-share saved location when coming back online
 window.addEventListener('online', function() {
