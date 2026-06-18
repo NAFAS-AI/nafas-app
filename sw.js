@@ -14,7 +14,6 @@ const PRECACHE = [
   '/manifest.json'
 ];
 
-// === INSTALL: حفظ الملفات الأساسية + تفعيل فوري ===
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME)
@@ -23,7 +22,6 @@ self.addEventListener('install', e => {
   );
 });
 
-// === ACTIVATE: حذف كل الكاش القديم + السيطرة فوراً ===
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -37,11 +35,8 @@ self.addEventListener('activate', e => {
   );
 });
 
-// === FETCH: Network-First for everything — no stale 404s ===
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-
-  // API calls — network only
   if (e.request.url.includes('supabase.co') || e.request.url.includes('googleapis.com') || e.request.url.includes('/api/')) {
     e.respondWith(
       fetch(e.request).catch(() =>
@@ -50,8 +45,6 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
-
-  // Everything else — Network-First, cache as fallback
   e.respondWith(
     fetch(e.request).then(resp => {
       if (resp.ok) {
