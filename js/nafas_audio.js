@@ -1,336 +1,386 @@
 /**
- * Nafas Audio System — نَفَس
- * Web Audio API-based sound library for ambient, UI, and breathing sounds.
- * Self-contained. Does NOT modify app.js.
+ * Nafas Audio System v2 — نَفَس
+ * Enhanced Web Audio API ambient sounds:
+ *   💓 Calm Heartbeat | 🌊 Ocean Waves | 🌧️ Rain Drops
+ * Auto-plays on first interaction. Self-contained.
  *
- * © منيرة علي المري 2026 — بوابة الجود الذكية
+ * © منيرة علي المري 2026 — NAFAS FOR ARTIFICIAL INTELLIGENCE
  */
 
 (function () {
   'use strict';
 
-  /* ───────── Sound metadata ───────── */
-  const SOUND_LABELS = {
+  var SOUND_LABELS = {
     heartbeat: { icon: '💓', name: 'نبض قلب', nameEn: 'Heartbeat' },
-    rain:      { icon: '🌧️', name: 'مطر هادئ', nameEn: 'Rain' },
-    humming:   { icon: '🎵', name: 'همهمة', nameEn: 'Humming' },
-    breeze:    { icon: '🌬️', name: 'نسمة صحراء', nameEn: 'Desert Breeze' },
     ocean:     { icon: '🌊', name: 'أمواج', nameEn: 'Ocean Waves' },
+    rain:      { icon: '🌧️', name: 'قطرات مطر', nameEn: 'Rain' },
   };
 
-  /* ───────── Internal state ───────── */
-  let audioCtx = null;
-  let masterGain = null;
-  let ambientGain = null;
-  let uiGain = null;
-  let breathGain = null;
+  var audioCtx = null;
+  var masterGain = null;
+  var ambientGain = null;
+  var uiGain = null;
+  var breathGain = null;
 
-  let _isMuted = false;
-  let _masterVolume = 0.5;
-  let _ambientVolume = 0.6;
-  let _uiVolume = 0.7;
+  var _isMuted = false;
+  var _masterVolume = 0.35;
+  var _ambientVolume = 0.5;
+  var _uiVolume = 0.6;
 
-  // Currently playing ambient nodes (to clean up)
-  let _ambientNodes = [];
-  let _ambientCurrent = null;
+  var _ambientNodes = [];
+  var _ambientCurrent = null;
+  var _breathNodes = [];
+  var _panelOpen = false;
+  var _timers = [];
 
-  // Breathing nodes
-  let _breathNodes = [];
-
-  // Panel state
-  let _panelOpen = false;
-
-  /* ───────── Helpers ───────── */
   function now() { return audioCtx ? audioCtx.currentTime : 0; }
 
+  /* ─── Noise Buffers ─── */
   function createNoiseBuffer(type, seconds) {
-    // type: 'white' | 'pink'
-    seconds = seconds || 2;
-    const sr = audioCtx.sampleRate;
-    const len = sr * seconds;
-    const buf = audioCtx.createBuffer(1, len, sr);
-    const data = buf.getChannelData(0);
-
-    if (type === 'white') {
-      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
-    } else {
-      // Pink noise (Paul Kellet's algorithm)
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-      for (let i = 0; i < len; i++) {
-        const w = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + w * 0.0555179;
-        b1 = 0.99332 * b1 + w * 0.0750759;
-        b2 = 0.96900 * b2 + w * 0.1538520;
-        b3 = 0.86650 * b3 + w * 0.3104856;
-        b4 = 0.55000 * b4 + w * 0.5329522;
-        b5 = -0.7616 * b5 - w * 0.0168980;
-        data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
-        b6 = w * 0.115926;
+    seconds = seconds || 4;
+    var sr = audioCtx.sampleRate;
+    var len = sr * seconds;
+    var buf = audioCtx.createBuffer(2, len, sr);
+    
+    for (var ch = 0; ch < 2; ch++) {
+      var data = buf.getChannelData(ch);
+      if (type === 'white') {
+        for (var i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      } else if (type === 'brown') {
+        var last = 0;
+        for (var i = 0; i < len; i++) {
+          var w = Math.random() * 2 - 1;
+          last = (last + 0.02 * w) / 1.02;
+          data[i] = last * 3.5;
+        }
+      } else {
+        // Pink noise
+        var b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+        for (var i = 0; i < len; i++) {
+          var w = Math.random() * 2 - 1;
+          b0 = 0.99886*b0 + w*0.0555179;
+          b1 = 0.99332*b1 + w*0.0750759;
+          b2 = 0.96900*b2 + w*0.1538520;
+          b3 = 0.86650*b3 + w*0.3104856;
+          b4 = 0.55000*b4 + w*0.5329522;
+          b5 = -0.7616*b5 - w*0.0168980;
+          data[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;
+          b6 = w*0.115926;
+        }
       }
     }
     return buf;
   }
 
   function stopNodes(arr) {
-    arr.forEach(function (n) {
-      try {
-        if (n.stop) n.stop();
-        if (n.disconnect) n.disconnect();
-      } catch (_) { /* already stopped */ }
+    arr.forEach(function(n) {
+      try { if(n.stop) n.stop(); } catch(_) {}
+      try { if(n.disconnect) n.disconnect(); } catch(_) {}
     });
     arr.length = 0;
   }
 
-  /* Musical frequencies */
-  const NOTE = {
-    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00,
-    A4: 440.00, B4: 493.88,
-    C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99,
-    A5: 880.00, B5: 987.77, C6: 1046.50,
-  };
+  function clearTimers() {
+    _timers.forEach(function(t) { clearInterval(t); clearTimeout(t); });
+    _timers.length = 0;
+  }
 
-  /* ═══════════════════════════════════════════
-     AMBIENT SOUND GENERATORS
-     Each returns an array of nodes to track.
-     ═══════════════════════════════════════════ */
-
+  /* ═══════════════════════════════════════
+     💓 HEARTBEAT — Deep, calm, 56 BPM
+     ═══════════════════════════════════════ */
   function ambientHeartbeat() {
     var nodes = [];
-    var t = now();
-    // Double-pulse (lub-dub) repeating every 1.2s
-    function pulse(startTime) {
-      // "Lub"
-      var osc1 = audioCtx.createOscillator();
-      var g1 = audioCtx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.value = 50;
-      g1.gain.setValueAtTime(0, startTime);
-      g1.gain.linearRampToValueAtTime(0.35, startTime + 0.04);
-      g1.gain.exponentialRampToValueAtTime(0.001, startTime + 0.18);
-      osc1.connect(g1).connect(ambientGain);
-      osc1.start(startTime);
-      osc1.stop(startTime + 0.2);
-      nodes.push(osc1, g1);
-
-      // "Dub"
-      var osc2 = audioCtx.createOscillator();
-      var g2 = audioCtx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.value = 42;
-      g2.gain.setValueAtTime(0, startTime + 0.22);
-      g2.gain.linearRampToValueAtTime(0.25, startTime + 0.26);
-      g2.gain.exponentialRampToValueAtTime(0.001, startTime + 0.42);
-      osc2.connect(g2).connect(ambientGain);
-      osc2.start(startTime + 0.22);
-      osc2.stop(startTime + 0.44);
-      nodes.push(osc2, g2);
+    var interval = 1.07; // ~56 BPM — resting heart rate
+    var batchSize = 60;
+    
+    function scheduleBatch(baseTime) {
+      for (var i = 0; i < batchSize; i++) {
+        var t = baseTime + i * interval;
+        
+        // === LUB (first heart sound — deeper, louder) ===
+        var osc1 = audioCtx.createOscillator();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(45, t);
+        osc1.frequency.exponentialRampToValueAtTime(30, t + 0.12);
+        var g1 = audioCtx.createGain();
+        g1.gain.setValueAtTime(0, t);
+        g1.gain.linearRampToValueAtTime(0.30, t + 0.025);
+        g1.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+        osc1.connect(g1).connect(ambientGain);
+        osc1.start(t);
+        osc1.stop(t + 0.16);
+        nodes.push(osc1, g1);
+        
+        // Sub-bass layer for warmth
+        var sub1 = audioCtx.createOscillator();
+        sub1.type = 'sine';
+        sub1.frequency.value = 28;
+        var sg1 = audioCtx.createGain();
+        sg1.gain.setValueAtTime(0, t);
+        sg1.gain.linearRampToValueAtTime(0.15, t + 0.03);
+        sg1.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        sub1.connect(sg1).connect(ambientGain);
+        sub1.start(t);
+        sub1.stop(t + 0.19);
+        nodes.push(sub1, sg1);
+        
+        // === DUB (second heart sound — lighter, higher) ===
+        var dt = t + 0.28;
+        var osc2 = audioCtx.createOscillator();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(55, dt);
+        osc2.frequency.exponentialRampToValueAtTime(35, dt + 0.08);
+        var g2 = audioCtx.createGain();
+        g2.gain.setValueAtTime(0, dt);
+        g2.gain.linearRampToValueAtTime(0.18, dt + 0.02);
+        g2.gain.exponentialRampToValueAtTime(0.001, dt + 0.12);
+        osc2.connect(g2).connect(ambientGain);
+        osc2.start(dt);
+        osc2.stop(dt + 0.13);
+        nodes.push(osc2, g2);
+      }
     }
-
-    // Schedule 60 seconds of heartbeats then loop
-    var interval = 1.2;
-    var count = Math.ceil(60 / interval);
-    for (var i = 0; i < count; i++) {
-      pulse(t + i * interval);
-    }
-
-    // Repeat via setInterval
-    var iv = setInterval(function () {
+    
+    scheduleBatch(now() + 0.1);
+    
+    var iv = setInterval(function() {
       if (_ambientCurrent !== 'heartbeat') { clearInterval(iv); return; }
-      var base = now();
-      for (var i = 0; i < count; i++) pulse(base + i * interval);
-    }, 58000);
-
-    // Store interval id for cleanup
-    nodes._interval = iv;
+      scheduleBatch(now() + 0.05);
+    }, batchSize * interval * 900);
+    _timers.push(iv);
+    
     return nodes;
   }
 
-  function ambientRain() {
-    var nodes = [];
-    var noiseBuf = createNoiseBuffer('white', 4);
-
-    // Main rain bed
-    var src = audioCtx.createBufferSource();
-    src.buffer = noiseBuf;
-    src.loop = true;
-    var bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 800;
-    bp.Q.value = 0.7;
-    var g = audioCtx.createGain();
-    g.gain.value = 0.25;
-    src.connect(bp).connect(g).connect(ambientGain);
-    src.start();
-    nodes.push(src, bp, g);
-
-    // Random drop layer
-    var src2 = audioCtx.createBufferSource();
-    src2.buffer = noiseBuf;
-    src2.loop = true;
-    var hp = audioCtx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 1400;
-    var g2 = audioCtx.createGain();
-    g2.gain.value = 0.08;
-
-    // Slow random modulation via LFO
-    var lfo = audioCtx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.3;
-    var lfoGain = audioCtx.createGain();
-    lfoGain.gain.value = 0.06;
-    lfo.connect(lfoGain).connect(g2.gain);
-    lfo.start();
-
-    src2.connect(hp).connect(g2).connect(ambientGain);
-    src2.start();
-    nodes.push(src2, hp, g2, lfo, lfoGain);
-
-    return nodes;
-  }
-
-  function ambientHumming() {
-    var nodes = [];
-    // Fundamental ~180Hz with vibrato
-    var osc = audioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = 180;
-
-    // Vibrato LFO
-    var vib = audioCtx.createOscillator();
-    vib.type = 'sine';
-    vib.frequency.value = 5;
-    var vibGain = audioCtx.createGain();
-    vibGain.gain.value = 5; // ±5Hz
-    vib.connect(vibGain).connect(osc.frequency);
-    vib.start();
-
-    var g = audioCtx.createGain();
-    g.gain.value = 0.12;
-    osc.connect(g).connect(ambientGain);
-    osc.start();
-    nodes.push(osc, vib, vibGain, g);
-
-    // 2nd harmonic
-    var osc2 = audioCtx.createOscillator();
-    osc2.type = 'sine';
-    osc2.frequency.value = 360;
-    var g2 = audioCtx.createGain();
-    g2.gain.value = 0.015;
-    osc2.connect(g2).connect(ambientGain);
-    osc2.start();
-    nodes.push(osc2, g2);
-
-    // 3rd harmonic
-    var osc3 = audioCtx.createOscillator();
-    osc3.type = 'sine';
-    osc3.frequency.value = 540;
-    var g3 = audioCtx.createGain();
-    g3.gain.value = 0.015;
-    osc3.connect(g3).connect(ambientGain);
-    osc3.start();
-    nodes.push(osc3, g3);
-
-    return nodes;
-  }
-
-  function ambientBreeze() {
-    var nodes = [];
-    var noiseBuf = createNoiseBuffer('pink', 4);
-
-    var src = audioCtx.createBufferSource();
-    src.buffer = noiseBuf;
-    src.loop = true;
-
-    var lp = audioCtx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 800;
-    lp.Q.value = 0.5;
-
-    var g = audioCtx.createGain();
-    g.gain.value = 0.18;
-
-    // Slow amplitude modulation (8-12s cycle → ~0.1Hz)
-    var lfo = audioCtx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.1; // ~10s cycle
-    var lfoG = audioCtx.createGain();
-    lfoG.gain.value = 0.1;
-    lfo.connect(lfoG).connect(g.gain);
-    lfo.start();
-
-    src.connect(lp).connect(g).connect(ambientGain);
-    src.start();
-    nodes.push(src, lp, g, lfo, lfoG);
-
-    return nodes;
-  }
-
+  /* ═══════════════════════════════════════
+     🌊 OCEAN — Layered waves with foam
+     ═══════════════════════════════════════ */
   function ambientOcean() {
     var nodes = [];
-    var noiseBuf = createNoiseBuffer('white', 4);
+    
+    // --- Layer 1: Deep wave bed (brown noise, low-passed) ---
+    var deepBuf = createNoiseBuffer('brown', 6);
+    var deep = audioCtx.createBufferSource();
+    deep.buffer = deepBuf;
+    deep.loop = true;
+    
+    var deepLP = audioCtx.createBiquadFilter();
+    deepLP.type = 'lowpass';
+    deepLP.frequency.value = 400;
+    deepLP.Q.value = 0.5;
+    
+    var deepGain = audioCtx.createGain();
+    deepGain.gain.value = 0.22;
+    
+    // Slow breathing wave (12s cycle)
+    var waveLFO = audioCtx.createOscillator();
+    waveLFO.type = 'sine';
+    waveLFO.frequency.value = 0.083; // ~12s
+    var waveLFOGain = audioCtx.createGain();
+    waveLFOGain.gain.value = 0.14;
+    waveLFO.connect(waveLFOGain).connect(deepGain.gain);
+    waveLFO.start();
+    
+    deep.connect(deepLP).connect(deepGain).connect(ambientGain);
+    deep.start();
+    nodes.push(deep, deepLP, deepGain, waveLFO, waveLFOGain);
+    
+    // --- Layer 2: Mid-range wash (pink noise, band-passed) ---
+    var midBuf = createNoiseBuffer('pink', 5);
+    var mid = audioCtx.createBufferSource();
+    mid.buffer = midBuf;
+    mid.loop = true;
+    
+    var midBP = audioCtx.createBiquadFilter();
+    midBP.type = 'bandpass';
+    midBP.frequency.value = 600;
+    midBP.Q.value = 0.3;
+    
+    var midGain = audioCtx.createGain();
+    midGain.gain.value = 0.12;
+    
+    // Offset wave cycle (15s)
+    var midLFO = audioCtx.createOscillator();
+    midLFO.type = 'sine';
+    midLFO.frequency.value = 0.067; // ~15s
+    var midLFOG = audioCtx.createGain();
+    midLFOG.gain.value = 0.08;
+    midLFO.connect(midLFOG).connect(midGain.gain);
+    midLFO.start();
+    
+    mid.connect(midBP).connect(midGain).connect(ambientGain);
+    mid.start();
+    nodes.push(mid, midBP, midGain, midLFO, midLFOG);
+    
+    // --- Layer 3: Foam / fizz (white noise, high-passed) ---
+    var foamBuf = createNoiseBuffer('white', 3);
+    var foam = audioCtx.createBufferSource();
+    foam.buffer = foamBuf;
+    foam.loop = true;
+    
+    var foamHP = audioCtx.createBiquadFilter();
+    foamHP.type = 'highpass';
+    foamHP.frequency.value = 3000;
+    
+    var foamGain = audioCtx.createGain();
+    foamGain.gain.value = 0.025;
+    
+    // Foam follows the deep wave but delayed
+    var foamLFO = audioCtx.createOscillator();
+    foamLFO.type = 'sine';
+    foamLFO.frequency.value = 0.083;
+    var foamLFOG = audioCtx.createGain();
+    foamLFOG.gain.value = 0.02;
+    foamLFO.connect(foamLFOG).connect(foamGain.gain);
+    foamLFO.start();
+    
+    foam.connect(foamHP).connect(foamGain).connect(ambientGain);
+    foam.start();
+    nodes.push(foam, foamHP, foamGain, foamLFO, foamLFOG);
+    
+    // --- Layer 4: Distant rumble ---
+    var rumble = audioCtx.createOscillator();
+    rumble.type = 'sine';
+    rumble.frequency.value = 55;
+    var rumbleG = audioCtx.createGain();
+    rumbleG.gain.value = 0.03;
+    var rumbleLFO = audioCtx.createOscillator();
+    rumbleLFO.type = 'sine';
+    rumbleLFO.frequency.value = 0.05;
+    var rumbleLFOG = audioCtx.createGain();
+    rumbleLFOG.gain.value = 0.025;
+    rumbleLFO.connect(rumbleLFOG).connect(rumbleG.gain);
+    rumbleLFO.start();
+    rumble.connect(rumbleG).connect(ambientGain);
+    rumble.start();
+    nodes.push(rumble, rumbleG, rumbleLFO, rumbleLFOG);
+    
+    return nodes;
+  }
 
-    var src = audioCtx.createBufferSource();
-    src.buffer = noiseBuf;
-    src.loop = true;
-
-    var bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 500;
-    bp.Q.value = 0.4;
-
-    var g = audioCtx.createGain();
-    g.gain.value = 0.22;
-
-    // Wave rhythm: amplitude modulated with slow sine (10-15s)
-    var lfo = audioCtx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.08; // ~12.5s period
-    var lfoG = audioCtx.createGain();
-    lfoG.gain.value = 0.15;
-    lfo.connect(lfoG).connect(g.gain);
-    lfo.start();
-
-    src.connect(bp).connect(g).connect(ambientGain);
-    src.start();
-    nodes.push(src, bp, g, lfo, lfoG);
-
-    // Lighter foam layer
-    var src2 = audioCtx.createBufferSource();
-    src2.buffer = noiseBuf;
-    src2.loop = true;
-    var hp = audioCtx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 2000;
-    var g2 = audioCtx.createGain();
-    g2.gain.value = 0.015;
-    var lfo2 = audioCtx.createOscillator();
-    lfo2.type = 'sine';
-    lfo2.frequency.value = 0.07;
-    var lfoG2 = audioCtx.createGain();
-    lfoG2.gain.value = 0.03;
-    lfo2.connect(lfoG2).connect(g2.gain);
-    lfo2.start();
-    src2.connect(hp).connect(g2).connect(ambientGain);
-    src2.start();
-    nodes.push(src2, hp, g2, lfo2, lfoG2);
-
+  /* ═══════════════════════════════════════
+     🌧️ RAIN — Individual drops + bed
+     ═══════════════════════════════════════ */
+  function ambientRain() {
+    var nodes = [];
+    
+    // --- Layer 1: Gentle rain bed (filtered white noise) ---
+    var rainBuf = createNoiseBuffer('white', 4);
+    var rainSrc = audioCtx.createBufferSource();
+    rainSrc.buffer = rainBuf;
+    rainSrc.loop = true;
+    
+    var rainBP = audioCtx.createBiquadFilter();
+    rainBP.type = 'bandpass';
+    rainBP.frequency.value = 1200;
+    rainBP.Q.value = 0.5;
+    
+    var rainGain = audioCtx.createGain();
+    rainGain.gain.value = 0.13;
+    
+    // Gentle variation
+    var rainLFO = audioCtx.createOscillator();
+    rainLFO.type = 'sine';
+    rainLFO.frequency.value = 0.15;
+    var rainLFOG = audioCtx.createGain();
+    rainLFOG.gain.value = 0.04;
+    rainLFO.connect(rainLFOG).connect(rainGain.gain);
+    rainLFO.start();
+    
+    rainSrc.connect(rainBP).connect(rainGain).connect(ambientGain);
+    rainSrc.start();
+    nodes.push(rainSrc, rainBP, rainGain, rainLFO, rainLFOG);
+    
+    // --- Layer 2: Higher frequency rain texture ---
+    var texBuf = createNoiseBuffer('white', 3);
+    var texSrc = audioCtx.createBufferSource();
+    texSrc.buffer = texBuf;
+    texSrc.loop = true;
+    
+    var texHP = audioCtx.createBiquadFilter();
+    texHP.type = 'highpass';
+    texHP.frequency.value = 4000;
+    
+    var texGain = audioCtx.createGain();
+    texGain.gain.value = 0.04;
+    
+    texSrc.connect(texHP).connect(texGain).connect(ambientGain);
+    texSrc.start();
+    nodes.push(texSrc, texHP, texGain);
+    
+    // --- Layer 3: Individual drop plinks ---
+    function spawnDrop() {
+      if (_ambientCurrent !== 'rain') return;
+      
+      var t = now();
+      var freq = 2000 + Math.random() * 4000; // Random pitch
+      var pan = Math.random() * 2 - 1; // Stereo position
+      
+      var osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, t + 0.08);
+      
+      var dropGain = audioCtx.createGain();
+      dropGain.gain.setValueAtTime(0, t);
+      dropGain.gain.linearRampToValueAtTime(0.03 + Math.random() * 0.04, t + 0.003);
+      dropGain.gain.exponentialRampToValueAtTime(0.001, t + 0.06 + Math.random() * 0.06);
+      
+      // Stereo panning
+      var panner = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+      if (panner) {
+        panner.pan.value = pan;
+        osc.connect(dropGain).connect(panner).connect(ambientGain);
+      } else {
+        osc.connect(dropGain).connect(ambientGain);
+      }
+      
+      osc.start(t);
+      osc.stop(t + 0.15);
+      
+      // Schedule next drop (random interval 80-300ms)
+      var nextDelay = 80 + Math.random() * 220;
+      var tid = setTimeout(spawnDrop, nextDelay);
+      _timers.push(tid);
+    }
+    
+    // Start multiple drop streams for density
+    for (var s = 0; s < 3; s++) {
+      var startDelay = s * 100 + Math.random() * 200;
+      var tid = setTimeout(spawnDrop, startDelay);
+      _timers.push(tid);
+    }
+    
+    // --- Layer 4: Low rumble (distant thunder ambience) ---
+    var thunderBuf = createNoiseBuffer('brown', 6);
+    var thunderSrc = audioCtx.createBufferSource();
+    thunderSrc.buffer = thunderBuf;
+    thunderSrc.loop = true;
+    
+    var thunderLP = audioCtx.createBiquadFilter();
+    thunderLP.type = 'lowpass';
+    thunderLP.frequency.value = 200;
+    
+    var thunderGain = audioCtx.createGain();
+    thunderGain.gain.value = 0.04;
+    
+    thunderSrc.connect(thunderLP).connect(thunderGain).connect(ambientGain);
+    thunderSrc.start();
+    nodes.push(thunderSrc, thunderLP, thunderGain);
+    
     return nodes;
   }
 
   var AMBIENT_GENERATORS = {
     heartbeat: ambientHeartbeat,
-    rain: ambientRain,
-    humming: ambientHumming,
-    breeze: ambientBreeze,
     ocean: ambientOcean,
+    rain: ambientRain,
   };
 
-  /* ═══════════════════════════════════════════
-     UI SOUND GENERATORS (one-shot)
-     ═══════════════════════════════════════════ */
-
-  function playTone(freq, startTime, duration, gain, type) {
+  /* ═══════════════════════════════════════
+     UI SOUNDS (one-shot)
+     ═══════════════════════════════════════ */
+  function playTone(freq, startTime, dur, gain, type) {
     type = type || 'sine';
     var osc = audioCtx.createOscillator();
     osc.type = type;
@@ -338,171 +388,130 @@
     var g = audioCtx.createGain();
     g.gain.setValueAtTime(0, startTime);
     g.gain.linearRampToValueAtTime(gain, startTime + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+    g.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
     osc.connect(g).connect(uiGain);
     osc.start(startTime);
-    osc.stop(startTime + duration + 0.05);
-  }
-
-  function uiAppOpen() {
-    var t = now();
-    playTone(NOTE.C5, t, 0.35, 0.15);
-    playTone(NOTE.E5, t + 0.12, 0.35, 0.12);
-    playTone(NOTE.G5, t + 0.24, 0.45, 0.10);
-  }
-
-  function uiSessionStart() {
-    var t = now();
-    // Descending tones — settle down
-    playTone(NOTE.G5, t, 0.5, 0.12);
-    playTone(NOTE.E5, t + 0.18, 0.55, 0.10);
-    playTone(NOTE.C5, t + 0.36, 0.7, 0.10);
-  }
-
-  function uiSessionEnd() {
-    var t = now();
-    // Ascending warm chord with long sustain
-    playTone(NOTE.C4, t, 1.5, 0.10);
-    playTone(NOTE.E4, t + 0.1, 1.5, 0.09);
-    playTone(NOTE.G4, t + 0.2, 1.4, 0.08);
-    playTone(NOTE.C5, t + 0.3, 1.8, 0.07);
-  }
-
-  function uiAchievement() {
-    var t = now();
-    var notes = [NOTE.C5, NOTE.E5, NOTE.G5, NOTE.C6, NOTE.E5, NOTE.G5];
-    notes.forEach(function (f, i) {
-      // Shimmer via detuned pairs
-      playTone(f, t + i * 0.06, 0.3, 0.08);
-      playTone(f * 1.005, t + i * 0.06, 0.3, 0.06); // slight detune
-    });
-  }
-
-  function uiMessage() {
-    var t = now();
-    playTone(NOTE.A5, t, 0.18, 0.10);
-  }
-
-  function uiTransition() {
-    // Short filtered noise sweep
-    var buf = createNoiseBuffer('white', 0.3);
-    var src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    var bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.setValueAtTime(300, now());
-    bp.frequency.linearRampToValueAtTime(3000, now() + 0.15);
-    bp.Q.value = 1;
-    var g = audioCtx.createGain();
-    g.gain.setValueAtTime(0.12, now());
-    g.gain.exponentialRampToValueAtTime(0.001, now() + 0.25);
-    src.connect(bp).connect(g).connect(uiGain);
-    src.start();
-    src.stop(now() + 0.3);
+    osc.stop(startTime + dur + 0.05);
   }
 
   var UI_SOUNDS = {
-    appOpen: uiAppOpen,
-    sessionStart: uiSessionStart,
-    sessionEnd: uiSessionEnd,
-    achievement: uiAchievement,
-    message: uiMessage,
-    transition: uiTransition,
+    appOpen: function() {
+      var t = now();
+      playTone(523.25, t, 0.35, 0.12);
+      playTone(659.25, t+0.12, 0.35, 0.10);
+      playTone(783.99, t+0.24, 0.45, 0.08);
+    },
+    sessionStart: function() {
+      var t = now();
+      playTone(783.99, t, 0.5, 0.10);
+      playTone(659.25, t+0.18, 0.55, 0.08);
+      playTone(523.25, t+0.36, 0.7, 0.08);
+    },
+    sessionEnd: function() {
+      var t = now();
+      playTone(261.63, t, 1.5, 0.08);
+      playTone(329.63, t+0.1, 1.5, 0.07);
+      playTone(392.00, t+0.2, 1.4, 0.06);
+      playTone(523.25, t+0.3, 1.8, 0.05);
+    },
+    achievement: function() {
+      var t = now();
+      [523.25,659.25,783.99,1046.50,659.25,783.99].forEach(function(f,i) {
+        playTone(f, t+i*0.06, 0.3, 0.06);
+      });
+    },
+    message: function() { playTone(880, now(), 0.18, 0.08); },
+    transition: function() {
+      var buf = createNoiseBuffer('white', 0.3);
+      var src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      var bp = audioCtx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(300, now());
+      bp.frequency.linearRampToValueAtTime(3000, now()+0.15);
+      bp.Q.value = 1;
+      var g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.10, now());
+      g.gain.exponentialRampToValueAtTime(0.001, now()+0.25);
+      src.connect(bp).connect(g).connect(uiGain);
+      src.start();
+      src.stop(now()+0.3);
+    },
   };
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      BREATHING SYNC
-     ═══════════════════════════════════════════ */
-
-  function breathInhale(duration) {
-    duration = duration || 4;
+     ═══════════════════════════════════════ */
+  function breathInhale(dur) {
+    dur = dur || 4;
     stopNodes(_breathNodes);
     var t = now();
-
     var buf = createNoiseBuffer('pink', 2);
     var src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
-
+    src.buffer = buf; src.loop = true;
     var bp = audioCtx.createBiquadFilter();
     bp.type = 'bandpass';
     bp.frequency.setValueAtTime(300, t);
-    bp.frequency.linearRampToValueAtTime(1200, t + duration);
+    bp.frequency.linearRampToValueAtTime(1200, t+dur);
     bp.Q.value = 1;
-
     var g = audioCtx.createGain();
     g.gain.setValueAtTime(0.01, t);
-    g.gain.linearRampToValueAtTime(0.12, t + duration);
-
+    g.gain.linearRampToValueAtTime(0.10, t+dur);
     src.connect(bp).connect(g).connect(breathGain);
-    src.start(t);
-    src.stop(t + duration + 0.1);
+    src.start(t); src.stop(t+dur+0.1);
     _breathNodes.push(src, bp, g);
   }
-
-  function breathHold(duration) {
-    duration = duration || 7;
+  function breathHold(dur) {
+    dur = dur || 7;
     stopNodes(_breathNodes);
     var t = now();
-
     var osc = audioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = 220;
-    var g = audioCtx.createGain();
-    g.gain.value = 0.015; // very faint
+    osc.type = 'sine'; osc.frequency.value = 220;
+    var g = audioCtx.createGain(); g.gain.value = 0.012;
     osc.connect(g).connect(breathGain);
-    osc.start(t);
-    osc.stop(t + duration + 0.1);
+    osc.start(t); osc.stop(t+dur+0.1);
     _breathNodes.push(osc, g);
   }
-
-  function breathExhale(duration) {
-    duration = duration || 6;
+  function breathExhale(dur) {
+    dur = dur || 6;
     stopNodes(_breathNodes);
     var t = now();
-
     var buf = createNoiseBuffer('pink', 2);
     var src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
-
+    src.buffer = buf; src.loop = true;
     var bp = audioCtx.createBiquadFilter();
     bp.type = 'bandpass';
     bp.frequency.setValueAtTime(1200, t);
-    bp.frequency.linearRampToValueAtTime(300, t + duration);
+    bp.frequency.linearRampToValueAtTime(300, t+dur);
     bp.Q.value = 0.8;
-
     var g = audioCtx.createGain();
-    g.gain.setValueAtTime(0.12, t);
-    g.gain.linearRampToValueAtTime(0.001, t + duration);
-
+    g.gain.setValueAtTime(0.10, t);
+    g.gain.linearRampToValueAtTime(0.001, t+dur);
     src.connect(bp).connect(g).connect(breathGain);
-    src.start(t);
-    src.stop(t + duration + 0.1);
+    src.start(t); src.stop(t+dur+0.1);
     _breathNodes.push(src, bp, g);
   }
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      PANEL UI
-     ═══════════════════════════════════════════ */
-
+     ═══════════════════════════════════════ */
   function buildSoundOptions() {
     var container = document.getElementById('soundOptions');
     if (!container) return;
     container.innerHTML = '';
-
+    
     // "No sound" option
     var none = document.createElement('div');
     none.className = 'sound-option sound-option-none' + (_ambientCurrent === null ? ' active' : '');
     none.setAttribute('data-sound', 'none');
     none.innerHTML = '<span class="sound-option-icon">🔇</span><span class="sound-option-name">بدون صوت</span>';
-    none.onclick = function () {
+    none.onclick = function() {
       NafasAudio.ambient.stop();
       updateOptionUI();
     };
     container.appendChild(none);
-
-    Object.keys(SOUND_LABELS).forEach(function (key) {
+    
+    Object.keys(SOUND_LABELS).forEach(function(key) {
       var info = SOUND_LABELS[key];
       var el = document.createElement('div');
       el.className = 'sound-option' + (_ambientCurrent === key ? ' active' : '');
@@ -515,7 +524,7 @@
           '<span class="sound-eq-bar"></span>' +
           '<span class="sound-eq-bar"></span>' +
         '</span>';
-      el.onclick = function () {
+      el.onclick = function() {
         if (_ambientCurrent === key) {
           NafasAudio.ambient.stop();
         } else {
@@ -529,7 +538,7 @@
 
   function updateOptionUI() {
     var opts = document.querySelectorAll('.sound-option');
-    opts.forEach(function (el) {
+    opts.forEach(function(el) {
       var s = el.getAttribute('data-sound');
       if (s === 'none') {
         el.classList.toggle('active', _ambientCurrent === null);
@@ -537,36 +546,37 @@
         el.classList.toggle('active', _ambientCurrent === s);
       }
     });
-    // FAB active state
     var fab = document.getElementById('soundFab');
-    if (fab) fab.classList.toggle('active', _ambientCurrent !== null);
+    if (fab) {
+      fab.classList.toggle('active', _ambientCurrent !== null);
+      // Update FAB icon to current sound
+      if (_ambientCurrent && SOUND_LABELS[_ambientCurrent]) {
+        fab.textContent = SOUND_LABELS[_ambientCurrent].icon;
+      } else {
+        fab.textContent = '🎵';
+      }
+    }
   }
 
   function togglePanel() {
     _panelOpen = !_panelOpen;
     var panel = document.getElementById('soundPanel');
-    if (panel) {
-      panel.classList.toggle('visible', _panelOpen);
-    }
+    if (panel) panel.classList.toggle('visible', _panelOpen);
     if (_panelOpen) buildSoundOptions();
   }
 
-  /* ═══════════════════════════════════════════
-     PUBLIC API: window.NafasAudio
-     ═══════════════════════════════════════════ */
-
+  /* ═══════════════════════════════════════
+     PUBLIC API
+     ═══════════════════════════════════════ */
   var NafasAudio = {
-
-    /** Initialize AudioContext — must be called after a user gesture */
-    init: function () {
+    init: function() {
       if (audioCtx) return;
       try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
+      } catch(e) {
         console.warn('[NafasAudio] Web Audio not supported', e);
         return;
       }
-
       masterGain = audioCtx.createGain();
       masterGain.gain.value = _masterVolume;
       masterGain.connect(audioCtx.destination);
@@ -580,121 +590,100 @@
       uiGain.connect(masterGain);
 
       breathGain = audioCtx.createGain();
-      breathGain.gain.value = 0.5;
+      breathGain.gain.value = 0.4;
       breathGain.connect(masterGain);
     },
 
-    /* ── Ambient ── */
     ambient: {
-      available: ['heartbeat', 'rain', 'humming', 'breeze', 'ocean'],
+      available: ['heartbeat', 'ocean', 'rain'],
       get current() { return _ambientCurrent; },
 
-      play: function (soundName) {
+      play: function(soundName) {
         NafasAudio.init();
         if (!audioCtx) return;
-        // Resume suspended context
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        // Stop previous ambient
         this.stop();
         if (AMBIENT_GENERATORS[soundName]) {
           _ambientNodes = AMBIENT_GENERATORS[soundName]();
           _ambientCurrent = soundName;
-          try { localStorage.setItem('nafas_ambient', soundName); } catch (_) {}
+          try { localStorage.setItem('nafas_ambient', soundName); } catch(_) {}
         }
         updateOptionUI();
       },
 
-      stop: function () {
-        if (_ambientNodes._interval) clearInterval(_ambientNodes._interval);
+      stop: function() {
+        clearTimers();
         stopNodes(_ambientNodes);
         _ambientCurrent = null;
-        try { localStorage.removeItem('nafas_ambient'); } catch (_) {}
+        try { localStorage.setItem('nafas_ambient', 'off'); } catch(_) {}
         updateOptionUI();
       },
 
-      setVolume: function (v) {
+      setVolume: function(v) {
         _ambientVolume = Math.max(0, Math.min(1, v));
         if (ambientGain) ambientGain.gain.value = _ambientVolume;
       },
     },
 
-    /* ── UI sounds ── */
     ui: {
-      play: function (soundName) {
+      play: function(soundName) {
         NafasAudio.init();
         if (!audioCtx || _isMuted) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
         if (UI_SOUNDS[soundName]) UI_SOUNDS[soundName]();
       },
-      setVolume: function (v) {
+      setVolume: function(v) {
         _uiVolume = Math.max(0, Math.min(1, v));
         if (uiGain) uiGain.gain.value = _uiVolume;
       },
     },
 
-    /* ── Breathing ── */
     breathing: {
-      inhale: function (duration) {
-        NafasAudio.init();
-        if (!audioCtx || _isMuted) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        breathInhale(duration);
-      },
-      hold: function (duration) {
-        NafasAudio.init();
-        if (!audioCtx || _isMuted) return;
-        breathHold(duration);
-      },
-      exhale: function (duration) {
-        NafasAudio.init();
-        if (!audioCtx || _isMuted) return;
-        breathExhale(duration);
-      },
-      stop: function () { stopNodes(_breathNodes); },
+      inhale: function(d) { NafasAudio.init(); if(!audioCtx||_isMuted)return; if(audioCtx.state==='suspended')audioCtx.resume(); breathInhale(d); },
+      hold: function(d) { NafasAudio.init(); if(!audioCtx||_isMuted)return; breathHold(d); },
+      exhale: function(d) { NafasAudio.init(); if(!audioCtx||_isMuted)return; breathExhale(d); },
+      stop: function() { stopNodes(_breathNodes); },
     },
 
-    /* ── Master controls ── */
     get isMuted() { return _isMuted; },
     get masterVolume() { return _masterVolume; },
 
-    mute: function () {
-      _isMuted = true;
-      if (masterGain) masterGain.gain.value = 0;
-    },
-    unmute: function () {
-      _isMuted = false;
-      if (masterGain) masterGain.gain.value = _masterVolume;
-    },
-    setMasterVolume: function (v) {
+    mute: function() { _isMuted = true; if(masterGain) masterGain.gain.value = 0; },
+    unmute: function() { _isMuted = false; if(masterGain) masterGain.gain.value = _masterVolume; },
+    setMasterVolume: function(v) {
       _masterVolume = Math.max(0, Math.min(1, v));
       if (!_isMuted && masterGain) masterGain.gain.value = _masterVolume;
     },
 
-    /* ── Panel toggle ── */
     togglePanel: togglePanel,
   };
 
   window.NafasAudio = NafasAudio;
 
-  /* ═══════════════════════════════════════════
-     AUTO-INIT ON FIRST USER INTERACTION
-     ═══════════════════════════════════════════ */
-
+  /* ═══════════════════════════════════════
+     AUTO-INIT: Play ambient on first touch
+     Default = ocean if no saved preference
+     ═══════════════════════════════════════ */
   var _autoInitDone = false;
   function autoInit() {
     if (_autoInitDone) return;
     _autoInitDone = true;
     NafasAudio.init();
 
-    // Restore previous ambient from localStorage
     try {
       var saved = localStorage.getItem('nafas_ambient');
-      if (saved && AMBIENT_GENERATORS[saved]) {
+      if (saved === 'off') {
+        // User explicitly turned off — respect that
+      } else if (saved && AMBIENT_GENERATORS[saved]) {
         NafasAudio.ambient.play(saved);
+      } else {
+        // First time — default to ocean waves 🌊
+        NafasAudio.ambient.play('ocean');
       }
-    } catch (_) {}
+    } catch(_) {
+      NafasAudio.ambient.play('ocean');
+    }
 
-    // Remove listeners
     document.removeEventListener('click', autoInit, true);
     document.removeEventListener('touchstart', autoInit, true);
     document.removeEventListener('keydown', autoInit, true);
