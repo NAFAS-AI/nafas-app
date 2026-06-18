@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nafas-v6.0';
+const CACHE_NAME = 'nafas-v7.0';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -30,7 +30,6 @@ self.addEventListener('activate', e => {
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
      .then(() => {
-       // إشعار كل النوافذ المفتوحة بالتحديث
        return self.clients.matchAll({ type: 'window' }).then(clients => {
          clients.forEach(client => client.postMessage({ type: 'SW_UPDATED', version: CACHE_NAME }));
        });
@@ -38,11 +37,11 @@ self.addEventListener('activate', e => {
   );
 });
 
-// === FETCH: Network-First للـ HTML/CSS/JS — التحديث يوصل دايماً ===
+// === FETCH: Network-First for everything — no stale 404s ===
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
 
-  // API calls — شبكة فقط، بلا كاش
+  // API calls — network only
   if (e.request.url.includes('supabase.co') || e.request.url.includes('googleapis.com') || e.request.url.includes('/api/')) {
     e.respondWith(
       fetch(e.request).catch(() =>
@@ -52,7 +51,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // HTML/CSS/JS — Network-First: حاول الشبكة أولاً، الكاش كـ fallback
+  // Everything else — Network-First, cache as fallback
   e.respondWith(
     fetch(e.request).then(resp => {
       if (resp.ok) {
@@ -68,7 +67,6 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// === MESSAGE: السماح بتحديث يدوي من التطبيق ===
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
