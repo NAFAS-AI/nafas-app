@@ -172,7 +172,7 @@
       '<div class="hug-breath-guide"></div>' +
       '<div class="hug-content">' +
         '<div class="hug-glow-circle"></div>' +
-        '<div class="hug-emoji">🤗</div>' +
+        '<div class="hug-emoji">🫂</div>' +
         '<div class="hug-message" id="hugMessage"></div>' +
         '<div class="hug-sub" id="hugSub"></div>' +
       '</div>' +

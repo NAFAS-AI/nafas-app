@@ -216,7 +216,7 @@
     osc2.type = 'sine';
     osc2.frequency.value = 360;
     var g2 = audioCtx.createGain();
-    g2.gain.value = 0.04;
+    g2.gain.value = 0.015;
     osc2.connect(g2).connect(ambientGain);
     osc2.start();
     nodes.push(osc2, g2);
@@ -303,7 +303,7 @@
     hp.type = 'highpass';
     hp.frequency.value = 2000;
     var g2 = audioCtx.createGain();
-    g2.gain.value = 0.04;
+    g2.gain.value = 0.015;
     var lfo2 = audioCtx.createOscillator();
     lfo2.type = 'sine';
     lfo2.frequency.value = 0.07;

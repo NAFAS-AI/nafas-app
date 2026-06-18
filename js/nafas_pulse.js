@@ -241,7 +241,7 @@
     var btn = document.createElement('button');
     btn.id = 'hugBtn';
     btn.className = 'hug-trigger-btn';
-    btn.innerHTML = '<span class="hug-btn-emoji">🤗</span><span class="hug-btn-text">' +
+    btn.innerHTML = '<span class="hug-btn-emoji">🫂</span><span class="hug-btn-text">' +
       (lang === 'ar' ? 'احضني' : 'Hug Me') + '</span>';
     btn.addEventListener('click', function() {
       if (typeof startHug === 'function') startHug();

@@ -6217,4 +6217,3 @@ checkConsent();
     document.getElementById('sessionCount').textContent = i18n[state.lang].sessions(0);
   }
 })();
-</script>

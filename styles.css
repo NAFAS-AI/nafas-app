@@ -1077,7 +1077,7 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   font-size: 0.92rem;
   font-weight: 600;
   font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
-  color: var(--text-primary);
+  color: #FFF5E6;
   cursor: pointer;
   background: var(--glass, rgba(196,149,106,0.06)) !important;
   backdrop-filter: blur(16px);
