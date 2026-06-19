@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>نَفَس — 127 طبقة ذكاء اصطناعي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:#0a0a1a;color:#e0e0e0;line-height:1.9;padding:20px}
+.container{max-width:900px;margin:0 auto}
+h1{text-align:center;font-size:2em;background:linear-gradient(135deg,#6C3DD6,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.subtitle{text-align:center;color:rgba(255,255,255,0.4);font-size:0.9em;margin-bottom:30px}
+.big-number{text-align:center;font-size:5em;font-weight:900;background:linear-gradient(135deg,#6C3DD6,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin:20px 0 5px}
+.big-label{text-align:center;font-size:1.1em;color:rgba(255,255,255,0.5);margin-bottom:30px}
+
+/* What is a layer */
+.explain-box{background:linear-gradient(135deg,rgba(108,61,214,0.12),rgba(34,211,238,0.08));border:1px solid rgba(108,61,214,0.3);border-radius:16px;padding:24px;margin:20px 0 30px}
+.explain-box h2{color:#22D3EE;font-size:1.3em;margin-bottom:12px}
+.explain-box p{color:rgba(255,255,255,0.75);font-size:1em;line-height:2}
+.explain-box .analogy{background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:14px;margin:12px 0;font-size:0.95em}
+.explain-box .analogy::before{content:"💡 "}
+
+/* Category */
+.category{margin:25px 0;border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden}
+.cat-header{background:linear-gradient(135deg,rgba(108,61,214,0.15),rgba(34,211,238,0.08));padding:16px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.cat-header h3{color:#fff;font-size:1.15em}
+.cat-count{background:linear-gradient(135deg,#6C3DD6,#22D3EE);color:#fff;font-weight:700;padding:4px 14px;border-radius:20px;font-size:0.85em}
+.cat-body{padding:12px 20px;background:rgba(0,0,0,0.3)}
+.layer-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.layer-item:last-child{border:none}
+.layer-num{color:#6C3DD6;font-weight:700;min-width:32px;text-align:center;font-size:0.85em}
+.layer-name-ar{color:#22D3EE;font-weight:600;font-size:0.95em}
+.layer-name-en{color:rgba(255,255,255,0.45);font-size:0.8em;direction:ltr}
+.layer-desc{color:rgba(255,255,255,0.55);font-size:0.85em;margin-top:2px}
+
+/* Summary */
+.summary{background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.03));border:1px solid rgba(34,197,94,0.25);border-radius:16px;padding:24px;margin:30px 0;text-align:center}
+.summary h2{color:#22C55E;margin-bottom:12px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.summary-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;text-align:center}
+.summary-card .num{font-size:1.8em;font-weight:900;color:#22D3EE}
+.summary-card .label{font-size:0.8em;color:rgba(255,255,255,0.45)}
+
+.footer{text-align:center;margin-top:30px;padding:16px;border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);font-size:0.8em}
+.highlight{color:#FFD700;font-weight:700}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🧠 نَفَس — خريطة الطبقات الكاملة</h1>
+<div class="subtitle">NAFAS FOR ARTIFICIAL INTELLIGENCE — CN-6573712 — Abu Dhabi</div>
+
+<div class="big-number">127</div>
+<div class="big-label">طبقة ذكاء اصطناعي — في منتج واحد</div>
+
+<!-- What is a layer -->
+<div class="explain-box">
+<h2>🤔 وش يعني "طبقة" أصلاً؟</h2>
+<p>
+<strong>الطبقة (Layer)</strong> = قدرة ذكية مستقلة داخل النظام. كل طبقة تأخذ مدخلات، تعالجها بذكاء، وتُنتج مخرجات.<br><br>
+مو كل طبقة = ملف كود. الطبقة الواحدة ممكن تكون <strong>خوارزمية</strong> (مثل تحليل المشاعر)، أو <strong>قرار ذكي</strong> (مثل التمييز بين التأديب والإساءة)، أو <strong>تجربة حسية</strong> (مثل العناق الرقمي)، أو <strong>ربط بين أنظمة</strong> (مثل اتصال نَفَس بأثير).
+</p>
+
+<div class="analogy">
+<strong>تشبيه بسيط:</strong> تخيلي الدماغ البشري — فيه طبقات للسمع، للبصر، للمشاعر، للقرارات، للذاكرة...<br>
+نَفَس = دماغ رقمي عربي — كل قدرة فيه = طبقة مستقلة تعمل مع باقي الطبقات.
+</div>
+
+<div class="analogy">
+<strong>الفرق بين نَفَس و Chatbot عادي:</strong><br>
+• Chatbot عادي = <strong>طبقة واحدة</strong> (يستقبل نص → يرد نص)<br>
+• نَفَس = <strong>127 طبقة</strong> (يستقبل نص → يحلل اللغة → يكشف المشاعر → يقيس الشدة → يحدد الأزمة → يختار نمط التنفس → يكيّف الصوت → يغيّر ألوان الشاشة → يتتبع التقدم... <span class="highlight">كل هذا يصير في لحظة واحدة</span>)
+</div>
+</div>
+
+<!-- Categories -->
+<div class="category">
+<div class="cat-header">
+<h3>🧠 محرك تحليل المشاعر — Emotion Engine</h3>
+<span class="cat-count">25 طبقة</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(108,61,214,0.08);border-radius:8px">
+<strong>الملف:</strong> api/nafas-emotion.js — 752 سطر<br>
+<strong>الوظيفة:</strong> القلب النابض — يقرأ كل رسالة ويفهم ماذا يشعر الإنسان
+</p>
+<div class="layer-item"><span class="layer-num">1</span><span class="layer-name-ar">تحليل النص العربي</span><span class="layer-name-en">Arabic Text Analysis</span></div>
+<div class="layer-item"><span class="layer-num">2</span><span class="layer-name-ar">تحليل النص الإنجليزي</span><span class="layer-name-en">English Text Analysis</span></div>
+<div class="layer-item"><span class="layer-num">3</span><span class="layer-name-ar">كشف الفرانكو عربي</span><span class="layer-name-en">Franco-Arabic Detection</span><div class="layer-desc">"ana ta3ban" → أنا تعبان — لا منافس عربي يدعم هذا 🏆</div></div>
+<div class="layer-item"><span class="layer-num">4</span><span class="layer-name-ar">كشف مزج اللغات</span><span class="layer-name-en">Code-Switching Detection</span><div class="layer-desc">يفهم لما تخلط عربي مع إنجليزي في نفس الجملة</div></div>
+<div class="layer-item"><span class="layer-num">5</span><span class="layer-name-ar">كشف اللغة التلقائي</span><span class="layer-name-en">Auto Language Detection</span></div>
+<div class="layer-item"><span class="layer-num">6</span><span class="layer-name-ar">عاطفة: سعيد</span><span class="layer-name-en">Emotion: Happy</span></div>
+<div class="layer-item"><span class="layer-num">7</span><span class="layer-name-ar">عاطفة: حزين</span><span class="layer-name-en">Emotion: Sad</span></div>
+<div class="layer-item"><span class="layer-num">8</span><span class="layer-name-ar">عاطفة: قلق</span><span class="layer-name-en">Emotion: Anxious</span></div>
+<div class="layer-item"><span class="layer-num">9</span><span class="layer-name-ar">عاطفة: غاضب</span><span class="layer-name-en">Emotion: Angry</span></div>
+<div class="layer-item"><span class="layer-num">10</span><span class="layer-name-ar">عاطفة: مضغوط</span><span class="layer-name-en">Emotion: Stressed</span></div>
+<div class="layer-item"><span class="layer-num">11</span><span class="layer-name-ar">عاطفة: تعبان</span><span class="layer-name-en">Emotion: Tired</span></div>
+<div class="layer-item"><span class="layer-num">12</span><span class="layer-name-ar">عاطفة: وحيد</span><span class="layer-name-en">Emotion: Lonely</span></div>
+<div class="layer-item"><span class="layer-num">13</span><span class="layer-name-ar">عاطفة: خايف</span><span class="layer-name-en">Emotion: Scared</span></div>
+<div class="layer-item"><span class="layer-num">14</span><span class="layer-name-ar">عاطفة: متفائل</span><span class="layer-name-en">Emotion: Hopeful</span></div>
+<div class="layer-item"><span class="layer-num">15</span><span class="layer-name-ar">عاطفة: ممتن</span><span class="layer-name-en">Emotion: Grateful</span></div>
+<div class="layer-item"><span class="layer-num">16</span><span class="layer-name-ar">عاطفة: محتار</span><span class="layer-name-en">Emotion: Confused</span></div>
+<div class="layer-item"><span class="layer-num">17</span><span class="layer-name-ar">عاطفة: محايد</span><span class="layer-name-en">Emotion: Neutral</span></div>
+<div class="layer-item"><span class="layer-num">18</span><span class="layer-name-ar">قياس شدة العاطفة</span><span class="layer-name-en">Intensity Scoring (1-10)</span><div class="layer-desc">مو بس "حزين" — بل حزين بدرجة 3 ولا 9؟ فرق كبير في الاستجابة</div></div>
+<div class="layer-item"><span class="layer-num">19</span><span class="layer-name-ar">تحليل النمط الإدراكي VAK</span><span class="layer-name-en">Visual / Auditory / Kinesthetic</span><div class="layer-desc">يعرف إذا الشخص يستجيب أكثر للصور، الأصوات، أو اللمس</div></div>
+<div class="layer-item"><span class="layer-num">20</span><span class="layer-name-ar">كشف العواطف الثانوية</span><span class="layer-name-en">Sub-Emotion Detection</span><div class="layer-desc">"حزين" ممكن يكون تحتها: وحدة + تعب + إحباط</div></div>
+<div class="layer-item"><span class="layer-num">21</span><span class="layer-name-ar">كشف إشارات الجسد</span><span class="layer-name-en">Body Signal Detection</span><div class="layer-desc">صداع، أرق، ضيق صدر — يفهمها من كلامك</div></div>
+<div class="layer-item"><span class="layer-num">22</span><span class="layer-name-ar">تقييم الاحتياجات</span><span class="layer-name-en">Needs Assessment</span><div class="layer-desc">تحتاج راحة؟ تواصل إنساني؟ هدوء؟ يحدد ذلك تلقائياً</div></div>
+<div class="layer-item"><span class="layer-num">23</span><span class="layer-name-ar">معايرة النبرة</span><span class="layer-name-en">Tone Calibration</span><div class="layer-desc">لطيف / عاجل / داعم — يختار كيف يرد حسب حالتك</div></div>
+<div class="layer-item"><span class="layer-num">24</span><span class="layer-name-ar">التحليل المحلي بلا إنترنت</span><span class="layer-name-en">Offline Fallback Analysis</span><div class="layer-desc">إذا انقطع النت — نَفَس يكمل يشتغل بتحليل محلي ذكي</div></div>
+<div class="layer-item"><span class="layer-num">25</span><span class="layer-name-ar">محرك السياق الثقافي</span><span class="layer-name-en">Cultural Context Engine</span><div class="layer-desc">يفهم "عادي" الخليجية = "مو عادي" — ذكاء ثقافي عميق</div></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🛡️ سلامة الأطفال — Child Safety</h3>
+<span class="cat-count">10 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(238,90,36,0.08);border-radius:8px">
+<strong>مدمج في:</strong> nafas-emotion.js — الأسطر 201-500+<br>
+<strong>ميزة فريدة عالمياً:</strong> أول AI يفرّق ثقافياً بين التأديب والإساءة 🏆
+</p>
+<div class="layer-item"><span class="layer-num">26</span><span class="layer-name-ar">المستوى 0: طبيعي</span><span class="layer-name-en">Level 0: Normal → Emotional support</span></div>
+<div class="layer-item"><span class="layer-num">27</span><span class="layer-name-ar">المستوى 1: تأديب طبيعي</span><span class="layer-name-en">Level 1: Natural discipline → Support only</span><div class="layer-desc">"بابا ضربني عشان ما سويت واجبي" = تأديب — دعم عاطفي فقط، بدون إنذار</div></div>
+<div class="layer-item"><span class="layer-num">28</span><span class="layer-name-ar">المستوى 2: يحتاج مراقبة</span><span class="layer-name-en">Level 2: Monitoring → Silent watch</span></div>
+<div class="layer-item"><span class="layer-num">29</span><span class="layer-name-ar">المستوى 3: مُقلق</span><span class="layer-name-en">Level 3: Concerning → Silent alert</span></div>
+<div class="layer-item"><span class="layer-num">30</span><span class="layer-name-ar">المستوى 4: خطر حقيقي</span><span class="layer-name-en">Level 4: Danger → Intervention + parent alert</span></div>
+<div class="layer-item"><span class="layer-num">31</span><span class="layer-name-ar">المستوى 5: طوارئ</span><span class="layer-name-en">Level 5: Emergency (suicide/abuse) → Full protocol</span></div>
+<div class="layer-item"><span class="layer-num">32</span><span class="layer-name-ar">التمييز الثقافي: تأديب ≠ إساءة</span><span class="layer-name-en">Cultural: Discipline ≠ Abuse</span></div>
+<div class="layer-item"><span class="layer-num">33</span><span class="layer-name-ar">كشف أنماط الإساءة العربية</span><span class="layer-name-en">Arabic Abuse Pattern Detection</span></div>
+<div class="layer-item"><span class="layer-num">34</span><span class="layer-name-ar">محرك التصعيد</span><span class="layer-name-en">Escalation Protocol Engine</span></div>
+<div class="layer-item"><span class="layer-num">35</span><span class="layer-name-ar">نظام تنبيه الوالدين</span><span class="layer-name-en">Parental Notification System</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🌬️ التنفس الذكي المتكيّف — Adaptive Breathing</h3>
+<span class="cat-count">10 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(34,211,238,0.08);border-radius:8px">
+<strong>الملف:</strong> nafas_breathing_smart.js — 396 سطر<br>
+<strong>كل نمط تنفس مُثبت علمياً</strong> — ويختاره النظام تلقائياً حسب حالتك
+</p>
+<div class="layer-item"><span class="layer-num">36</span><span class="layer-name-ar">تنفس الطمأنينة 4-7-8</span><span class="layer-name-en">Calming Breath (anxiety relief)</span></div>
+<div class="layer-item"><span class="layer-num">37</span><span class="layer-name-ar">التنفس المربّع 4-4-4-4</span><span class="layer-name-en">Box Breathing (general stress)</span></div>
+<div class="layer-item"><span class="layer-num">38</span><span class="layer-name-ar">التنفس السريع 2-4</span><span class="layer-name-en">Quick Breath (panic attacks)</span></div>
+<div class="layer-item"><span class="layer-num">39</span><span class="layer-name-ar">تنفس النوم 5-5</span><span class="layer-name-en">Sleep Breath (insomnia)</span></div>
+<div class="layer-item"><span class="layer-num">40</span><span class="layer-name-ar">السكينة العميقة 6-2-8</span><span class="layer-name-en">Deep Serenity (deep relaxation)</span></div>
+<div class="layer-item"><span class="layer-num">41</span><span class="layer-name-ar">الاختيار التلقائي حسب المشاعر</span><span class="layer-name-en">Auto-selection based on emotion</span></div>
+<div class="layer-item"><span class="layer-num">42</span><span class="layer-name-ar">التوقيت التكيّفي</span><span class="layer-name-en">Adaptive Timing (adjusts to user)</span></div>
+<div class="layer-item"><span class="layer-num">43</span><span class="layer-name-ar">الرسوم المتحركة البصرية</span><span class="layer-name-en">Visual Breathing Animation</span></div>
+<div class="layer-item"><span class="layer-num">44</span><span class="layer-name-ar">التوجيه الصوتي</span><span class="layer-name-en">Audio-Guided Breathing</span></div>
+<div class="layer-item"><span class="layer-num">45</span><span class="layer-name-ar">تتبع إكمال الجلسة</span><span class="layer-name-en">Session Completion Tracking</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🤗 العناق الرقمي — Digital Hug</h3>
+<span class="cat-count">10 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(255,215,0,0.08);border-radius:8px">
+<strong>الملف:</strong> nafas_hug.js — 347 سطر<br>
+<strong>الميزة الأكثر عاطفية في المنظومة كلها</strong> — تجربة حسية كاملة
+</p>
+<div class="layer-item"><span class="layer-num">46</span><span class="layer-name-ar">تحوّل الألوان الدافئة</span><span class="layer-name-en">Warm Color Transition</span></div>
+<div class="layer-item"><span class="layer-num">47</span><span class="layer-name-ar">نظام الجسيمات الذهبية</span><span class="layer-name-en">Golden Particle System</span></div>
+<div class="layer-item"><span class="layer-num">48</span><span class="layer-name-ar">محاكاة نبض القلب</span><span class="layer-name-en">Heartbeat Simulation</span></div>
+<div class="layer-item"><span class="layer-num">49</span><span class="layer-name-ar">رسائل مواساة عربية (12 رسالة)</span><span class="layer-name-en">Arabic Comfort Messages</span></div>
+<div class="layer-item"><span class="layer-num">50</span><span class="layer-name-ar">رسائل مواساة عميقة (4 رسائل)</span><span class="layer-name-en">Deep Comfort Messages</span></div>
+<div class="layer-item"><span class="layer-num">51</span><span class="layer-name-ar">المرحلة 1: العناق</span><span class="layer-name-en">Phase 1: Embrace</span></div>
+<div class="layer-item"><span class="layer-num">52</span><span class="layer-name-ar">المرحلة 2: العناق العميق</span><span class="layer-name-en">Phase 2: Deep Hug</span></div>
+<div class="layer-item"><span class="layer-num">53</span><span class="layer-name-ar">المرحلة 3: الإطلاق الهادئ</span><span class="layer-name-en">Phase 3: Gentle Release</span></div>
+<div class="layer-item"><span class="layer-num">54</span><span class="layer-name-ar">جسيمات تستجيب للمس</span><span class="layer-name-en">Touch-Responsive Particles</span></div>
+<div class="layer-item"><span class="layer-num">55</span><span class="layer-name-ar">اهتزاز الجهاز</span><span class="layer-name-en">Vibration Feedback (mobile)</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>💓 نبض الحياة — Life Pulse</h3>
+<span class="cat-count">8 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(108,61,214,0.08);border-radius:8px">
+<strong>الملف:</strong> nafas_pulse.js — 297 سطر<br>
+<strong>يخلّي التطبيق ينبض بالحياة</strong> — مو آلة، مو chatbot، شي حي
+</p>
+<div class="layer-item"><span class="layer-num">56</span><span class="layer-name-ar">حاسب أطوار القمر الحقيقي</span><span class="layer-name-en">Moon Phase Calculator</span></div>
+<div class="layer-item"><span class="layer-num">57</span><span class="layer-name-ar">جسيمات اليراعات</span><span class="layer-name-en">Firefly Particles</span></div>
+<div class="layer-item"><span class="layer-num">58</span><span class="layer-name-ar">ألوان تتكيّف مع المزاج</span><span class="layer-name-en">Mood-Adaptive Colors</span></div>
+<div class="layer-item"><span class="layer-num">59</span><span class="layer-name-ar">إيقاعات عضوية (حركة طبيعية)</span><span class="layer-name-en">Organic Rhythms</span></div>
+<div class="layer-item"><span class="layer-num">60</span><span class="layer-name-ar">تفاعل اللمس (جسيمات تتبع الإصبع)</span><span class="layer-name-en">Touch Interaction</span></div>
+<div class="layer-item"><span class="layer-num">61</span><span class="layer-name-ar">أجواء حسب الوقت</span><span class="layer-name-en">Time-of-Day Ambiance</span></div>
+<div class="layer-item"><span class="layer-num">62</span><span class="layer-name-ar">حركة تنفس في الخلفية</span><span class="layer-name-en">Breathing Background Animation</span></div>
+<div class="layer-item"><span class="layer-num">63</span><span class="layer-name-ar">واجهة حية (تنبض)</span><span class="layer-name-en">Living UI</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🎵 الأصوات المحيطة — Ambient Audio</h3>
+<span class="cat-count">8 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(34,211,238,0.08);border-radius:8px">
+<strong>الملف:</strong> nafas_audio.js — 707 سطر<br>
+<strong>كل الأصوات مُولَّدة بالكود</strong> = 0 ملفات صوتية خارجية! 🏆
+</p>
+<div class="layer-item"><span class="layer-num">64</span><span class="layer-name-ar">نبض قلب حقيقي</span><span class="layer-name-en">Heartbeat (lub-dub @ 1.2s)</span></div>
+<div class="layer-item"><span class="layer-num">65</span><span class="layer-name-ar">مطر هادئ</span><span class="layer-name-en">Rain (pink noise)</span></div>
+<div class="layer-item"><span class="layer-num">66</span><span class="layer-name-ar">همهمة موسيقية</span><span class="layer-name-en">Humming Melody</span></div>
+<div class="layer-item"><span class="layer-num">67</span><span class="layer-name-ar">نسمة صحراء</span><span class="layer-name-en">Desert Breeze</span></div>
+<div class="layer-item"><span class="layer-num">68</span><span class="layer-name-ar">أمواج بحر</span><span class="layer-name-en">Ocean Waves</span></div>
+<div class="layer-item"><span class="layer-num">69</span><span class="layer-name-ar">توليد بـ Web Audio API</span><span class="layer-name-en">Zero External Files!</span></div>
+<div class="layer-item"><span class="layer-num">70</span><span class="layer-name-ar">صوت يتكيّف مع المزاج</span><span class="layer-name-en">Volume Adapts to Mood</span></div>
+<div class="layer-item"><span class="layer-num">71</span><span class="layer-name-ar">انتقال سلس بين الأصوات</span><span class="layer-name-en">Cross-Fade Between Sounds</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🤖 الذكاء المحادثاتي — Conversational AI</h3>
+<span class="cat-count">10 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">72</span><span class="layer-name-ar">تكامل Gemini AI</span><span class="layer-name-en">Gemini AI Integration</span></div>
+<div class="layer-item"><span class="layer-num">73</span><span class="layer-name-ar">هندسة البرومبت العلاجي</span><span class="layer-name-en">Therapeutic Prompt Engineering</span></div>
+<div class="layer-item"><span class="layer-num">74</span><span class="layer-name-ar">ردود واعية بالسياق</span><span class="layer-name-en">Context-Aware Responses</span></div>
+<div class="layer-item"><span class="layer-num">75</span><span class="layer-name-ar">تدفق محادثة علاجي</span><span class="layer-name-en">Therapeutic Conversation Flow</span></div>
+<div class="layer-item"><span class="layer-num">76</span><span class="layer-name-ar">فلتر الحساسية الثقافية</span><span class="layer-name-en">Cultural Sensitivity Filter</span></div>
+<div class="layer-item"><span class="layer-num">77</span><span class="layer-name-ar">كاشف الصمت</span><span class="layer-name-en">Silence Detector</span><div class="layer-desc">30 ثانية صمت → "أنا هني معك... تبي تكمل؟ 💙"</div></div>
+<div class="layer-item"><span class="layer-num">78</span><span class="layer-name-ar">مولّد الأسئلة اللاحقة</span><span class="layer-name-en">Follow-up Question Generator</span></div>
+<div class="layer-item"><span class="layer-num">79</span><span class="layer-name-ar">ملخص الجلسة التلقائي</span><span class="layer-name-en">Session Summary Generation</span></div>
+<div class="layer-item"><span class="layer-num">80</span><span class="layer-name-ar">سلوك استباقي (Agentic)</span><span class="layer-name-en">Acts Before You Ask</span><div class="layer-desc">يبادر — يسأل عن حالتك بدون ما تطلب، يكشف الأزمة بدون ما تقول</div></div>
+<div class="layer-item"><span class="layer-num">81</span><span class="layer-name-ar">ضبط النبرة العاطفية</span><span class="layer-name-en">Empathetic Tone Modulation</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🎙️ الصوت العربي — Arabic Voice</h3>
+<span class="cat-count">5 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">82</span><span class="layer-name-ar">محرك تحويل النص لصوت</span><span class="layer-name-en">Text-to-Speech Engine</span></div>
+<div class="layer-item"><span class="layer-num">83</span><span class="layer-name-ar">تكامل ElevenLabs</span><span class="layer-name-en">ElevenLabs Integration</span></div>
+<div class="layer-item"><span class="layer-num">84</span><span class="layer-name-ar">أصوات عربية طبيعية</span><span class="layer-name-en">Arabic Voices (Haitham/Sana/Farah)</span></div>
+<div class="layer-item"><span class="layer-num">85</span><span class="layer-name-ar">تكيّف سرعة الكلام</span><span class="layer-name-en">Speech Rate Adaptation</span></div>
+<div class="layer-item"><span class="layer-num">86</span><span class="layer-name-ar">نبرة عاطفية في الصوت</span><span class="layer-name-en">Emotional Tone in Voice</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>📊 التحليلات والتتبع — Analytics</h3>
+<span class="cat-count">8 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">87</span><span class="layer-name-ar">تتبع الزوار بمعرّف فريد</span><span class="layer-name-en">Visitor Unique ID Tracking</span></div>
+<div class="layer-item"><span class="layer-num">88</span><span class="layer-name-ar">تتبع مدة الجلسات</span><span class="layer-name-en">Session Duration Tracking</span></div>
+<div class="layer-item"><span class="layer-num">89</span><span class="layer-name-ar">تقييم المزاج قبل الجلسة</span><span class="layer-name-en">Mood Rating Before Session</span></div>
+<div class="layer-item"><span class="layer-num">90</span><span class="layer-name-ar">تقييم المزاج بعد الجلسة</span><span class="layer-name-en">Mood Rating After Session</span></div>
+<div class="layer-item"><span class="layer-num">91</span><span class="layer-name-ar">تحليل الأحداث الشامل</span><span class="layer-name-en">Event Analytics</span></div>
+<div class="layer-item"><span class="layer-num">92</span><span class="layer-name-ar">تسجيل المستخدم الاختياري</span><span class="layer-name-en">Optional Registration</span></div>
+<div class="layer-item"><span class="layer-num">93</span><span class="layer-name-ar">لوحة تتبع التقدم</span><span class="layer-name-en">Progress Dashboard</span></div>
+<div class="layer-item"><span class="layer-num">94</span><span class="layer-name-ar">قاعدة بيانات Supabase</span><span class="layer-name-en">Supabase Real-time DB</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🎯 أوضاع المحادثة — Modes</h3>
+<span class="cat-count">4 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">95</span><span class="layer-name-ar">تحقق سريع — 30 ثانية</span><span class="layer-name-en">Quick Check</span></div>
+<div class="layer-item"><span class="layer-num">96</span><span class="layer-name-ar">فضفضة حرة — بلا حدود</span><span class="layer-name-en">Free Talk (Fadfada)</span></div>
+<div class="layer-item"><span class="layer-num">97</span><span class="layer-name-ar">تقييم عميق — 5-10 دقائق</span><span class="layer-name-en">Deep Assessment</span></div>
+<div class="layer-item"><span class="layer-num">98</span><span class="layer-name-ar">وضع العرض — للمعارض</span><span class="layer-name-en">Exhibition Demo Mode</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>📋 التقييمات العلمية — Assessments</h3>
+<span class="cat-count">4 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">99</span><span class="layer-name-ar">مقياس ماسلاك للإرهاق MBI</span><span class="layer-name-en">Maslach Burnout Inventory</span></div>
+<div class="layer-item"><span class="layer-num">100</span><span class="layer-name-ar">مقياس كوبنهاجن CBI</span><span class="layer-name-en">Copenhagen Burnout Inventory</span></div>
+<div class="layer-item"><span class="layer-num">101</span><span class="layer-name-ar">تقييم الأنماط الإدراكية VAK</span><span class="layer-name-en">VAK Learning Style Assessment</span></div>
+<div class="layer-item"><span class="layer-num">102</span><span class="layer-name-ar">تتبع الرحلة برموز فريدة</span><span class="layer-name-en">Journey Tracking & Codes</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🔒 الخصوصية والأمان — Privacy</h3>
+<span class="cat-count">6 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">103</span><span class="layer-name-ar">رموز رحلة مجهولة الهوية</span><span class="layer-name-en">Anonymous Journey Codes</span></div>
+<div class="layer-item"><span class="layer-num">104</span><span class="layer-name-ar">تشفير البيانات</span><span class="layer-name-en">Data Encryption (Supabase)</span></div>
+<div class="layer-item"><span class="layer-num">105</span><span class="layer-name-ar">حذف البيانات عند الطلب</span><span class="layer-name-en">User Data Deletion</span></div>
+<div class="layer-item"><span class="layer-num">106</span><span class="layer-name-ar">صفر بيانات شخصية مطلوبة</span><span class="layer-name-en">Zero PII Required</span></div>
+<div class="layer-item"><span class="layer-num">107</span><span class="layer-name-ar">إخلاء مسؤولية طبية</span><span class="layer-name-en">Medical Disclaimer System</span></div>
+<div class="layer-item"><span class="layer-num">108</span><span class="layer-name-ar">حماية بيانات شاملة</span><span class="layer-name-en">GDPR-Style Protection</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🌐 دعم اللغات — Languages</h3>
+<span class="cat-count">5 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">109</span><span class="layer-name-ar">العربية الفصحى</span><span class="layer-name-en">Modern Standard Arabic</span></div>
+<div class="layer-item"><span class="layer-num">110</span><span class="layer-name-ar">العامية الخليجية</span><span class="layer-name-en">Gulf Arabic Dialect</span></div>
+<div class="layer-item"><span class="layer-num">111</span><span class="layer-name-ar">الإنجليزية</span><span class="layer-name-en">English</span></div>
+<div class="layer-item"><span class="layer-num">112</span><span class="layer-name-ar">الفرانكو عربي</span><span class="layer-name-en">Franco-Arabic</span></div>
+<div class="layer-item"><span class="layer-num">113</span><span class="layer-name-ar">مزج اللغات</span><span class="layer-name-en">Code-Switching</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>🔗 المنظومة المتكاملة — Ecosystem</h3>
+<span class="cat-count">6 طبقات</span>
+</div>
+<div class="cat-body">
+<p style="color:rgba(255,255,255,0.5);font-size:0.85em;margin-bottom:10px;padding:8px;background:rgba(34,197,94,0.08);border-radius:8px">
+<strong>الملف:</strong> nafas_ecosystem.js — 384 سطر<br>
+<strong>نَفَس = القلب العاطفي لـ 5 منتجات</strong> — API واحد يخدمهم كلهم
+</p>
+<div class="layer-item"><span class="layer-num">114</span><span class="layer-name-ar">نَفَس → أثير (مشاعر الطفل + سلامة)</span><span class="layer-name-en">Nafas → Atheer API</span></div>
+<div class="layer-item"><span class="layer-num">115</span><span class="layer-name-ar">نَفَس → الجود (مزاج الطلاب + إرهاق المعلمين)</span><span class="layer-name-en">Nafas → AlJood API</span></div>
+<div class="layer-item"><span class="layer-num">116</span><span class="layer-name-ar">نَفَس → مِداد (حالة المتعلم + تركيز)</span><span class="layer-name-en">Nafas → Midad API</span></div>
+<div class="layer-item"><span class="layer-num">117</span><span class="layer-name-ar">نَفَس → عُمق (مشاعر العميل + مزاج الجلسة)</span><span class="layer-name-en">Nafas → Umq API</span></div>
+<div class="layer-item"><span class="layer-num">118</span><span class="layer-name-ar">نقطة API موحّدة</span><span class="layer-name-en">Unified /api/nafas-emotion</span></div>
+<div class="layer-item"><span class="layer-num">119</span><span class="layer-name-ar">مشاركة البيانات بين المنتجات</span><span class="layer-name-en">Cross-Product Data Sharing</span></div>
+</div>
+</div>
+
+<div class="category">
+<div class="cat-header">
+<h3>📱 تجربة المستخدم الذكية — Smart UX</h3>
+<span class="cat-count">8 طبقات</span>
+</div>
+<div class="cat-body">
+<div class="layer-item"><span class="layer-num">120</span><span class="layer-name-ar">تطبيق ويب تقدمي (قابل للتثبيت)</span><span class="layer-name-en">PWA — Installable App</span></div>
+<div class="layer-item"><span class="layer-num">121</span><span class="layer-name-ar">يعمل بدون إنترنت</span><span class="layer-name-en">Service Worker (Offline)</span></div>
+<div class="layer-item"><span class="layer-num">122</span><span class="layer-name-ar">تصميم متجاوب (موبايل + تابلت + كمبيوتر)</span><span class="layer-name-en">Responsive Design</span></div>
+<div class="layer-item"><span class="layer-num">123</span><span class="layer-name-ar">زر طوارئ SOS</span><span class="layer-name-en">SOS Emergency Button</span></div>
+<div class="layer-item"><span class="layer-num">124</span><span class="layer-name-ar">مشاركة بـ QR</span><span class="layer-name-en">QR Code Sharing</span></div>
+<div class="layer-item"><span class="layer-num">125</span><span class="layer-name-ar">نظام التقييم بالنجوم</span><span class="layer-name-en">Star Rating System</span></div>
+<div class="layer-item"><span class="layer-num">126</span><span class="layer-name-ar">وضع داكن / فاتح</span><span class="layer-name-en">Dark / Light Theme</span></div>
+<div class="layer-item"><span class="layer-num">127</span><span class="layer-name-ar">شاشة البداية المتحركة</span><span class="layer-name-en">Animated Splash Screen</span></div>
+</div>
+</div>
+
+<!-- Summary -->
+<div class="summary">
+<h2>📊 الملخص — بالأرقام</h2>
+<div class="summary-grid">
+<div class="summary-card"><div class="num">127</div><div class="label">طبقة ذكاء اصطناعي</div></div>
+<div class="summary-card"><div class="num">15</div><div class="label">فئة رئيسية</div></div>
+<div class="summary-card"><div class="num">14</div><div class="label">ملف كود</div></div>
+<div class="summary-card"><div class="num">13,657</div><div class="label">سطر كود (نَفَس وحده)</div></div>
+<div class="summary-card"><div class="num">54,000+</div><div class="label">سطر كود (المنظومة كاملة)</div></div>
+<div class="summary-card"><div class="num">5</div><div class="label">منتجات تعمل من محرك واحد</div></div>
+</div>
+<p style="color:rgba(255,255,255,0.5);font-size:0.9em;margin-top:12px">
+<strong style="color:#FFD700">للمقارنة:</strong> ChatGPT = طبقة محادثة واحدة. Calm = تأمل + أصوات (طبقتين). Woebot = محادثة + تمارين (طبقتين).<br>
+<strong style="color:#22D3EE">نَفَس = 127 طبقة تعمل معاً في وقت واحد.</strong>
+</p>
+</div>
+
+<div class="footer">
+© 2026 NAFAS FOR ARTIFICIAL INTELLIGENCE — CN-6573712 · Abu Dhabi<br>
+خريطة الطبقات v1 — 19 يونيو 2026
+</div>
+
+</div>
+</body>
+</html>
