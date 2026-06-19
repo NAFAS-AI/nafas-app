@@ -272,15 +272,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;font-family:'Tajawal',sans-se
 </div>
 
 <!-- ===== SLIDE 8: THE REVEAL ===== -->
-<div class="slide" id="s8" style="background:radial-gradient(ellipse at center,#1A0B2E 0%,#0B0B1A 70%)">
+<div class="slide" id="s8" style="background:radial-gradient(ellipse at center,#1A0B2E 0%,#0B0B1A 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
 <div class="hdr" dir="rtl">نَفَس</div>
-<video class="rv-video" id="falcon" playsinline controls style="display:none"><source src="falcon.mp4" type="video/mp4"></video>
-<div id="rv-text">
-<div class="rv-nafas" dir="rtl">نَفَس</div>
-<p class="gp" style="margin-top:16px" dir="ltr">"400,000 lines of code. 5 products. One person."</p>
-<div class="rv-company">NAFAS FOR ARTIFICIAL INTELLIGENCE</div>
+<video id="falcon" playsinline muted loop style="width:min(60vw,480px);border-radius:18px;box-shadow:0 0 60px rgba(108,61,214,.5);margin-bottom:24px"><source src="falcon.mp4" type="video/mp4"></video>
+<div id="rv-text" style="text-align:center">
+<p class="gp" style="margin-top:0" dir="ltr">"400,000 lines of code. 5 products. One person."</p>
+<div class="rv-company" style="margin-top:16px">NAFAS FOR ARTIFICIAL INTELLIGENCE</div>
 <div class="rv-founder">Founded by Munira Al-Mari · Abu Dhabi · UAE</div>
-<div class="rv-copy" style="margin-top:16px">© 2026 NAFAS FOR ARTIFICIAL INTELLIGENCE. All rights reserved. · CN-6573712</div>
+<div class="rv-copy" style="margin-top:12px">© 2026 NAFAS FOR ARTIFICIAL INTELLIGENCE. All rights reserved. · CN-6573712</div>
 </div>
 </div>
 
@@ -297,8 +296,8 @@ function go(n){
  document.querySelector('.deck').style.transform='translateX(-'+cur*100+'vw)';
  document.getElementById('pg').textContent=(cur+1)+' / '+total;
  var f=document.getElementById('falcon');
- if(cur===7&&f&&f.src){try{f.style.display='block';f.play()}catch(e){}}
- else if(f){f.pause();f.currentTime=0;f.style.display='none'}
+ if(cur===7&&f){try{f.play()}catch(e){}}
+ else if(f){try{f.pause()}catch(e){}}
 }
 document.addEventListener('keydown',function(e){
  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
