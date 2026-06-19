@@ -11,7 +11,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 
 /* === DECK SYSTEM === */
 .deck{display:flex;width:800vw;height:100vh;transition:transform 0.7s cubic-bezier(0.25,0.1,0.25,1)}
-.slide{width:100vw;height:100vh;flex-shrink:0;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;overflow-x:hidden;padding:18px 14px 18px;scrollbar-width:none;-ms-overflow-style:none}.slide::-webkit-scrollbar{display:none}
+.slide{width:100vw;height:100vh;flex-shrink:0;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;overflow-x:hidden;padding:28px 20px 28px;scrollbar-width:none;-ms-overflow-style:none}.slide::-webkit-scrollbar{display:none}
 
 /* === HEADER LOGO === */
 .header-logo{position:fixed;top:12px;right:14px;z-index:1000;height:35px;opacity:0.9;mix-blend-mode:lighten;filter:drop-shadow(0 0 6px rgba(34,211,238,0.3))}
@@ -28,18 +28,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 .s1::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.2) 0%,rgba(10,5,30,0.85) 80%,#0a0518 100%)}
 .s1 .c{position:relative;z-index:10;text-align:center}
 .s1 .tag{font-size:0.75em;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:12px;font-weight:400}
-.s1 .ttl{font-family:'Tajawal';font-size:clamp(3.5em,9vw,6.5em);font-weight:900;background:linear-gradient(135deg,#6C3DD6 0%,#8B5CF6 30%,#22D3EE 70%,#06B6D4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:10px;filter:drop-shadow(0 0 30px rgba(108,61,214,0.3))}
+.s1 .ttl{font-family:'Tajawal';font-size:clamp(3.5em,9vw,6.5em);font-weight:900;background:linear-gradient(135deg,#6C3DD6 0%,#8B5CF6 30%,#22D3EE 70%,#06B6D4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.4;margin-bottom:10px;filter:drop-shadow(0 0 30px rgba(108,61,214,0.3))}
 .s1 .sub{font-size:clamp(0.9em,2vw,1.35em);color:rgba(255,255,255,0.85);font-weight:300;letter-spacing:0.5px;margin-bottom:18px}
 .s1 .hook{font-family:'Tajawal';font-size:clamp(0.8em,1.4vw,1em);color:#22D3EE;font-weight:500;direction:rtl}
 
 /* ====== SLIDE 2: THE PAIN ====== */
 .s2{background:linear-gradient(160deg,#0a0514,#1a0a2e,#0f0a20)}
 .s2 .c{text-align:center;max-width:1050px;width:100%}
-.s2 .qt{font-family:'Tajawal';font-size:clamp(0.95em,2.2vw,1.5em);color:#fff;font-weight:700;margin-bottom:18px;direction:rtl;line-height:1.5}
+.s2 .qt{font-family:'Tajawal';font-size:clamp(1.1em,2.5vw,1.7em);color:#fff;font-weight:700;margin-bottom:20px;direction:rtl;line-height:1.5}
 .s2 .qt span{color:#22D3EE}
 .ps{display:flex;gap:12px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
 .ps .p{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 12px;flex:1;min-width:140px;max-width:200px;text-align:center}
-.ps .p .n{font-size:clamp(1.3em,2.5vw,1.8em);font-weight:900;background:linear-gradient(135deg,#FF6B6B,#EE5A24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.ps .p .n{font-size:clamp(1.6em,3vw,2.2em);font-weight:900;background:linear-gradient(135deg,#FF6B6B,#EE5A24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
 .ps .p .l{font-size:0.72em;color:rgba(255,255,255,0.5);margin-top:4px;line-height:1.3}
 .ps .p .sr{font-size:0.6em;color:rgba(255,255,255,0.25);margin-top:3px}
 .br{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
@@ -51,8 +51,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 /* ====== SLIDE 3: THE SOLUTION ====== */
 .s3{background:linear-gradient(160deg,#050520,#0a0a2e,#0a1520)}
 .s3 .c{text-align:center;max-width:1000px;width:100%}
-.s3 .st{font-size:clamp(1.1em,2.2vw,1.6em);font-weight:800;color:#fff;margin-bottom:4px}
-.s3 .ss{font-size:clamp(0.75em,1.2vw,0.9em);color:rgba(255,255,255,0.4);margin-bottom:14px}
+.s3 .st{font-size:clamp(1.3em,2.8vw,2em);font-weight:800;color:#fff;margin-bottom:6px}
+.s3 .ss{font-size:clamp(0.85em,1.4vw,1em);color:rgba(255,255,255,0.4);margin-bottom:14px}
 .lg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .lg .ly{background:rgba(108,61,214,0.08);border:1px solid rgba(108,61,214,0.2);border-radius:10px;padding:7px 4px;text-align:center}
 .lg .ly .li{font-size:1.1em}
@@ -67,11 +67,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 /* ====== SLIDE 4: THE PROOF ====== */
 .s4{background:linear-gradient(160deg,#0a0a14,#0a1a2e,#0a0a20)}
 .s4 .c{text-align:center;max-width:1000px;width:100%}
-.s4 .pt{font-size:clamp(1.1em,2.2vw,1.6em);font-weight:800;color:#fff;margin-bottom:16px}
+.s4 .pt{font-size:clamp(1.3em,2.8vw,2em);font-weight:800;color:#fff;margin-bottom:16px}
 .s4 .pt span{color:#22D3EE}
 .pg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
 .pg .pc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 8px;text-align:center}
-.pg .pc .pn{font-size:clamp(1.2em,2.5vw,1.6em);font-weight:900;background:linear-gradient(135deg,#6C3DD6,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.pg .pc .pn{font-size:clamp(1.5em,3vw,2em);font-weight:900;background:linear-gradient(135deg,#6C3DD6,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
 .pg .pc .pl{font-size:0.78em;color:rgba(255,255,255,0.65);margin-top:5px;font-weight:500}
 .pg .pc .pd{font-size:0.62em;color:rgba(255,255,255,0.35);margin-top:3px}
 .s4 .gq{font-family:'Tajawal';font-size:clamp(0.85em,1.5vw,1.1em);color:rgba(255,255,255,0.7);font-weight:500;direction:rtl;font-style:italic}
@@ -79,10 +79,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 /* ====== SLIDE 5: THE ECOSYSTEM ====== */
 .s5{background:linear-gradient(160deg,#050514,#1a0a30,#0a1020)}
 .s5 .c{text-align:center;max-width:1200px;width:100%}
-.s5 .et{font-size:clamp(1em,2vw,1.4em);font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px}
+.s5 .et{font-size:clamp(1.2em,2.5vw,1.8em);font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px}
 .s5 .es{font-size:clamp(0.65em,1vw,0.78em);color:rgba(255,255,255,0.35);margin-bottom:14px}
 .pr{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
-.pr .pd{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 8px;width:clamp(100px,16vw,155px);text-align:center;position:relative}
+.pr .pd{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 10px;width:clamp(120px,18vw,175px);text-align:center;position:relative}
 .pr .pd .pl{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:1.1em;background:linear-gradient(135deg,#6C3DD6,#22D3EE)}
 .pr .pd .pn{font-family:'Tajawal';font-size:0.9em;font-weight:700;color:#fff}
 .pr .pd .pp{font-size:0.6em;color:rgba(255,255,255,0.4)}
@@ -95,8 +95,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 /* ====== SLIDE 6: MARKET ====== */
 .s6{background:linear-gradient(160deg,#0a0a14,#0a1a30,#0a0a20)}
 .s6 .c{text-align:center;max-width:1050px;width:100%}
-.s6 .mt{font-size:clamp(1em,2vw,1.4em);font-weight:800;color:#fff;margin-bottom:14px}
-.mc{display:flex;justify-content:center;align-items:center;margin-bottom:10px;position:relative;height:clamp(120px,18vh,190px)}
+.s6 .mt{font-size:clamp(1.3em,2.8vw,2em);font-weight:800;color:#fff;margin-bottom:14px}
+.mc{display:flex;justify-content:center;align-items:center;margin-bottom:10px;position:relative;height:clamp(150px,22vh,230px)}
 .mc .ci{border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid;position:absolute}
 .mc .tam{width:clamp(130px,18vw,190px);height:clamp(130px,18vw,190px);background:rgba(108,61,214,0.06);border-color:rgba(108,61,214,0.35)}
 .mc .sam{width:clamp(80px,12vw,130px);height:clamp(80px,12vw,130px);background:rgba(34,211,238,0.06);border-color:rgba(34,211,238,0.35);top:50%;left:50%;transform:translate(-50%,-30%)}
@@ -120,7 +120,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 /* ====== SLIDE 7: FOUNDER ====== */
 .s7{background:linear-gradient(160deg,#0a0514,#1a0a2e,#0a1020)}
 .s7 .c{text-align:center;max-width:1000px;width:100%}
-.s7 .ft{font-size:clamp(1.1em,2.2vw,1.5em);font-weight:800;color:#fff;margin-bottom:14px}
+.s7 .ft{font-size:clamp(1.3em,2.8vw,2em);font-weight:800;color:#fff;margin-bottom:14px}
 .s7 .ft span{color:#22D3EE}
 .fs{display:flex;gap:10px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
 .fs .fx{background:rgba(108,61,214,0.08);border:1px solid rgba(108,61,214,0.2);border-radius:10px;padding:12px 10px;flex:1;min-width:100px;max-width:170px;text-align:center}
@@ -136,7 +136,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 .s8{background:radial-gradient(ellipse at center,#1a0a2e 0%,#0a0514 60%,#000 100%)}
 .s8 .c{text-align:center}
 .s8 .cl{height:clamp(80px,14vh,140px);margin-bottom:20px;mix-blend-mode:lighten;filter:drop-shadow(0 0 25px rgba(255,215,0,0.15))}
-.s8 .cp{font-size:clamp(1.2em,2.5vw,1.9em);font-weight:300;color:rgba(255,255,255,0.85);letter-spacing:0.5px;line-height:1.5;margin-bottom:12px}
+.s8 .cp{font-size:clamp(1.5em,3vw,2.3em);font-weight:300;color:rgba(255,255,255,0.85);letter-spacing:0.5px;line-height:1.5;margin-bottom:12px}
 .s8 .cp em{font-style:italic;color:#22D3EE;font-weight:500}
 .s8 .cu{font-size:0.85em;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-bottom:20px}
 .s8 .cc{font-size:0.65em;color:rgba(255,255,255,0.2)}
@@ -199,17 +199,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'In
 <!-- SLIDE 3: THE SOLUTION -->
 <div class="slide s3">
   <div class="c">
-    <div class="st">8 AI Layers. One Listener.</div>
+    <div class="st">127 AI Layers. One Listener.</div>
     <div class="ss">A 500 AED session lasts one hour. Nafas is there — 24/7.</div>
     <div class="lg">
-      <div class="ly"><div class="li">🗣️</div><div class="ln">Arabic Voice AI</div></div>
-      <div class="ly"><div class="li">💬</div><div class="ln">AI Therapist</div></div>
-      <div class="ly"><div class="li">😢</div><div class="ln">Emotion Detection</div></div>
-      <div class="ly"><div class="li">📊</div><div class="ln">Mood Analytics</div></div>
-      <div class="ly"><div class="li">🎵</div><div class="ln">Adaptive Audio</div></div>
-      <div class="ly"><div class="li">📓</div><div class="ln">Healing Journal</div></div>
-      <div class="ly"><div class="li">🆘</div><div class="ln">Crisis Detection</div></div>
-      <div class="ly"><div class="li">🔒</div><div class="ln">Full Privacy</div></div>
+      <div class="ly"><div class="li">🧠</div><div class="ln">Emotion Engine<br><small style="color:rgba(255,255,255,0.3)">25 layers</small></div></div>
+      <div class="ly"><div class="li">🛡️</div><div class="ln">Child Safety<br><small style="color:rgba(255,255,255,0.3)">10 layers</small></div></div>
+      <div class="ly"><div class="li">🌬️</div><div class="ln">Smart Breathing<br><small style="color:rgba(255,255,255,0.3)">10 layers</small></div></div>
+      <div class="ly"><div class="li">🤗</div><div class="ln">Digital Hug<br><small style="color:rgba(255,255,255,0.3)">10 layers</small></div></div>
+      <div class="ly"><div class="li">💓</div><div class="ln">Life Pulse<br><small style="color:rgba(255,255,255,0.3)">8 layers</small></div></div>
+      <div class="ly"><div class="li">🎵</div><div class="ln">Ambient Audio<br><small style="color:rgba(255,255,255,0.3)">8 layers</small></div></div>
+      <div class="ly"><div class="li">🤖</div><div class="ln">Conversational AI<br><small style="color:rgba(255,255,255,0.3)">10 layers</small></div></div>
+      <div class="ly"><div class="li">🔗</div><div class="ln">+ 46 more layers<br><small style="color:rgba(255,255,255,0.3)">Voice · Analytics · Safety · UX</small></div></div>
     </div>
     <div class="df">
       <div class="dt">No one — <em>no one</em> — in the region combines all four:</div>
