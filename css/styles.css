@@ -1985,3 +1985,23 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
   .bps-content { padding: 16px; }
   .bps-option { padding: 12px; }
 }
+
+/* === Date Separator — المحادثة المستمرة === */
+.date-separator{
+  display:flex;align-items:center;justify-content:center;
+  margin:16px 0 8px;gap:12px;opacity:.6
+}
+.date-separator span{
+  font-size:.75rem;color:var(--text-secondary);white-space:nowrap;
+  background:var(--bg-card);padding:4px 14px;border-radius:20px;
+  border:1px solid var(--glass-border);backdrop-filter:blur(8px);
+  letter-spacing:.3px
+}
+.date-separator::before,.date-separator::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent)
+}
+
+/* Clear Chat button in settings */
+.settings-panel .clear-chat-btn{color:var(--text-secondary) !important}
+.settings-panel .clear-chat-btn:hover{color:#ff6b6b !important;background:rgba(255,107,107,.08) !important}

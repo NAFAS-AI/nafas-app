@@ -764,7 +764,7 @@ function getVoiceParams(lvl,vak){
 let recognition = null;
 let isRecording = false;
 let selectedVoiceIndex = -1; // -1 = auto
-const TTS_PROVIDER = 'web'; // 'web' or 'elevenlabs'
+const TTS_PROVIDER = 'elevenlabs'; // 'web' or 'elevenlabs'
 const ELEVENLABS_API_KEY = ''; // Add when ready
 const ELEVENLABS_VOICE_ID = ''; // Add when ready
 
@@ -831,19 +831,25 @@ function changeVoice(v){selectedVoiceIndex=parseInt(v)}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=populateVoiceList;setTimeout(populateVoiceList,500)}
 
 async function speakElevenLabs(text){
-  if(!ELEVENLABS_API_KEY||!ELEVENLABS_VOICE_ID)return false;
   try{
-    const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+ELEVENLABS_VOICE_ID,{
-      method:'POST',headers:{'xi-api-key':ELEVENLABS_API_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.6,similarity_boost:.75}})
+    const clean=text.replace(/<[^>]*>/g,'').replace(/[*_~\`#]/g,'').replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆💡📝😊📚🌸🤍💚🩵🫂🧠❤️🙏💛💪🫁🍃]/g,'').trim();
+    if(!clean||clean.length<2)return false;
+    const r=await fetch('/api/tts',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:clean,lang:state.lang})
     });
     if(!r.ok)return false;
-    const blob=await r.blob();const url=URL.createObjectURL(blob);const audio=new Audio(url);
+    const ct=r.headers.get('content-type')||'';
+    if(ct.includes('json')){const j=await r.json();if(j.fallback)return false}
+    const blob=await r.blob();
+    if(blob.size<100)return false;
+    const url=URL.createObjectURL(blob);const audio=new Audio(url);
     state.isSpeaking=true;const msgs=document.querySelectorAll('.msg.bot');const last=msgs[msgs.length-1];
     if(last)last.classList.add('speaking');
     audio.onended=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    audio.play();return true;
-  }catch(e){console.warn('ElevenLabs:',e);return false}
+    audio.onerror=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
+    await audio.play();return true;
+  }catch(e){console.warn('ElevenLabs TTS:',e);return false}
 }
 
 async function speak(text){
@@ -1259,6 +1265,7 @@ function sanitizeHTML(str){
 function addMessage(role, text, isHTML){
   state.messages.push({role, text: isHTML ? '[card]' : text, timestamp: Date.now()});
   state.unsavedChanges = true;
+  saveChatHistory();
   const container = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = `msg ${role === 'user' ? 'user' : 'bot'}`;
@@ -1291,6 +1298,90 @@ function addCardToChat(html){
   requestAnimationFrame(() => { container.scrollTop = container.scrollHeight; });
   return div;
 }
+
+/* ============================================================
+   PERSISTENT CHAT — المحادثة المستمرة
+   ============================================================ */
+function saveChatHistory(){
+  try{
+    const h=state.messages.filter(m=>m.role!=='_meta').slice(-200).map(m=>({
+      role:m.role,text:m.text,timestamp:m.timestamp
+    }));
+    localStorage.setItem('nafas_chat_history',JSON.stringify(h));
+  }catch(e){}
+}
+
+function loadChatHistory(){
+  try{const s=localStorage.getItem('nafas_chat_history');return s?JSON.parse(s):[];}catch(e){return[];}
+}
+
+function addDateSeparator(timestamp){
+  const container=document.getElementById('messages');
+  if(!container)return;
+  const div=document.createElement('div');
+  div.className='date-separator';
+  const d=new Date(timestamp);const now=new Date();
+  const isToday=d.toDateString()===now.toDateString();
+  const y=new Date(now);y.setDate(y.getDate()-1);
+  const isYesterday=d.toDateString()===y.toDateString();
+  let label;
+  if(state.lang==='ar'){
+    label=isToday?'اليوم':isYesterday?'أمس':d.toLocaleDateString('ar-SA',{day:'numeric',month:'long'});
+  }else{
+    label=isToday?'Today':isYesterday?'Yesterday':d.toLocaleDateString('en-US',{day:'numeric',month:'short'});
+  }
+  const time=d.toLocaleTimeString(state.lang==='ar'?'ar-SA':'en-US',{hour:'2-digit',minute:'2-digit'});
+  div.innerHTML='<span>'+label+' \u00b7 '+time+'</span>';
+  container.appendChild(div);
+}
+
+function restoreChatHistory(){
+  const history=loadChatHistory();
+  if(!history.length)return false;
+  const container=document.getElementById('messages');
+  if(!container)return false;
+  let lastDate='';
+  history.forEach(function(m){
+    if(m.role==='_meta')return;
+    const msgDate=new Date(m.timestamp).toDateString();
+    if(msgDate!==lastDate){
+      addDateSeparator(m.timestamp);
+      lastDate=msgDate;
+    }
+    const div=document.createElement('div');
+    div.className='msg '+(m.role==='user'?'user':'bot');
+    if(m.role==='bot'){
+      const av=document.createElement('span');
+      av.className='avatar';av.textContent='\u0646\u0640';av.setAttribute('aria-hidden','true');
+      div.appendChild(av);
+    }
+    const ct=document.createElement('span');
+    if(m.text==='[card]'){ct.textContent='[\u0645\u062d\u062a\u0648\u0649 \u062a\u0641\u0627\u0639\u0644\u064a]';ct.style.opacity='0.5';}
+    else{ct.textContent=m.text;}
+    div.appendChild(ct);
+    div.style.opacity='0.75';
+    container.appendChild(div);
+  });
+  state.messages=history;
+  // Rebuild geminiHistory from last messages
+  geminiHistory=[];
+  var recent=history.filter(function(m){return m.role==='user'||m.role==='bot'}).slice(-10);
+  recent.forEach(function(m){
+    if(m.role==='user')geminiHistory.push({role:'user',parts:[{text:m.text}]});
+    else if(m.text!=='[card]')geminiHistory.push({role:'model',parts:[{text:JSON.stringify({response:m.text})}]});
+  });
+  requestAnimationFrame(function(){container.scrollTop=container.scrollHeight;});
+  return true;
+}
+
+function clearChatHistory(){
+  localStorage.removeItem('nafas_chat_history');
+  state.messages=[];
+  geminiHistory=[];
+  var container=document.getElementById('messages');
+  if(container)container.innerHTML='';
+}
+
 
 
 // Skeleton loading
@@ -5574,15 +5665,30 @@ function goToWelcome(){
 function startMode(mode){
   state.mode = mode;
   state.sessionId = genId();
-  state.messages = []; state.vakCounts = {v:0,a:0,k:0};
-  state.vakPattern = 'mixed'; state.burnoutScore = 0; state.burnoutLevel = 1;
+  // Persistent chat: don't clear messages
+  if(!state.messages)state.messages=[];
+  if(!state.vakCounts)state.vakCounts={v:0,a:0,k:0};
   state.deepStep = 0; state.deepUsedThemes = [];
   state.ventMsgCount = 0; state.ventUsedTemplates = [];
   state.resourcesOpened = false; state.quickCheckDone = false;
   state.sessionSaved = false; state.crisisDetected = false;
-  geminiHistory = []; // Reset AI conversation history
   state.anonymousName = state.journeyCode || ('user_' + Math.random().toString(36).slice(2,6));
-  document.getElementById('messages').innerHTML = '';
+  // Restore previous messages or add separator
+  var container = document.getElementById('messages');
+  if(state.messages.length===0){
+    container.innerHTML='';
+    var restored=restoreChatHistory();
+    if(restored){addDateSeparator(Date.now());}
+  }else if(container.children.length>0){
+    addDateSeparator(Date.now());
+  }
+  // Rebuild geminiHistory from recent messages for AI continuity
+  geminiHistory=[];
+  var recent=state.messages.filter(function(m){return m.role==='user'||m.role==='bot'}).slice(-10);
+  recent.forEach(function(m){
+    if(m.role==='user')geminiHistory.push({role:'user',parts:[{text:m.text}]});
+    else if(m.text!=='[card]')geminiHistory.push({role:'model',parts:[{text:JSON.stringify({response:m.text})}]});
+  });
   closeCrisisBanner();
   updateUI();
   showScreen('chatScreen');
