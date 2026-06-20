@@ -7,14 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0F1A2E">
+<meta name="theme-color" content="#1a1730">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="نَفَس">
 <link rel="apple-touch-icon" sizes="180x180" href="logos/nafas_new/favicon_iphone.png">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 </head>
 <body>
 <!-- Stars Background -->
@@ -72,7 +72,7 @@
     
     <div class="consent-section" id="consentMethodSection">
       <h3 id="consentMethodTitle">📚 المنهجية العلمية</h3>
-      <p id="consentMethodText">نَفَس مبنية على أسس علمية موثّقة تشمل مقياس ماسلاك للإرهاق (MBI)، مقياس كوبنهاجن (CBI)، نظرية VAK الإدراكية، وتقنية التنفس 4-7-8. <a href="#" onclick="event.preventDefault();document.getElementById('consentOverlay').style.display='none';showMethodology();" style="color:var(--accent-primary);text-decoration:underline;cursor:pointer" id="consentMethodLink">اقرأ/ي المزيد ←</a></p>
+      <p id="consentMethodText">نَفَس مبنية على أسس علمية موثّقة تشمل مقياس ماسلاك للإرهاق (MBI)، مقياس كوبنهاجن (CBI)، نظرية VAK الإدراكية، وتقنية التنفس 4-7-8. <a href="#" onclick="event.preventDefault();document.getElementById('consentOverlay').style.display='none';showMethodology();" style="color:var(--primary);text-decoration:underline;cursor:pointer" id="consentMethodLink">اقرأ/ي المزيد ←</a></p>
     </div>
     
     <button class="consent-accept" id="consentAcceptBtn" onclick="acceptConsent()">✨ فهمت — ابدأ</button>
@@ -113,7 +113,7 @@
     
     <h3>6. التواصل</h3>
     <p>لأي استفسار: munira.almarri35@gmail.com</p>
-    <p style="margin-top:12px;font-size:.78rem;color:var(--text-secondary)">© منيرة علي المري 2026 — بوابة الجود الذكية</p>
+    <p style="margin-top:12px;font-size:.78rem;color:var(--muted-foreground)">© منيرة علي المري 2026 — بوابة الجود الذكية</p>
     
     <button class="privacy-close" onclick="closePrivacyPolicy()">إغلاق</button>
   </div>
@@ -161,9 +161,16 @@
 <!-- Welcome Screen -->
 <div id="welcomeScreen" class="screen welcome" role="main">
 
-  <!-- 1. Logo Area (removed — logo shown in splash screen only) -->
+  <!-- 1. Logo Area -->
   <div class="welcome-header" style="padding-top:env(safe-area-inset-top, 12px);margin-bottom:0;height:12px"></div>
-  <div class="app-name" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
+  
+  <!-- Logo with breathing glow aura -->
+  <div class="nafas-logo-container" id="logoContainer">
+    <div class="logo-breathing-glow" aria-hidden="true"></div>
+    <img src="logos/nafas_new/white_nobg.png" alt="نَفَس" class="nafas-logo-img" />
+  </div>
+  
+  <div class="app-name text-gold-shimmer" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
   <div class="app-slogan">CALM IS HALF THE CURE</div>
   <div class="tagline" id="tagline">يفهمكِ من كلامكِ</div>
 
@@ -207,7 +214,7 @@
       <button onclick="loadJourneyByCode()" aria-label="Load journey">&#128269;</button>
     </div>
     <button class="tour-btn" id="tourBtn" onclick="startTour()" aria-label="App tour">&#127919; جولة تعريفية</button>
-    <div class="copyright" id="copyrightWelcome">&copy; منيرة علي المري 2026 &mdash; بوابة الجود الذكية<br><a onclick="showPrivacyPolicy()" style="color:var(--text-secondary);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
+    <div class="copyright" id="copyrightWelcome">&copy; منيرة علي المري 2026 &mdash; بوابة الجود الذكية<br><a onclick="showPrivacyPolicy()" style="color:var(--muted-foreground);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
   </div>
 </div>
 
@@ -238,7 +245,7 @@
         <button onclick="toggleTheme()" id="settTheme" aria-label="Toggle theme">&#127769; الوضع الداكن</button>
         
         <div class="theme-picker" id="themePicker">
-          <span style="font-size:.82rem;color:var(--text-secondary);width:100%;margin-bottom:2px">🎨 الثيم:</span>
+          <span style="font-size:.82rem;color:var(--muted-foreground);width:100%;margin-bottom:2px">🎨 الثيم:</span>
           <div class="theme-dot active" data-theme="default" onclick="setTheme('default')" title="الأصلي"></div>
           <div class="theme-dot" data-theme="sunset" onclick="setTheme('sunset')" title="غروب"></div>
           <div class="theme-dot" data-theme="ocean" onclick="setTheme('ocean')" title="محيط"></div>
@@ -255,7 +262,7 @@
         <button onclick="openExport()" id="settExport" aria-label="Export session">&#128228; شاركي مع معالجكِ</button>
         <button onclick="showPrivacyPolicy()" id="settPrivacy" aria-label="Privacy Policy">🔒 سياسة الخصوصية</button>
         <button onclick="showMethodology()" id="settMethodology" aria-label="Scientific Methodology">📚 المنهجية العلمية</button>
-        <button onclick="deleteMyData()" id="settDeleteData" aria-label="Delete my data" style="color:#ff6b6b">🗑️ حذف بياناتي</button>
+        <button onclick="deleteMyData()" id="settDeleteData" aria-label="Delete my data" style="color:oklch(62% .18 22)">🗑️ حذف بياناتي</button>
         <button onclick="if(confirm('مسح كل المحادثات السابقة؟'))clearChatHistory()" id="settClearChat" class="clear-chat-btn">🗑️ مسح المحادثة</button>
         <button onclick="toggleExhibitionMode()" id="settExhibition">🎪 وضع المعرض</button>
       </div>
@@ -372,6 +379,30 @@
   </div>
 </div>
 
+<!-- Inline style for the breathing glow behind logo -->
+<style>
+  .logo-breathing-glow {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.78 0.082 73 / 0.45), transparent 70%);
+    animation: breathe 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* Ensure logo sits above the glow */
+  .nafas-logo-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
 <script src="js/nafas_audio.js"></script>
 <script src="js/nafas_splash.js"></script>
 <script src="js/nafas_emotions.js"></script>
@@ -411,8 +442,8 @@ function showUpdateBanner() {
   if (document.getElementById('updateBanner')) return;
   const banner = document.createElement('div');
   banner.id = 'updateBanner';
-  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg,#C4956A,#A67B5B);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:.95rem;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideDown .4s ease';
-  banner.innerHTML = '✨ تحديث جديد متاح! <button onclick="location.reload()" style="background:#fff;color:#C4956A;border:none;padding:6px 18px;border-radius:20px;font-family:Tajawal;font-weight:700;cursor:pointer;font-size:.9rem">تحديث الآن</button>';
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg, oklch(78% .082 73), oklch(72% .09 195));color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:Tajawal,sans-serif;font-size:.95rem;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideDown .4s ease';
+  banner.innerHTML = '✨ تحديث جديد متاح! <button onclick="location.reload()" style="background:#fff;color:oklch(18% .04 258);border:none;padding:6px 18px;border-radius:20px;font-family:Tajawal;font-weight:700;cursor:pointer;font-size:.9rem">تحديث الآن</button>';
   document.body.prepend(banner);
 }
 </script>
