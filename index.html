@@ -178,20 +178,20 @@
   </div>
 
   <!-- 3. Primary CTA -->
-  <button class="cta-primary" onclick="startMode('vent')" role="button" aria-label="Free Venting">🌙 فضفض لي</button>
+  <button class="cta-primary" onclick="startMode('vent')" role="button" aria-label="Free Venting"><span class="cta-icon">🌙</span> فضفض لي</button>
 
   <!-- 4. Two Secondary Buttons -->
   <div class="cta-row">
-    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check">⚡ تحقق سريع</button>
-    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment">📊 تقييم عميق</button>
+    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check"><span class="cta-icon">⚡</span> تحقق سريع</button>
+    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment"><span class="cta-icon">📊</span> تقييم عميق</button>
   </div>
 
   <!-- Hidden modesGrid: kept for app.js compatibility -->
   <div class="modes-grid" id="modesGrid" role="group" aria-label="Modes" style="display:none!important">
-    <div class="mode-card" onclick="startMode('quick')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">⚡</div><div class="mode-text"><h3 id="modeQuick">تحقق سريع</h3><p id="modeQuickDesc">سؤال واحد &bull; 30 ثانية</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('vent')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">🌙</div><div class="mode-text"><h3 id="modeVent">فضفضة حرة</h3><p id="modeVentDesc">أنا أسمع &bull; بلا أسئلة</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('deep')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">📊</div><div class="mode-text"><h3 id="modeDeep">تقييم عميق</h3><p id="modeDeepDesc">محادثة &bull; 5-10 دقائق</p></div><span class="mode-arrow">&#8592;</span></div>
-    <div class="mode-card" onclick="startMode('demo')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon">🎪</div><div class="mode-text"><h3 id="modeDemo">وضع العرض</h3><p id="modeDemoDesc">عرض سريع &bull; للمعارض</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('quick')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon-wrap quick-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M22 10l-6 12h5l-2 10 8-14h-6l1-8z" fill="url(#gQ2)" opacity=".9"/><defs><linearGradient id="gQ2" x1="12" y1="8" x2="28" y2="34"><stop stop-color="#5A9BB5"/><stop offset="1" stop-color="#7BC4D4"/></linearGradient></defs></svg></div><div class="mode-text"><h3 id="modeQuick">تحقق سريع</h3><p id="modeQuickDesc">سؤال واحد &bull; 30 ثانية</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('vent')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon-wrap faded-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M26 20a8 8 0 1 1-8-8 6 6 0 0 0 8 8z" fill="url(#gM2)" opacity=".85"/><circle cx="26" cy="12" r="1.2" fill="#E8C07A" opacity=".5"/><circle cx="30" cy="18" r=".8" fill="#E8C07A" opacity=".3"/><defs><linearGradient id="gM2" x1="10" y1="10" x2="30" y2="30"><stop stop-color="#E8C07A"/><stop offset="1" stop-color="#C4956A"/></linearGradient></defs></svg></div><div class="mode-text"><h3 id="modeVent">فضفضة حرة</h3><p id="modeVentDesc">أنا أسمع &bull; بلا أسئلة</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('deep')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon-wrap deep-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="8" y="22" width="5" height="10" rx="2" fill="url(#gD2)" opacity=".6"/><rect x="17" y="16" width="5" height="16" rx="2" fill="url(#gD2)" opacity=".8"/><rect x="26" y="10" width="5" height="22" rx="2" fill="url(#gD2)"/><defs><linearGradient id="gD2" x1="8" y1="10" x2="32" y2="34"><stop stop-color="#D4A574"/><stop offset="1" stop-color="#C4956A"/></linearGradient></defs></svg></div><div class="mode-text"><h3 id="modeDeep">تقييم عميق</h3><p id="modeDeepDesc">محادثة &bull; 5-10 دقائق</p></div><span class="mode-arrow">&#8592;</span></div>
+    <div class="mode-card" onclick="startMode('demo')" role="button" tabindex="-1" aria-hidden="true"><div class="mode-icon-wrap demo-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M10 28l10-18 10 18z" fill="none" stroke="url(#gE2)" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="16" r="3" fill="url(#gE2)" opacity=".6"/><path d="M15 28h10" stroke="url(#gE2)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="gE2" x1="10" y1="10" x2="30" y2="30"><stop stop-color="#E8C07A"/><stop offset="1" stop-color="#5A9BB5"/></linearGradient></defs></svg></div><div class="mode-text"><h3 id="modeDemo">وضع العرض</h3><p id="modeDemoDesc">عرض سريع &bull; للمعارض</p></div><span class="mode-arrow">&#8592;</span></div>
   </div>
 
   <!-- 5. Bottom Section -->
@@ -201,7 +201,7 @@
       <span class="live-dot"></span>
       <span id="liveStatsText">0 شخص فحص اليوم</span>
     </div>
-    <button class="journey-link" id="journeyLink" onclick="showJourneyEntry()" style="display:none" aria-label="Enter journey code">&#128273; لديّ رمز رحلة</button>
+    <button class="journey-link" id="journeyLink" onclick="showJourneyEntry()" style="display:none" aria-label="Enter journey code">🔑 لديّ رمز رحلة</button>
     <div class="journey-entry" id="journeyEntry">
       <input type="text" id="journeyCodeInput" maxlength="6" placeholder="ABC123" aria-label="Journey code">
       <button onclick="loadJourneyByCode()" aria-label="Load journey">&#128269;</button>
@@ -228,11 +228,11 @@
 <div id="chatScreen" class="screen chat-screen hidden">
   <div class="chat-header">
     <div id="connectionDot" style="width:8px;height:8px;border-radius:50%;background:#4ade80;position:absolute;top:12px;left:12px" title="متصل"></div>
-    <button onclick="goBack()" aria-label="Back" id="backBtn">&#8592;</button>
+    <button onclick="goBack()" aria-label="Back" id="backBtn" class="back-btn-premium"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
     <span class="mode-badge" id="modeBadge"></span>
     <span class="vak-indicator" id="vakBadge" aria-live="polite">&#127775; متنوع</span>
     <div class="settings-wrapper">
-      <button onclick="toggleSettings()" aria-label="Settings" id="settingsBtn">&#9881;&#65039;</button>
+      <button onclick="toggleSettings()" aria-label="Settings" id="settingsBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
       <div class="settings-panel" id="settingsPanel">
         <button onclick="toggleLang()" id="settLang" aria-label="Toggle language">&#127760; العربية / English</button>
         <button onclick="toggleTheme()" id="settTheme" aria-label="Toggle theme">&#127769; الوضع الداكن</button>

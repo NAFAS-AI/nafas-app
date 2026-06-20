@@ -2005,3 +2005,416 @@ body,.msg,.mode-card,.chat-header,.input-area,.consent-box{transition:background
 /* Clear Chat button in settings */
 .settings-panel .clear-chat-btn{color:var(--text-secondary) !important}
 .settings-panel .clear-chat-btn:hover{color:#ff6b6b !important;background:rgba(255,107,107,.08) !important}
+
+
+/* ============================================
+   NAFAS PREMIUM REDESIGN v2.0
+   "A friend who never sleeps"
+   ============================================ */
+
+/* --- PREMIUM MODE ICON WRAPS --- */
+.mode-icon-wrap{
+  width:52px;height:52px;min-width:52px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;position:relative;
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s;
+}
+.mode-icon-wrap svg{width:32px;height:32px}
+
+.faded-icon{background:linear-gradient(135deg,rgba(232,192,122,.12),rgba(196,149,106,.08));border:1px solid rgba(232,192,122,.15)}
+.quick-icon{background:linear-gradient(135deg,rgba(90,155,181,.12),rgba(123,196,212,.08));border:1px solid rgba(90,155,181,.15)}
+.deep-icon{background:linear-gradient(135deg,rgba(212,165,116,.12),rgba(196,149,106,.08));border:1px solid rgba(196,149,106,.15)}
+
+.mode-card:hover .mode-icon-wrap{
+  transform:scale(1.08) rotate(-3deg);
+  box-shadow:0 0 20px rgba(232,192,122,.15);
+}
+
+/* --- PREMIUM MODE CARDS --- */
+.mode-card{
+  background:linear-gradient(135deg,rgba(42,31,26,.6),rgba(30,26,46,.4)) !important;
+  border:1px solid rgba(196,149,106,.1) !important;
+  border-radius:20px !important;
+  padding:20px !important;
+  backdrop-filter:blur(20px) !important;
+  position:relative;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(.22,1,.36,1) !important;
+}
+.mode-card::after{
+  content:'';position:absolute;inset:0;
+  border-radius:20px;padding:1px;
+  background:linear-gradient(135deg,rgba(232,192,122,.15),transparent 40%,transparent 60%,rgba(196,149,106,.1));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;opacity:0;transition:opacity .4s;
+}
+.mode-card:hover::after{opacity:1}
+.mode-card:hover{
+  transform:translateY(-4px) !important;
+  border-color:rgba(232,192,122,.2) !important;
+  box-shadow:0 8px 32px rgba(196,149,106,.12),0 2px 8px rgba(0,0,0,.2) !important;
+}
+
+.mode-header{display:flex;align-items:center;gap:16px}
+.mode-title{font-size:1.05rem !important;font-weight:700 !important;letter-spacing:.3px}
+.mode-desc{font-size:.82rem !important;opacity:.65;line-height:1.5;margin-top:3px}
+
+/* --- WELCOME SCREEN PREMIUM --- */
+.app-name{
+  font-size:clamp(3rem,8vw,4.5rem) !important;
+  background:linear-gradient(135deg,#E8C07A 0%,#F5EDE0 30%,#C4956A 60%,#E8C07A 100%) !important;
+  background-size:200% auto !important;
+  -webkit-background-clip:text !important;
+  animation:shimmerText 4s ease-in-out infinite !important;
+  letter-spacing:6px !important;
+}
+@keyframes shimmerText{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+.tagline{
+  font-size:1rem !important;
+  color:var(--text-secondary) !important;
+  letter-spacing:2px !important;
+  font-weight:300 !important;
+  opacity:.7 !important;
+}
+
+/* --- BREATHING GLOW behind logo --- */
+.welcome::before{
+  content:'';position:absolute;
+  width:200px;height:200px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(232,192,122,.08) 0%,transparent 70%);
+  animation:breathGlow 4s ease-in-out infinite;
+  pointer-events:none;z-index:0;
+  top:18%;left:50%;transform:translateX(-50%);
+}
+@keyframes breathGlow{
+  0%,100%{transform:translateX(-50%) scale(1);opacity:.6}
+  50%{transform:translateX(-50%) scale(1.3);opacity:1}
+}
+
+/* --- CHAT MESSAGES PREMIUM --- */
+.msg.bot{
+  background:linear-gradient(135deg,rgba(196,149,106,.06),rgba(232,192,122,.03)) !important;
+  border:1px solid rgba(196,149,106,.08) !important;
+  border-radius:20px 20px 20px 6px !important;
+  position:relative;
+  padding:14px 18px 14px 18px !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+.msg.bot::before{
+  content:'✦';
+  position:absolute;top:-8px;right:-8px;
+  font-size:10px;
+  width:20px;height:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#C4956A,#E8C07A);
+  border-radius:50%;color:#0F1A2E;
+  box-shadow:0 2px 8px rgba(196,149,106,.3);
+  opacity:0;transition:opacity .3s;
+}
+.msg.bot:first-of-type::before{opacity:1}
+
+.msg.user{
+  background:linear-gradient(135deg,rgba(90,155,181,.08),rgba(90,155,181,.04)) !important;
+  border:1px solid rgba(90,155,181,.1) !important;
+  border-radius:20px 20px 6px 20px !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+
+/* --- TYPING INDICATOR PREMIUM --- */
+.typing-indicator{
+  background:linear-gradient(135deg,rgba(196,149,106,.06),rgba(232,192,122,.03)) !important;
+  border:1px solid rgba(196,149,106,.08) !important;
+  border-radius:20px 20px 20px 6px !important;
+  padding:14px 20px !important;
+  display:flex;gap:5px;align-items:center;
+}
+.typing-indicator .dot{
+  width:7px !important;height:7px !important;
+  border-radius:50%;
+  background:linear-gradient(135deg,#C4956A,#E8C07A) !important;
+  animation:typingWave 1.4s ease-in-out infinite !important;
+}
+.typing-indicator .dot:nth-child(2){animation-delay:.15s !important}
+.typing-indicator .dot:nth-child(3){animation-delay:.3s !important}
+
+@keyframes typingWave{
+  0%,60%,100%{transform:translateY(0);opacity:.4}
+  30%{transform:translateY(-8px);opacity:1}
+}
+
+/* --- INPUT AREA PREMIUM --- */
+.input-area{
+  background:linear-gradient(to top,var(--bg-main),transparent) !important;
+  padding:12px 16px max(env(safe-area-inset-bottom,12px),12px) !important;
+  backdrop-filter:blur(20px) !important;
+}
+.input-row{
+  background:linear-gradient(135deg,rgba(42,31,26,.5),rgba(30,26,46,.3)) !important;
+  border:1px solid rgba(196,149,106,.1) !important;
+  border-radius:24px !important;
+  transition:border-color .3s,box-shadow .3s !important;
+  overflow:hidden;
+}
+.input-row:focus-within{
+  border-color:rgba(232,192,122,.3) !important;
+  box-shadow:0 0 20px rgba(196,149,106,.1),0 4px 16px rgba(0,0,0,.15) !important;
+}
+
+.input-row textarea,.input-row input[type="text"]{
+  background:transparent !important;
+  border:none !important;
+  color:var(--text-primary) !important;
+  font-size:.95rem !important;
+  padding:14px 16px !important;
+}
+
+.send-btn,.mic-btn{
+  transition:all .3s cubic-bezier(.22,1,.36,1) !important;
+  border-radius:50% !important;
+}
+.send-btn:hover,.mic-btn:hover{
+  transform:scale(1.1) !important;
+  box-shadow:0 0 16px rgba(196,149,106,.2) !important;
+}
+.send-btn:active,.mic-btn:active{
+  transform:scale(.92) !important;
+}
+
+/* --- BACK & SETTINGS BUTTONS PREMIUM --- */
+.back-btn{
+  background:rgba(196,149,106,.08) !important;
+  border:1px solid rgba(196,149,106,.1) !important;
+  border-radius:12px !important;
+  width:40px !important;height:40px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  transition:all .3s !important;
+  color:var(--text-primary) !important;
+}
+.back-btn:hover{
+  background:rgba(196,149,106,.15) !important;
+  border-color:rgba(232,192,122,.2) !important;
+  transform:translateX(-2px) !important;
+}
+
+.settings-btn{
+  background:rgba(196,149,106,.08) !important;
+  border:1px solid rgba(196,149,106,.1) !important;
+  border-radius:12px !important;
+  width:40px !important;height:40px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  transition:all .3s !important;
+  color:var(--text-secondary) !important;
+}
+.settings-btn:hover{
+  background:rgba(196,149,106,.15) !important;
+  color:var(--text-primary) !important;
+  transform:rotate(30deg) !important;
+}
+
+/* --- CHAT HEADER PREMIUM --- */
+.chat-header{
+  background:linear-gradient(to bottom,var(--bg-main) 60%,transparent) !important;
+  backdrop-filter:blur(16px) !important;
+  padding:max(env(safe-area-inset-top,12px),12px) 16px 12px !important;
+  border-bottom:1px solid rgba(196,149,106,.06) !important;
+}
+.header-center .mode-name{
+  font-weight:700 !important;font-size:1rem !important;
+  letter-spacing:.3px !important;
+}
+
+/* --- SETTINGS PANEL PREMIUM --- */
+.settings-panel{
+  background:linear-gradient(135deg,rgba(15,26,46,.97),rgba(30,26,46,.95)) !important;
+  backdrop-filter:blur(24px) !important;
+}
+.settings-panel button{
+  background:rgba(196,149,106,.06) !important;
+  border:1px solid rgba(196,149,106,.08) !important;
+  border-radius:14px !important;
+  padding:14px 18px !important;
+  color:var(--text-primary) !important;
+  transition:all .3s !important;
+  text-align:right !important;
+}
+.settings-panel button:hover{
+  background:rgba(196,149,106,.12) !important;
+  border-color:rgba(232,192,122,.15) !important;
+  transform:translateX(-4px) !important;
+}
+
+/* --- SCROLLBAR PREMIUM --- */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(to bottom,rgba(196,149,106,.3),rgba(232,192,122,.15));
+  border-radius:4px;
+}
+::-webkit-scrollbar-thumb:hover{background:rgba(196,149,106,.5)}
+
+/* --- SMOOTH PAGE TRANSITIONS --- */
+.screen{transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1) !important}
+.screen.hidden{transform:translateY(12px) scale(.98) !important}
+
+/* --- MESSAGE ANIMATION ENHANCED --- */
+@keyframes msgIn{
+  from{opacity:0;transform:translateY(12px) scale(.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.msg{animation:msgIn .5s cubic-bezier(.22,1,.36,1) !important}
+
+/* --- EMOJI REACTIONS (future-ready) --- */
+.msg.bot:hover{box-shadow:0 4px 20px rgba(196,149,106,.1) !important}
+.msg.user:hover{box-shadow:0 4px 20px rgba(90,155,181,.08) !important}
+
+/* --- CRISIS BANNER PREMIUM --- */
+.crisis-bar{
+  background:linear-gradient(135deg,rgba(248,113,113,.08),rgba(153,27,27,.05)) !important;
+  border:1px solid rgba(248,113,113,.15) !important;
+  backdrop-filter:blur(12px) !important;
+}
+
+/* --- LIGHT MODE PREMIUM OVERRIDES --- */
+:root.light .mode-card{
+  background:linear-gradient(135deg,rgba(255,248,240,.8),rgba(253,243,230,.6)) !important;
+  border:1px solid rgba(196,149,106,.12) !important;
+}
+:root.light .mode-card:hover{
+  box-shadow:0 8px 32px rgba(196,149,106,.08),0 2px 8px rgba(0,0,0,.04) !important;
+}
+:root.light .msg.bot{
+  background:linear-gradient(135deg,rgba(196,149,106,.04),rgba(232,192,122,.02)) !important;
+}
+:root.light .msg.user{
+  background:linear-gradient(135deg,rgba(90,155,181,.05),rgba(90,155,181,.02)) !important;
+}
+:root.light .input-row{
+  background:rgba(255,248,240,.7) !important;
+  border:1px solid rgba(196,149,106,.12) !important;
+}
+:root.light .back-btn,:root.light .settings-btn{
+  background:rgba(196,149,106,.06) !important;
+  border-color:rgba(196,149,106,.1) !important;
+}
+
+/* --- SELECTION COLOR --- */
+::selection{background:rgba(232,192,122,.25);color:inherit}
+
+/* --- FOCUS VISIBLE (accessibility) --- */
+:focus-visible{
+  outline:2px solid rgba(232,192,122,.5) !important;
+  outline-offset:2px !important;
+}
+
+/* --- WELCOME CARD ANIMATION --- */
+.welcome-card{
+  animation:welcomeIn .8s cubic-bezier(.22,1,.36,1) !important;
+}
+@keyframes welcomeIn{
+  from{opacity:0;transform:translateY(24px) scale(.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* --- JOURNEY MODE ICON --- */
+.mode-card[data-mode="journey"] .mode-icon-wrap,
+.mode-card:has([id*="journey"]) span.mode-icon{
+  color:#E8C07A;
+}
+
+/* --- BLOB REFINEMENT --- */
+.blob{filter:blur(150px) !important;opacity:.08 !important}
+
+/* Fix mode-icon display when both old emoji and new svg exist */
+.mode-icon{display:none !important}
+.mode-icon-wrap{display:flex !important}
+
+/* --- DEMO MODE ICON --- */
+.demo-icon{background:linear-gradient(135deg,rgba(232,192,122,.1),rgba(90,155,181,.08));border:1px solid rgba(232,192,122,.12)}
+
+/* --- CTA BUTTON ICONS --- */
+.cta-icon{font-size:1.1em;margin-inline-end:4px}
+
+/* --- CTA BUTTONS PREMIUM --- */
+.cta-primary{
+  background:linear-gradient(135deg,#C4956A,#E8C07A) !important;
+  color:#0F1A2E !important;
+  border:none !important;
+  border-radius:18px !important;
+  padding:16px 28px !important;
+  font-size:1.05rem !important;
+  font-weight:700 !important;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.22,1,.36,1) !important;
+  box-shadow:0 4px 20px rgba(196,149,106,.25) !important;
+  letter-spacing:.3px;
+}
+.cta-primary:hover{
+  transform:translateY(-3px) scale(1.02) !important;
+  box-shadow:0 8px 32px rgba(196,149,106,.35) !important;
+}
+.cta-primary:active{transform:translateY(0) scale(.98) !important}
+
+.cta-secondary{
+  background:rgba(196,149,106,.08) !important;
+  color:var(--text-primary) !important;
+  border:1px solid rgba(196,149,106,.12) !important;
+  border-radius:16px !important;
+  padding:14px 24px !important;
+  font-size:.95rem !important;
+  font-weight:600 !important;
+  cursor:pointer;
+  transition:all .3s cubic-bezier(.22,1,.36,1) !important;
+}
+.cta-secondary:hover{
+  background:rgba(196,149,106,.14) !important;
+  border-color:rgba(232,192,122,.2) !important;
+  transform:translateY(-2px) !important;
+}
+
+/* --- BACK BUTTON PREMIUM (new class) --- */
+.back-btn-premium{
+  background:rgba(196,149,106,.06) !important;
+  border:1px solid rgba(196,149,106,.08) !important;
+  border-radius:12px !important;
+  width:40px !important;height:40px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  transition:all .3s !important;
+  color:var(--text-primary) !important;
+  cursor:pointer;padding:0 !important;
+}
+.back-btn-premium:hover{
+  background:rgba(196,149,106,.12) !important;
+  border-color:rgba(232,192,122,.15) !important;
+  transform:translateX(-3px) !important;
+}
+
+/* --- WELCOME SCREEN REFINEMENT --- */
+.welcome-card{
+  background:linear-gradient(135deg,rgba(42,31,26,.4),rgba(30,26,46,.3)) !important;
+  border:1px solid rgba(196,149,106,.08) !important;
+  border-radius:28px !important;
+  backdrop-filter:blur(24px) !important;
+  box-shadow:0 8px 40px rgba(0,0,0,.15) !important;
+}
+
+/* --- LOGO IMAGE ENHANCEMENT --- */
+.welcome-card img,.logo-img{
+  filter:drop-shadow(0 4px 16px rgba(196,149,106,.2));
+  transition:transform .6s cubic-bezier(.22,1,.36,1);
+}
+.welcome-card img:hover,.logo-img:hover{
+  transform:scale(1.05);
+}
+
+/* --- CONSENT SCREEN PREMIUM --- */
+#consentOverlay{
+  background:rgba(15,26,46,.95) !important;
+  backdrop-filter:blur(24px) !important;
+}
