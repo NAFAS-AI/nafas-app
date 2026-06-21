@@ -2172,3 +2172,390 @@ button[onclick*="startNew"],
   overflow-x:hidden!important;
   overflow-y:auto!important;
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   v4.1 — LAYOUT POLISH (Welcome Screen)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Welcome screen spacing ── */
+.screen.welcome{
+  padding:30px 20px 20px!important;
+  gap:8px!important;
+  min-height:100dvh;
+  justify-content:center!important;
+}
+
+/* ── Logo section — tighter ── */
+.nafas-logo-container{
+  margin-bottom:0!important;
+}
+.app-name{
+  margin-bottom:0!important;
+  font-size:2.6rem!important;
+}
+.app-slogan{
+  margin-bottom:4px!important;
+  font-size:0.72rem!important;
+  letter-spacing:0.25em!important;
+}
+
+/* ── Tagline ── */
+.tagline{
+  font-size:0.95rem!important;
+  max-width:320px!important;
+  margin:4px auto 8px!important;
+  line-height:1.6!important;
+}
+
+/* ── Returning welcome bubble ── */
+.returning-welcome{
+  max-width:300px!important;
+  padding:12px 18px!important;
+  margin:0 auto 8px!important;
+  font-size:0.88rem!important;
+}
+
+/* ── Breathing circle — slightly smaller ── */
+.breath-hero{
+  margin:8px auto!important;
+}
+.breath-circle{
+  width:110px!important;
+  height:110px!important;
+}
+.breath-text{
+  font-size:0.88rem!important;
+}
+.breath-label{
+  font-size:0.75rem!important;
+  margin-top:6px!important;
+}
+
+/* ── CTA buttons ── */
+.screen.welcome .cta-primary{
+  margin-top:12px!important;
+  margin-bottom:6px!important;
+  font-size:1.05rem!important;
+  padding:15px 28px!important;
+}
+.screen.welcome .cta-row{
+  margin-bottom:12px!important;
+}
+.cta-secondary{
+  font-size:0.82rem!important;
+  padding:11px 16px!important;
+}
+
+/* ── Hug button — subtle and integrated ── */
+.hug-trigger-btn,
+#hugBtn,
+button[onclick*="Hug"],
+button[onclick*="hug"]{
+  background:transparent!important;
+  border:1px solid rgba(94,204,199,0.15)!important;
+  color:var(--text-secondary)!important;
+  padding:6px 16px!important;
+  border-radius:20px!important;
+  font-size:0.78rem!important;
+  cursor:pointer;
+  transition:all 0.3s!important;
+  margin:0 auto!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:4px!important;
+}
+.hug-trigger-btn:hover,
+#hugBtn:hover{
+  border-color:rgba(94,204,199,0.4)!important;
+  background:rgba(94,204,199,0.08)!important;
+  color:var(--accent-primary)!important;
+}
+
+/* ── Welcome bottom — clean and minimal ── */
+.welcome-bottom{
+  max-width:280px!important;
+  margin:0 auto!important;
+  padding-top:8px!important;
+}
+
+/* ── Session count and history — subtle ── */
+.welcome-bottom .session-history,
+.welcome-bottom [class*="session"]{
+  font-size:0.72rem!important;
+  color:rgba(255,255,255,0.3)!important;
+  margin:4px 0!important;
+}
+
+/* ── "لا جلسات سابقة" — make it less prominent ── */
+.welcome-bottom p,
+.no-sessions{
+  font-size:0.72rem!important;
+  color:rgba(255,255,255,0.25)!important;
+  margin:2px 0!important;
+}
+
+/* ── Journey code section — compact ── */
+.journey-code-section,
+.journey-input-container,
+#journeySection,
+.welcome-bottom div[class*="journey"]{
+  margin:6px auto!important;
+}
+
+/* ── Journey buttons — small and subtle ── */
+button[onclick*="journey"],
+button[onclick*="Journey"],
+.journey-btn{
+  font-size:0.75rem!important;
+  padding:5px 14px!important;
+  border-radius:16px!important;
+  background:transparent!important;
+  border:1px solid rgba(94,204,199,0.12)!important;
+  color:var(--text-secondary)!important;
+}
+
+/* ── Journey input — compact ── */
+input[placeholder*="ABC"],
+input[placeholder*="journey"],
+input[placeholder*="رمز"]{
+  padding:6px 14px!important;
+  font-size:0.78rem!important;
+  border-radius:16px!important;
+  max-width:160px!important;
+}
+
+/* ── Tour button — very subtle ── */
+button[onclick*="tour"],
+button[onclick*="Tour"],
+.tour-btn{
+  font-size:0.72rem!important;
+  padding:5px 14px!important;
+  border-radius:16px!important;
+  background:transparent!important;
+  border:1px solid rgba(94,204,199,0.08)!important;
+  color:rgba(255,255,255,0.3)!important;
+}
+
+button[onclick*="tour"]:hover,
+button[onclick*="Tour"]:hover{
+  border-color:rgba(94,204,199,0.2)!important;
+  color:var(--text-secondary)!important;
+}
+
+/* ── Live counter — very subtle ── */
+.live-counter,
+[class*="liveCount"],
+.welcome-bottom span[class*="live"]{
+  font-size:0.7rem!important;
+  color:rgba(255,255,255,0.2)!important;
+}
+
+/* ── Footer ── */
+.welcome-footer,
+.welcome-bottom .footer-area,
+.screen.welcome footer{
+  font-size:0.68rem!important;
+  color:rgba(255,255,255,0.2)!important;
+  margin-top:8px!important;
+}
+
+/* ── Progress button (top left) — compact ── */
+#progressBtn,
+button[onclick*="progress"],
+button[onclick*="Progress"]{
+  padding:5px 12px!important;
+  font-size:0.72rem!important;
+  border-radius:16px!important;
+  backdrop-filter:blur(10px)!important;
+}
+
+/* ── Dark mode toggle (top right) — subtle ── */
+#darkModeToggle,
+button[onclick*="dark"],
+button[onclick*="Dark"]{
+  width:32px!important;
+  height:32px!important;
+  font-size:1rem!important;
+  opacity:0.4;
+  transition:opacity 0.3s;
+}
+#darkModeToggle:hover{
+  opacity:0.8;
+}
+
+/* ── Wave button (bottom right) — clean ── */
+.wave-btn,
+button[class*="wave"]{
+  width:40px!important;
+  height:40px!important;
+  border-radius:50%!important;
+  opacity:0.6;
+  transition:opacity 0.3s;
+}
+.wave-btn:hover{
+  opacity:1;
+}
+
+/* ── Mood check — proper overlay ── */
+[class*="mood-check"],
+.mood-section{
+  position:fixed!important;
+  inset:0!important;
+  z-index:300!important;
+  background:rgba(10,20,25,0.92)!important;
+  backdrop-filter:blur(16px)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-direction:column!important;
+}
+
+/* ── Emoji buttons in mood check ── */
+.mood-emoji-btn,
+button[class*="emoji"]{
+  width:52px!important;
+  height:52px!important;
+  font-size:1.8rem!important;
+  border-radius:50%!important;
+  background:rgba(94,204,199,0.08)!important;
+  border:1px solid rgba(94,204,199,0.15)!important;
+  transition:all 0.2s!important;
+}
+.mood-emoji-btn:hover,
+button[class*="emoji"]:hover{
+  background:rgba(94,204,199,0.15)!important;
+  border-color:rgba(94,204,199,0.3)!important;
+  transform:scale(1.15);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.1 — CHAT SCREEN POLISH
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Messages — proper glass cards ── */
+.message{
+  border-radius:18px!important;
+  padding:14px 18px!important;
+  max-width:82%!important;
+  font-size:0.9rem!important;
+  line-height:1.65!important;
+  animation:fadeInUp 0.3s ease!important;
+}
+
+.message.bot{
+  background:rgba(94,204,199,0.06)!important;
+  border:1px solid rgba(94,204,199,0.12)!important;
+  border-bottom-right:4px!important;
+}
+
+.message.user{
+  background:rgba(94,204,199,0.12)!important;
+  border:1px solid rgba(94,204,199,0.18)!important;
+  border-bottom-left:4px!important;
+}
+
+/* ── Chat input area ── */
+.chat-input-area,
+.input-area{
+  padding:12px 16px!important;
+  background:rgba(15,25,35,0.95)!important;
+  backdrop-filter:blur(20px)!important;
+  border-top:1px solid rgba(94,204,199,0.08)!important;
+}
+
+#chatInput,
+.chat-input,
+textarea[id*="chat"]{
+  background:rgba(94,204,199,0.04)!important;
+  border:1px solid rgba(94,204,199,0.12)!important;
+  border-radius:20px!important;
+  padding:10px 18px!important;
+  font-size:0.9rem!important;
+  color:var(--text-primary)!important;
+  transition:border-color 0.3s!important;
+  resize:none!important;
+}
+
+#chatInput:focus,
+.chat-input:focus{
+  border-color:rgba(94,204,199,0.4)!important;
+  outline:none!important;
+  box-shadow:0 0 0 3px rgba(94,204,199,0.08)!important;
+}
+
+/* ── Send button ── */
+#sendBtn,
+button[onclick*="send"],
+.send-btn{
+  background:var(--accent-primary)!important;
+  border:none!important;
+  border-radius:50%!important;
+  width:40px!important;
+  height:40px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  cursor:pointer;
+  transition:all 0.2s!important;
+  flex-shrink:0!important;
+}
+
+#sendBtn:hover{
+  transform:scale(1.08)!important;
+  box-shadow:0 4px 16px rgba(94,204,199,0.3)!important;
+}
+
+/* ── Voice panel — must NOT cover send button ── */
+.voice-panel,
+#voicePanel,
+[class*="voice-panel"]{
+  bottom:70px!important;
+  z-index:100!important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE FIRST
+   ══════════════════════════════════════════════════════════════ */
+
+@media(max-width:480px){
+  .screen.welcome{
+    padding:20px 16px 16px!important;
+    gap:6px!important;
+  }
+  .app-name{
+    font-size:2.2rem!important;
+  }
+  .tagline{
+    font-size:0.85rem!important;
+  }
+  .breath-circle{
+    width:100px!important;
+    height:100px!important;
+  }
+  .screen.welcome .cta-primary{
+    max-width:100%!important;
+    font-size:1rem!important;
+    padding:14px 24px!important;
+  }
+  .screen.welcome .cta-row{
+    max-width:100%!important;
+  }
+  .cta-secondary{
+    font-size:0.78rem!important;
+    padding:10px 12px!important;
+  }
+  .message{
+    max-width:88%!important;
+    font-size:0.88rem!important;
+  }
+}
+
+@media(min-width:768px){
+  .screen.welcome .cta-primary{
+    max-width:320px!important;
+  }
+  .screen.welcome .cta-row{
+    max-width:320px!important;
+  }
+}
