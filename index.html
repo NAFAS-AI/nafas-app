@@ -16,6 +16,34 @@
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 <style>
+  /* ═══════════════════════════════════
+     SPLASH LOGO — أكبر وأوضح
+  ═══════════════════════════════════ */
+  .splash-logo {
+    width: min(260px, 65vw) !important;
+    max-width: 320px !important;
+    height: auto !important;
+    filter: drop-shadow(0 0 40px rgba(78,205,196,0.5)) !important;
+    animation: splashPulse 2.5s ease-in-out infinite !important;
+  }
+  .splash-logo-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    margin-bottom: 24px !important;
+  }
+  .splash-tagline {
+    font-size: clamp(1rem, 3.5vw, 1.4rem) !important;
+    letter-spacing: .15em !important;
+    opacity: .75 !important;
+    font-weight: 500 !important;
+  }
+  @keyframes splashPulse {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(78,205,196,0.4)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 60px rgba(78,205,196,0.7)); transform: scale(1.03); }
+  }
+
   /* Journey entry — hidden until user clicks 🔑 button */
   #journeyEntry { display: none !important; }
   #journeyEntry.visible { display: flex !important; }
