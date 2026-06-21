@@ -2,8 +2,9 @@
    NAFAS TTS API — Text-to-Speech Proxy
    POST /api/tts
    
-   Security: Server-side API key, rate limiting, CORS restricted
+   Pipeline: Clean text → Gemini diacritization → ElevenLabs TTS
    Voice: Sultan — Authentic Emirati Gulf Arabic
+   Security: Server-side API keys, rate limiting, CORS restricted
    © Munira Ali Al Marri 2026 — NAFAS FOR ARTIFICIAL INTELLIGENCE
    ============================================================ */
 
@@ -33,6 +34,53 @@ function isRateLimited(ip) {
   }
   entry.count++;
   return entry.count > RATE_LIMIT;
+}
+
+/* --------------------------------------------------------
+   Gemini Diacritization — adds tashkeel for accurate TTS
+   -------------------------------------------------------- */
+async function addDiacritics(text) {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (!geminiKey) return text; // fallback: use original text
+
+  try {
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `أضف التشكيل الكامل (الفتحة، الضمة، الكسرة، السكون، الشدة، التنوين) على النص العربي التالي. أرجع النص المشكَّل فقط بدون أي شرح أو إضافات. إذا كان النص يحتوي كلمات غير عربية، اتركها كما هي.\n\nالنص:\n${text}`
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 1000
+          }
+        })
+      }
+    );
+
+    if (!response.ok) {
+      console.error('Gemini diacritics error:', response.status);
+      return text;
+    }
+
+    const data = await response.json();
+    const diacritized = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    
+    // Sanity check: result should be similar length (diacritics add ~50-80% chars)
+    if (diacritized && diacritized.length >= text.length * 0.8 && diacritized.length <= text.length * 3) {
+      return diacritized;
+    }
+    return text;
+  } catch (err) {
+    console.error('Diacritization error:', err.message);
+    return text;
+  }
 }
 
 export default async function handler(req, res) {
@@ -88,6 +136,10 @@ export default async function handler(req, res) {
       return res.status(200).json({ fallback: true, message: 'No speakable text' });
     }
 
+    // Step 1: Add diacritics via Gemini
+    const diacritizedText = await addDiacritics(cleanText);
+
+    // Step 2: Send diacritized text to ElevenLabs
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
@@ -98,7 +150,7 @@ export default async function handler(req, res) {
           'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
-          text: cleanText,
+          text: diacritizedText,
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
             stability: 0.65,
