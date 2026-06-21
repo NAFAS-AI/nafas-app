@@ -1546,3 +1546,495 @@ button[onclick*="taqaddumi"]:hover{
 .hug-emoji{font-size:6rem;animation:hugPulse 1.5s ease-in-out infinite}
 @keyframes hugPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 
+
+/* ══════════════════════════════════════════════════════════════
+   FIX PATCH v3.1 — Layout fixes
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Fix welcome screen — ensure it fills viewport properly ── */
+.screen.welcome{
+  min-height:100dvh;
+  overflow-x:hidden;
+  padding-bottom:40px;
+}
+
+/* ── Chat screen hidden when welcome is shown ── */
+.screen.chat{display:none}
+.screen.chat.active,.screen.chat[style*="block"],.screen.chat[style*="flex"]{display:flex}
+
+/* ── Fix secondary buttons area ── */
+/* Group hug, journey code, tour into a nice row */
+.screen.welcome > button[onclick*="Hug"],
+.screen.welcome > button[onclick*="hug"],
+button[onclick="showHugAnimation()"] {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:8px 18px;
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  color:var(--text-secondary);
+  font-family:var(--font);
+  font-size:0.82rem;
+  border-radius:var(--radius-full);
+  cursor:pointer;
+  transition:all var(--duration) var(--ease);
+  margin:3px;
+}
+
+/* Journey code section — cleaner styling */
+.screen.welcome .journey-code-section,
+.screen.welcome [id*="journey"],
+#journeySection,
+.journey-input-container{
+  max-width:300px;
+  margin:8px auto;
+  text-align:center;
+}
+
+/* Fix journey input to look integrated */
+button[onclick="showJourneyInput()"],
+button[onclick*="journey"],
+button[onclick*="Journey"]{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:8px 18px;
+  background:var(--bg-card)!important;
+  border:1px solid var(--glass-border)!important;
+  color:var(--text-secondary)!important;
+  font-family:var(--font);
+  font-size:0.82rem;
+  border-radius:var(--radius-full);
+  cursor:pointer;
+  transition:all var(--duration) var(--ease);
+}
+
+/* Journey code input field */
+input[placeholder*="ABC"],
+input[id*="journey"],
+input[aria-label*="Journey"]{
+  background:var(--bg-card)!important;
+  border:1px solid var(--glass-border)!important;
+  color:var(--text-primary)!important;
+  padding:10px 14px!important;
+  border-radius:var(--radius-full)!important;
+  font-family:var(--font)!important;
+  font-size:0.85rem;
+  outline:none;
+  width:auto;
+  max-width:180px;
+}
+input[placeholder*="ABC"]:focus,
+input[id*="journey"]:focus{
+  border-color:rgba(78,205,196,0.3)!important;
+  box-shadow:0 0 0 3px rgba(78,205,196,0.06);
+}
+
+/* Search/load journey button */
+button[onclick*="loadJourney"],
+button[onclick*="searchJourney"],
+button[aria-label*="Load journey"]{
+  background:var(--accent)!important;
+  color:#0B1120!important;
+  border:none!important;
+  padding:10px 16px!important;
+  border-radius:var(--radius-full)!important;
+  font-family:var(--font);
+  font-weight:var(--fw-bold);
+  cursor:pointer;
+}
+
+/* "لا جلسات سابقة" text — subtle */
+.no-sessions,.no-history,
+.screen.welcome [class*="session"]{
+  color:var(--text-muted)!important;
+  font-size:0.82rem;
+  margin:8px 0;
+}
+
+/* Tour button */
+button[onclick="startTour()"],
+button[onclick*="Tour"],
+button[onclick*="tour"]{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:8px 18px;
+  background:var(--bg-card)!important;
+  border:1px solid var(--glass-border)!important;
+  color:var(--text-secondary)!important;
+  font-family:var(--font);
+  font-size:0.82rem;
+  border-radius:var(--radius-full);
+  cursor:pointer;
+}
+
+/* ── Fix Taqaddumi / Progress panel overflow ── */
+.taqaddumi-panel,
+#taqaddumiPanel,
+[id*="progress"],
+[class*="progress-panel"]{
+  position:fixed!important;
+  top:0;right:0;bottom:0;
+  width:320px;
+  max-width:85vw;
+  background:var(--bg-surface);
+  border-left:1px solid var(--glass-border);
+  z-index:var(--z-overlay);
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform var(--duration) var(--ease);
+  padding:24px 20px;
+}
+.taqaddumi-panel.open,
+#taqaddumiPanel.open,
+[id*="progress"].open,
+[class*="progress-panel"].open{
+  transform:translateX(0);
+}
+
+/* Fix progress button */
+button[onclick*="taqaddumi"],
+#progressBtn,
+.progress-btn,
+button:has(> .taqaddumi){
+  position:fixed!important;
+  top:16px;
+  left:16px;
+  z-index:var(--z-fab);
+  background:var(--glass-strong)!important;
+  border:1px solid var(--glass-border)!important;
+  color:var(--text-secondary)!important;
+  padding:6px 14px!important;
+  border-radius:var(--radius-full)!important;
+  font-family:var(--font);
+  font-size:0.78rem;
+  backdrop-filter:blur(10px);
+}
+
+/* ── Mood check styling ── */
+.mood-screen,.mood-check-screen,
+[class*="mood"]:not(button){
+  background:var(--bg-surface);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  padding:32px 24px;
+  max-width:400px;
+  margin:0 auto;
+  text-align:center;
+}
+
+/* Mood emoji buttons */
+button[onclick*="rateMood"],
+button[onclick*="selectMood"],
+.mood-btn,.mood-emoji{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--bg-card);
+  border:2px solid var(--glass-border);
+  font-size:1.8rem;
+  cursor:pointer;
+  transition:all var(--duration) var(--ease);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button[onclick*="rateMood"]:hover,
+button[onclick*="selectMood"]:hover,
+.mood-btn:hover,.mood-emoji:hover{
+  border-color:var(--accent);
+  transform:scale(1.15);
+  box-shadow:0 0 20px rgba(78,205,196,0.15);
+}
+
+/* Skip mood button */
+button[onclick*="skipMood"],
+.mood-skip{
+  background:transparent;
+  border:none;
+  color:var(--text-muted);
+  font-family:var(--font);
+  font-size:0.85rem;
+  cursor:pointer;
+  margin-top:12px;
+  transition:color var(--duration);
+}
+button[onclick*="skipMood"]:hover{color:var(--accent)}
+
+/* ── PWA install prompt fix ── */
+.pwa-install-prompt,
+[class*="pwa"],
+[id*="pwa"],
+[id*="install"]{
+  position:fixed!important;
+  bottom:0;left:0;right:0;
+  z-index:var(--z-overlay);
+  background:var(--bg-surface)!important;
+  border-top:1px solid var(--glass-border)!important;
+  padding:12px 20px!important;
+  box-shadow:var(--shadow-md)!important;
+}
+
+/* ── Fix the welcome screen having a bubble message ── */
+.returning-welcome,
+.welcome-greeting{
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  padding:14px 20px;
+  max-width:320px;
+  margin:0 auto 16px;
+  font-size:0.9rem;
+  color:var(--text-secondary);
+}
+
+/* ── Fix welcome screen becoming too tall ── */
+.screen.welcome > *{max-width:100%}
+
+/* ── New session button ── */
+button[onclick*="newSession"],
+button[onclick*="startNewSession"],
+.new-session-btn{
+  padding:8px 18px;
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  color:var(--text-secondary);
+  font-family:var(--font);
+  font-size:0.82rem;
+  border-radius:var(--radius-full);
+  cursor:pointer;
+  transition:all var(--duration);
+}
+
+/* ── Theme/mode label in header ── */
+.mode-label,
+#modeLabel,
+[class*="mode-label"]{
+  font-size:0.8rem;
+  color:var(--accent);
+  padding:4px 10px;
+  border-radius:var(--radius-full);
+  background:var(--accent-glow);
+  font-weight:var(--fw-medium);
+}
+
+/* ── Fix "ابدأ جلسة جديدة" overflow ── */
+.screen.welcome{overflow:hidden!important}
+
+
+/* ══════════════════════════════════════════════════════════════
+   CRITICAL FIX v3.2 — Screen management + hidden state
+   ══════════════════════════════════════════════════════════════ */
+
+/* Hidden utility — MUST be defined */
+.hidden{display:none!important}
+.screen.hidden{display:none!important}
+[hidden]{display:none!important}
+
+/* Screen management — each screen is full viewport */
+.screen{
+  min-height:100dvh;
+  position:relative;
+}
+
+/* Chat screen — full viewport with flexbox */
+.screen.chat-screen{
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  min-height:100dvh;
+  position:relative;
+  z-index:var(--z-base);
+  overflow:hidden;
+}
+.screen.chat-screen.hidden{display:none!important}
+
+/* Journey screen */
+.screen.journey-screen{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.screen.journey-screen.hidden{display:none!important}
+
+/* ── Taqaddumi / NFT progress button fix ── */
+.nft-progress-btn{
+  position:fixed!important;
+  top:14px;
+  left:14px;
+  z-index:var(--z-fab);
+  background:var(--glass-strong);
+  border:1px solid var(--glass-border);
+  color:var(--text-secondary);
+  padding:6px 14px;
+  border-radius:var(--radius-full);
+  font-family:var(--font);
+  font-size:0.78rem;
+  cursor:pointer;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:all var(--duration) var(--ease);
+  white-space:nowrap;
+}
+.nft-progress-btn:hover{
+  border-color:rgba(78,205,196,0.2);
+  color:var(--accent);
+}
+
+/* ── Chat screen header ── */
+.chat-screen .chat-header,
+.chat-screen > header,
+.chat-screen > .header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(11,17,32,0.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-border);
+  position:sticky;
+  top:0;
+  z-index:var(--z-header);
+  min-height:54px;
+  flex-shrink:0;
+}
+
+/* Chat screen messages area */
+.chat-screen .messages,
+.chat-screen #messages{
+  flex:1;
+  overflow-y:auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* Chat screen input area */
+.chat-screen .input-area{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  padding:12px 16px 16px;
+  background:rgba(11,17,32,0.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--glass-border);
+  flex-shrink:0;
+}
+
+/* ── Mood check overlay — should be OVER the welcome screen ── */
+.mood-overlay,
+.mood-screen,
+.mood-check{
+  position:fixed!important;
+  inset:0;
+  background:rgba(11,17,32,0.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:var(--z-modal);
+}
+.mood-overlay.hidden,.mood-screen.hidden,.mood-check.hidden{display:none!important}
+
+.mood-card,.mood-content,.mood-box{
+  background:var(--bg-surface);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  padding:32px 28px;
+  max-width:400px;
+  width:90%;
+  text-align:center;
+  box-shadow:var(--shadow-lg);
+}
+
+.mood-card h2,.mood-content h2,.mood-box h2,
+.mood-card h3,.mood-content h3{
+  font-size:1.2rem;
+  color:var(--accent);
+  margin-bottom:8px;
+}
+.mood-card p{
+  color:var(--text-secondary);
+  font-size:0.88rem;
+  margin-bottom:20px;
+}
+.mood-emojis,.mood-buttons{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:16px;
+}
+
+/* ── Back button in chat ── */
+.chat-screen .back-btn,
+button[onclick*="goBack"],
+button[onclick*="backToWelcome"],
+button[aria-label*="Back"]{
+  background:none;
+  border:none;
+  color:var(--text-secondary);
+  font-size:1.3rem;
+  cursor:pointer;
+  padding:6px 8px;
+  border-radius:var(--radius-sm);
+  transition:all var(--duration);
+  display:flex;
+  align-items:center;
+}
+button[aria-label*="Back"]:hover{color:var(--accent);background:var(--bg-card)}
+
+/* Settings button */
+button[aria-label*="Settings"],
+button[onclick*="settings"],
+button[onclick*="Settings"]{
+  background:none!important;
+  border:none!important;
+  color:var(--text-muted)!important;
+  font-size:1.1rem;
+  cursor:pointer;
+  padding:6px 8px;
+  border-radius:var(--radius-sm);
+  transition:all var(--duration);
+}
+button[aria-label*="Settings"]:hover{color:var(--text-primary)!important;background:var(--bg-card)!important}
+
+/* ── Sound icon at welcome screen (bottom left) ── */
+.sound-fab,.sound-toggle{
+  position:fixed!important;
+  bottom:20px;
+  right:20px;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--glass-strong);
+  border:1px solid var(--glass-border);
+  color:var(--text-secondary);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  z-index:var(--z-fab);
+  transition:all var(--duration);
+  backdrop-filter:blur(10px);
+  font-size:1rem;
+}
+
+/* ── "ابدأ جلسة جديدة" button overflow fix ── */
+button[onclick*="newSession"],
+button[onclick*="startNew"],
+.new-session-btn{
+  background:var(--bg-card)!important;
+  border:1px solid var(--glass-border)!important;
+  color:var(--text-secondary)!important;
+  padding:8px 18px!important;
+  border-radius:var(--radius-full)!important;
+  font-family:var(--font);
+  font-size:0.82rem;
+  cursor:pointer;
+  max-width:100%!important;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
