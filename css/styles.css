@@ -3449,3 +3449,235 @@ button.send-btn {
     0% { left: -100%; }
     100% { left: 100%; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   v4.6 — WELCOME SCREEN COMPACT + SCROLLABLE
+   ══════════════════════════════════════════════════════════════ */
+
+/* Welcome screen scrollable */
+.screen.welcome {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+}
+
+/* Compact breathing hero */
+.breath-hero {
+    margin: 8px auto !important;
+    padding: 8px 0 !important;
+}
+
+.breath-hero .breathing-circle,
+.breath-hero #breathingCircle {
+    width: 120px !important;
+    height: 120px !important;
+}
+
+/* Compact bottom section */
+.welcome-bottom {
+    padding: 8px 0 4px !important;
+    gap: 6px !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+}
+
+/* Session info ultra compact */
+.session-info, .no-sessions,
+.welcome-bottom .session-text,
+.welcome-bottom > p {
+    font-size: 11px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.4 !important;
+}
+
+/* Journey toggle minimal */
+.journey-link, #journeyLink {
+    font-size: 12px !important;
+    padding: 4px 10px !important;
+    margin: 0 !important;
+}
+
+/* Journey entry compact */
+.journey-entry {
+    display: flex !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.journey-entry input {
+    height: 32px !important;
+    font-size: 12px !important;
+    padding: 4px 10px !important;
+}
+
+.journey-entry button {
+    height: 32px !important;
+    min-width: 32px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+}
+
+/* Tour button minimal */
+.tour-btn, #tourBtn {
+    font-size: 11px !important;
+    padding: 4px 12px !important;
+    margin: 0 !important;
+}
+
+/* Hug button compact */
+.hug-trigger-btn, #hugBtn {
+    padding: 6px 16px !important;
+    font-size: 13px !important;
+    margin: 4px auto !important;
+    display: block !important;
+}
+
+/* Footer compact */
+.welcome-footer, .app-footer, 
+.welcome-bottom .footer,
+.welcome-bottom > footer {
+    padding: 4px 0 !important;
+    margin: 0 !important;
+}
+
+/* Reduce tagline spacing */
+.tagline, #tagline {
+    margin: 4px 0 !important;
+    font-size: 14px !important;
+}
+
+/* Reduce returning welcome */
+.returning-welcome, #returningWelcome {
+    margin: 4px auto !important;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+}
+
+/* Reduce CTA spacing */
+.cta-primary {
+    margin: 8px auto !important;
+}
+
+.cta-row {
+    margin: 6px auto !important;
+    gap: 8px !important;
+}
+
+/* Session counter compact */
+.session-counter, .session-stats,
+.welcome-bottom > div:first-child {
+    font-size: 11px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.6 — RATING/SHARE OVERLAYS
+   ══════════════════════════════════════════════════════════════ */
+
+/* Share overlay */
+.share-overlay, #shareOverlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 3000 !important;
+    background: rgba(0,0,0,0.7) !important;
+    backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.share-overlay .share-card, #shareOverlay > div {
+    background: linear-gradient(145deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95)) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 20px !important;
+    padding: 24px !important;
+    max-width: 360px !important;
+    width: 90% !important;
+    text-align: center !important;
+}
+
+/* Rating overlay */
+.rating-overlay, #ratingOverlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 3000 !important;
+    background: rgba(0,0,0,0.7) !important;
+    backdrop-filter: blur(8px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Onboarding overlay */
+.onboarding-overlay, #onboardingOverlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 4000 !important;
+    background: rgba(0,0,0,0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.onboarding-card {
+    background: linear-gradient(145deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95)) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 24px !important;
+    padding: 32px !important;
+    max-width: 400px !important;
+    width: 90% !important;
+    text-align: center !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.6 — VOICE PANEL FIX (old bug)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Voice panel should not cover send button */
+.voice-panel, #voicePanel, .voice-selector, #voiceSelector {
+    position: fixed !important;
+    bottom: 70px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 900 !important;
+    background: linear-gradient(145deg, rgba(30,41,59,0.98), rgba(15,23,42,0.98)) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    max-width: 340px !important;
+    width: 90% !important;
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.5) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.6 — GLOBAL POLISH
+   ══════════════════════════════════════════════════════════════ */
+
+/* Smooth fade-in for all screens */
+.screen {
+    animation: fadeIn 0.4s ease !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Focus styles */
+textarea:focus, input:focus, button:focus-visible {
+    outline: 2px solid rgba(45, 212, 191, 0.4) !important;
+    outline-offset: 2px !important;
+}
+
+/* Remove default button outline */
+button:focus:not(:focus-visible) {
+    outline: none !important;
+}
