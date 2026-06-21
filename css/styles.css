@@ -3134,3 +3134,318 @@ button.send-btn {
     border-radius: 24px !important;
     text-align: center !important;
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — WELCOME SCREEN FINAL POLISH
+   ══════════════════════════════════════════════════════════════ */
+
+/* Constrain welcome content width on desktop */
+@media (min-width: 768px) {
+    .screen.welcome {
+        max-width: 100% !important;
+    }
+    
+    .screen.welcome .welcome-content,
+    .screen.welcome .welcome-main,
+    .screen.welcome .cta-primary,
+    .screen.welcome .cta-row,
+    .screen.welcome .welcome-bottom {
+        max-width: 440px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    .screen.welcome .cta-primary {
+        max-width: 380px !important;
+    }
+    
+    .screen.welcome .cta-row {
+        max-width: 380px !important;
+    }
+}
+
+/* Welcome bottom section cleanup */
+.welcome-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 16px 0 8px !important;
+}
+
+/* "احضني" button — pill style */
+.hug-btn, button[onclick*="hugMe"], [class*="hug"] {
+    padding: 8px 24px !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+/* "No previous sessions" text */
+.no-sessions, .session-info {
+    color: rgba(255, 255, 255, 0.3) !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Journey code section */
+.journey-code-section, .journey-input-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    max-width: 300px !important;
+}
+
+/* Journey code input */
+.journey-code-section input,
+#journeyCodeInput {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 10px 16px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    width: 160px !important;
+    transition: all 0.3s ease !important;
+}
+
+.journey-code-section input:focus,
+#journeyCodeInput:focus {
+    border-color: var(--teal-primary, #2dd4bf) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    outline: none !important;
+}
+
+/* Journey code button */
+.journey-code-section button,
+#loadJourneyBtn {
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+    background: rgba(45, 212, 191, 0.15) !important;
+    border: 1px solid rgba(45, 212, 191, 0.3) !important;
+    color: var(--teal-primary, #2dd4bf) !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* "Tour" button */
+.tour-btn, button[onclick*="tour"], [class*="tour"] {
+    padding: 8px 20px !important;
+    border-radius: 20px !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.tour-btn:hover, button[onclick*="tour"]:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* "لديّ رمز رحلة" toggle */
+.journey-toggle {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    background: none !important;
+    padding: 4px 12px !important;
+}
+
+.journey-toggle:hover {
+    color: var(--teal-primary, #2dd4bf) !important;
+}
+
+/* Footer */
+.welcome-footer, .app-footer {
+    padding: 16px 0 8px !important;
+    text-align: center !important;
+}
+
+.welcome-footer p, .app-footer p,
+.welcome-footer small, .app-footer small {
+    color: rgba(255, 255, 255, 0.25) !important;
+    font-size: 11px !important;
+    line-height: 1.6 !important;
+}
+
+.welcome-footer a, .app-footer a {
+    color: rgba(45, 212, 191, 0.5) !important;
+    text-decoration: none !important;
+    transition: color 0.3s ease !important;
+}
+
+.welcome-footer a:hover, .app-footer a:hover {
+    color: var(--teal-primary, #2dd4bf) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — WELCOME GREETING TEXT
+   ══════════════════════════════════════════════════════════════ */
+
+/* Greeting text — the dynamic "يا هلا..." message */
+.greeting, .welcome-greeting, #greeting {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+    padding: 12px 24px !important;
+    margin: 8px auto !important;
+    max-width: 380px !important;
+    text-align: center !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — PROGRESS DASHBOARD BUTTON REFINEMENT
+   ══════════════════════════════════════════════════════════════ */
+
+.progress-btn, #progressBtn, [class*="progress-btn"] {
+    position: fixed !important;
+    top: 16px !important;
+    left: 16px !important;
+    z-index: 100 !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.progress-btn:hover, #progressBtn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — DARK/LIGHT MODE TOGGLE
+   ══════════════════════════════════════════════════════════════ */
+
+.theme-toggle, #themeToggle, [class*="theme-toggle"] {
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+    z-index: 100 !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.theme-toggle:hover, #themeToggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — WAVE / MASCOT BUTTON
+   ══════════════════════════════════════════════════════════════ */
+
+.wave-btn, #waveBtn, .mascot-btn {
+    position: fixed !important;
+    bottom: 16px !important;
+    right: 16px !important;
+    z-index: 100 !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, var(--teal-primary, #2dd4bf), var(--teal-deep, #0f766e)) !important;
+    border: none !important;
+    color: white !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 20px rgba(45, 212, 191, 0.3) !important;
+    transition: all 0.3s ease !important;
+    overflow: hidden !important;
+}
+
+.wave-btn:hover, #waveBtn:hover, .mascot-btn:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 6px 28px rgba(45, 212, 191, 0.4) !important;
+}
+
+.wave-btn img, #waveBtn img, .mascot-btn img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — SCROLLBAR STYLING
+   ══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.5 — ANIMATIONS AND MICRO-INTERACTIONS
+   ══════════════════════════════════════════════════════════════ */
+
+/* Pulse animation for breathing circle */
+@keyframes breathePulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+
+.breathing-circle, #breathingCircle {
+    animation: breathePulse 4s ease-in-out infinite !important;
+}
+
+/* Shimmer effect for CTA */
+.cta-primary::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent) !important;
+    animation: shimmer 3s infinite !important;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
