@@ -2559,3 +2559,191 @@ button[onclick*="send"],
     max-width:320px!important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   v4.2 — MOOD CHECK CARD (nft-card) — PROPER OVERLAY
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Card container — fixed overlay ── */
+.nft-card{
+  position:fixed!important;
+  bottom:0!important;
+  left:0!important;
+  right:0!important;
+  z-index:500!important;
+  background:linear-gradient(170deg, rgba(20,38,48,0.98) 0%, rgba(12,25,32,0.99) 100%)!important;
+  backdrop-filter:blur(24px)!important;
+  -webkit-backdrop-filter:blur(24px)!important;
+  border-top:1px solid rgba(94,204,199,0.15)!important;
+  border-radius:24px 24px 0 0!important;
+  padding:28px 24px 32px!important;
+  text-align:center!important;
+  box-shadow:0 -12px 48px rgba(0,0,0,0.4)!important;
+  animation:nftSlideUp 0.5s cubic-bezier(0.16,1,0.3,1)!important;
+  font-family:var(--font)!important;
+  max-width:500px!important;
+  margin:0 auto!important;
+}
+
+@keyframes nftSlideUp{
+  from{transform:translateY(100%);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+@keyframes nftSlideDown{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(100%);opacity:0}
+}
+
+.nft-card.closing{
+  animation:nftSlideDown 0.4s cubic-bezier(0.7,0,0.84,0) forwards!important;
+}
+
+/* ── Title ── */
+.nft-card h3{
+  color:var(--accent-primary)!important;
+  font-size:1.15rem!important;
+  font-weight:700!important;
+  margin:0 0 6px!important;
+  font-family:var(--font)!important;
+}
+
+/* ── Subtitle ── */
+.nft-sub{
+  color:rgba(255,255,255,0.45)!important;
+  font-size:0.82rem!important;
+  margin-bottom:20px!important;
+  font-family:var(--font)!important;
+}
+
+/* ── Emoji row ── */
+.nft-emojis{
+  display:flex!important;
+  justify-content:center!important;
+  gap:12px!important;
+  margin-bottom:18px!important;
+}
+
+/* ── Individual emoji buttons ── */
+.nft-emojis button{
+  width:54px!important;
+  height:54px!important;
+  font-size:1.8rem!important;
+  border-radius:50%!important;
+  background:rgba(94,204,199,0.06)!important;
+  border:2px solid rgba(94,204,199,0.12)!important;
+  cursor:pointer!important;
+  transition:all 0.25s cubic-bezier(0.16,1,0.3,1)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+}
+
+.nft-emojis button:hover{
+  background:rgba(94,204,199,0.12)!important;
+  border-color:rgba(94,204,199,0.35)!important;
+  transform:scale(1.18)!important;
+}
+
+.nft-emojis button:active{
+  transform:scale(0.95)!important;
+}
+
+/* ── Selected emoji ── */
+.nft-emojis button.sel{
+  background:rgba(94,204,199,0.18)!important;
+  border-color:var(--accent-primary)!important;
+  transform:scale(1.2)!important;
+  box-shadow:0 0 20px rgba(94,204,199,0.25)!important;
+}
+
+/* ── Skip button ── */
+.nft-skip{
+  background:none!important;
+  border:none!important;
+  color:rgba(255,255,255,0.3)!important;
+  font-size:0.78rem!important;
+  cursor:pointer!important;
+  padding:8px 16px!important;
+  font-family:var(--font)!important;
+  transition:color 0.2s!important;
+}
+
+.nft-skip:hover{
+  color:rgba(255,255,255,0.6)!important;
+}
+
+/* ── Registration section ── */
+.nft-reg{
+  margin-top:16px!important;
+  padding-top:16px!important;
+  border-top:1px solid rgba(94,204,199,0.08)!important;
+}
+
+.nft-reg input{
+  display:block!important;
+  width:100%!important;
+  max-width:260px!important;
+  margin:8px auto!important;
+  padding:10px 16px!important;
+  border-radius:16px!important;
+  border:1px solid rgba(94,204,199,0.15)!important;
+  background:rgba(94,204,199,0.04)!important;
+  color:var(--text-primary)!important;
+  font-size:0.85rem!important;
+  font-family:var(--font)!important;
+  transition:border-color 0.3s!important;
+}
+
+.nft-reg input:focus{
+  border-color:rgba(94,204,199,0.4)!important;
+  outline:none!important;
+  box-shadow:0 0 0 3px rgba(94,204,199,0.08)!important;
+}
+
+.nft-btn{
+  display:inline-block!important;
+  margin-top:10px!important;
+  padding:10px 28px!important;
+  border-radius:20px!important;
+  border:none!important;
+  background:var(--accent-primary)!important;
+  color:#fff!important;
+  font-weight:700!important;
+  font-size:0.85rem!important;
+  cursor:pointer!important;
+  font-family:var(--font)!important;
+  transition:all 0.2s!important;
+}
+
+.nft-btn:hover{
+  transform:scale(1.05)!important;
+  box-shadow:0 4px 16px rgba(94,204,199,0.3)!important;
+}
+
+/* ── Backdrop overlay behind mood card ── */
+.nft-card::before{
+  content:''!important;
+  position:fixed!important;
+  inset:0!important;
+  background:rgba(0,0,0,0.3)!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+}
+
+/* ── Mobile adjustments ── */
+@media(max-width:480px){
+  .nft-card{
+    padding:24px 20px 28px!important;
+    border-radius:20px 20px 0 0!important;
+  }
+  .nft-emojis button{
+    width:48px!important;
+    height:48px!important;
+    font-size:1.5rem!important;
+  }
+  .nft-emojis{
+    gap:8px!important;
+  }
+}
