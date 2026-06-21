@@ -21,6 +21,116 @@
   #journeyEntry.visible { display: flex !important; }
   /* Hide session-count div when empty (0 sessions) */
   #sessionCount:empty { display: none !important; }
+
+  /* ═══════════════════════════════════
+     HERO CTA — الزر الرئيسي الواحد
+  ═══════════════════════════════════ */
+  .cta-hero-main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 20px 48px !important;
+    font-size: 1.45rem !important;
+    border-radius: 60px !important;
+    background: linear-gradient(135deg, #4ECDC4, #3AA8A0) !important;
+    box-shadow: 0 0 40px rgba(78,205,196,0.45), 0 8px 32px rgba(0,0,0,.35) !important;
+    margin: 8px auto 4px !important;
+    min-width: 220px !important;
+    transition: transform .2s, box-shadow .2s !important;
+  }
+  .cta-hero-main:hover, .cta-hero-main:focus {
+    transform: scale(1.04) !important;
+    box-shadow: 0 0 60px rgba(78,205,196,0.6), 0 12px 40px rgba(0,0,0,.4) !important;
+  }
+  .cta-label-main {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  .cta-sub {
+    font-size: .78rem;
+    opacity: .75;
+    font-weight: 400;
+    letter-spacing: .02em;
+  }
+
+  /* ═══════════════════════════════════
+     MORE TOGGLE — زر "اكتشف المزيد"
+  ═══════════════════════════════════ */
+  .more-toggle-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,.15);
+    color: rgba(255,255,255,.5);
+    font-family: Tajawal, sans-serif;
+    font-size: .82rem;
+    padding: 7px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 4px auto 0;
+    display: block;
+    transition: color .2s, border-color .2s;
+    letter-spacing: .03em;
+  }
+  .more-toggle-btn:hover {
+    color: rgba(255,255,255,.8);
+    border-color: rgba(255,255,255,.35);
+  }
+  .more-toggle-btn.open {
+    color: rgba(78,205,196,.9);
+    border-color: rgba(78,205,196,.4);
+  }
+
+  /* ═══════════════════════════════════
+     MORE PANEL — الخيارات المطوية
+  ═══════════════════════════════════ */
+  .more-options-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s ease, margin .3s ease;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 320px;
+  }
+  .more-options-panel.open {
+    max-height: 200px;
+    opacity: 1;
+    margin: 10px auto 0;
+  }
+  .cta-secondary {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 13px 20px !important;
+    border-radius: 16px !important;
+    background: rgba(255,255,255,.07) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    backdrop-filter: blur(10px) !important;
+    color: #f8fafc !important;
+    font-family: Tajawal, sans-serif !important;
+    font-size: .95rem !important;
+    cursor: pointer !important;
+    transition: background .2s, transform .15s !important;
+    text-align: right !important;
+    width: 100% !important;
+  }
+  .cta-secondary:hover {
+    background: rgba(255,255,255,.13) !important;
+    transform: translateX(-3px) !important;
+  }
+  .cta-label-sec {
+    font-weight: 600;
+    flex: 1;
+  }
+  .cta-hint-sec {
+    font-size: .72rem;
+    opacity: .55;
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body>
@@ -191,13 +301,28 @@
     <div class="breath-hero-subtitle">تنفّس معي...</div>
   </div>
 
-  <!-- 3. Primary CTA -->
-  <button class="cta-primary" onclick="startMode('vent')" role="button" aria-label="Free Venting"><span class="cta-icon">🌙</span> فضفض لي</button>
+  <!-- 3. PRIMARY HERO CTA — الزر الوحيد الظاهر -->
+  <button class="cta-primary cta-hero-main" onclick="startMode('vent')" role="button" aria-label="Free Venting">
+    <span class="cta-icon">🌙</span>
+    <span class="cta-label-main">فضفض لي</span>
+    <span class="cta-sub">أنا أسمع · بلا أسئلة</span>
+  </button>
 
-  <!-- 4. Two Secondary Buttons -->
-  <div class="cta-row">
-    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check"><span class="cta-icon">⚡</span> تحقق سريع</button>
-    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment"><span class="cta-icon">📊</span> تقييم عميق</button>
+  <!-- 4. المزيد — مطوي افتراضياً -->
+  <button class="more-toggle-btn" id="moreToggleBtn" onclick="toggleNafasMore()" aria-expanded="false">
+    <span id="moreToggleLabel">اكتشف المزيد ↓</span>
+  </button>
+  <div class="more-options-panel" id="moreOptionsPanel" aria-hidden="true">
+    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check">
+      <span class="cta-icon">⚡</span>
+      <span class="cta-label-sec">تحقق سريع</span>
+      <span class="cta-hint-sec">سؤال واحد · 30 ثانية</span>
+    </button>
+    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment">
+      <span class="cta-icon">📊</span>
+      <span class="cta-label-sec">تقييم عميق</span>
+      <span class="cta-hint-sec">محادثة · 5-10 دقائق</span>
+    </button>
   </div>
 
   <!-- Hidden modesGrid: kept for app.js compatibility -->
@@ -410,6 +535,20 @@
   }
 </style>
 
+<script>
+/* toggleNafasMore — يفتح/يغلق الخيارات الثانوية */
+function toggleNafasMore() {
+  const panel = document.getElementById('moreOptionsPanel');
+  const btn   = document.getElementById('moreToggleBtn');
+  const label = document.getElementById('moreToggleLabel');
+  if (!panel || !btn) return;
+  const isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen);
+  panel.setAttribute('aria-hidden', !isOpen);
+  label.textContent = isOpen ? 'إخفاء ↑' : 'اكتشف المزيد ↓';
+}
+</script>
 <script src="js/nafas_audio.js"></script>
 <script src="js/nafas_splash.js"></script>
 <script src="js/nafas_emotions.js"></script>
