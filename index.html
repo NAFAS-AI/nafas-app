@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1a1730">
+<meta name="theme-color" content="#0B1426">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="نَفَس">
@@ -72,7 +72,7 @@
     
     <div class="consent-section" id="consentMethodSection">
       <h3 id="consentMethodTitle">📚 المنهجية العلمية</h3>
-      <p id="consentMethodText">نَفَس مبنية على أسس علمية موثّقة تشمل مقياس ماسلاك للإرهاق (MBI)، مقياس كوبنهاجن (CBI)، نظرية VAK الإدراكية، وتقنية التنفس 4-7-8. <a href="#" onclick="event.preventDefault();document.getElementById('consentOverlay').style.display='none';showMethodology();" style="color:var(--primary);text-decoration:underline;cursor:pointer" id="consentMethodLink">اقرأ/ي المزيد ←</a></p>
+      <p id="consentMethodText">نَفَس مبنية على أسس علمية موثّقة تشمل مقياس ماسلاك للإرهاق (MBI)، مقياس كوبنهاجن (CBI)، نظرية VAK الإدراكية، وتقنية التنفس 4-7-8. <a href="#" onclick="event.preventDefault();document.getElementById('consentOverlay').style.display='none';showMethodology();" style="color:#4ECDC4;text-decoration:underline;cursor:pointer" id="consentMethodLink">اقرأ/ي المزيد ←</a></p>
     </div>
     
     <button class="consent-accept" id="consentAcceptBtn" onclick="acceptConsent()">✨ فهمت — ابدأ</button>
@@ -262,7 +262,7 @@
         <button onclick="openExport()" id="settExport" aria-label="Export session">&#128228; شارك مع معالجك</button>
         <button onclick="showPrivacyPolicy()" id="settPrivacy" aria-label="Privacy Policy">🔒 سياسة الخصوصية</button>
         <button onclick="showMethodology()" id="settMethodology" aria-label="Scientific Methodology">📚 المنهجية العلمية</button>
-        <button onclick="deleteMyData()" id="settDeleteData" aria-label="Delete my data" style="color:oklch(62% .18 22)">🗑️ حذف بياناتي</button>
+        <button onclick="deleteMyData()" id="settDeleteData" aria-label="Delete my data" style="color:#FF6B6B">🗑️ حذف بياناتي</button>
         <button onclick="if(confirm('مسح كل المحادثات السابقة؟'))clearChatHistory()" id="settClearChat" class="clear-chat-btn">🗑️ مسح المحادثة</button>
         <button onclick="toggleExhibitionMode()" id="settExhibition">🎪 وضع المعرض</button>
       </div>
@@ -389,7 +389,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    background: radial-gradient(circle, oklch(0.78 0.082 73 / 0.45), transparent 70%);
+    background: radial-gradient(circle, rgba(78, 205, 196, 0.35), transparent 70%);
     animation: breathe 6s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
@@ -442,8 +442,8 @@ function showUpdateBanner() {
   if (document.getElementById('updateBanner')) return;
   const banner = document.createElement('div');
   banner.id = 'updateBanner';
-  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg, oklch(78% .082 73), oklch(72% .09 195));color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:Tajawal,sans-serif;font-size:.95rem;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideDown .4s ease';
-  banner.innerHTML = '✨ تحديث جديد متاح! <button onclick="location.reload()" style="background:#fff;color:oklch(18% .04 258);border:none;padding:6px 18px;border-radius:20px;font-family:Tajawal;font-weight:700;cursor:pointer;font-size:.9rem">تحديث الآن</button>';
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg, #3DB8B0, #4ECDC4);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:Tajawal,sans-serif;font-size:.95rem;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideDown .4s ease';
+  banner.innerHTML = '✨ تحديث جديد متاح! <button onclick="location.reload()" style="background:#fff;color:#0B1426;border:none;padding:6px 18px;border-radius:20px;font-family:Tajawal;font-weight:700;cursor:pointer;font-size:.9rem">تحديث الآن</button>';
   document.body.prepend(banner);
 }
 </script>
