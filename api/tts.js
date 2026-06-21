@@ -67,6 +67,15 @@ export default async function handler(req, res) {
     });
   }
 
+  // Debug endpoint — GET /api/tts?debug=1 to check config
+  if (req.method === 'GET' && req.query?.debug === '1') {
+    return res.status(200).json({
+      voiceId,
+      hasKey: !!apiKey,
+      keyPrefix: apiKey ? apiKey.substring(0, 4) + '...' : null
+    });
+  }
+
   try {
     const { text, lang } = req.body || {};
 
@@ -110,8 +119,14 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
-      console.error('ElevenLabs error:', response.status);
-      return res.status(200).json({ fallback: true, message: 'TTS service error' });
+      const errBody = await response.text();
+      console.error('ElevenLabs error:', response.status, errBody);
+      return res.status(200).json({ 
+        fallback: true, 
+        message: 'TTS service error',
+        debug_status: response.status,
+        debug_error: errBody.substring(0, 200)
+      });
     }
 
     res.setHeader('Content-Type', 'audio/mpeg');
