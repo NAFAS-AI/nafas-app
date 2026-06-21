@@ -6218,15 +6218,26 @@ function showInstallBanner() {
   const isAr = state.lang === 'ar';
   const banner = document.createElement('div');
   banner.id = 'installBanner';
-  banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--accent-primary);border-radius:16px;padding:12px 20px;display:flex;align-items:center;gap:12px;z-index:150;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:msgIn .4s;max-width:90vw';
-  banner.innerHTML = '<span style="font-size:1.5rem">📲</span><div><strong style="color:var(--accent-primary);font-size:.9rem">' + 
-    (isAr ? 'ثبّت نَفَس على جهازك' : 'Install Nafas on your device') + 
-    '</strong><p style="font-size:.75rem;color:var(--text-secondary);margin-top:2px">' + 
-    (isAr ? 'للوصول السريع بدون متصفح' : 'Quick access without browser') + 
-    '</p></div><button onclick="installPWA()" style="padding:8px 16px;border-radius:12px;border:none;background:var(--accent-primary);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap;font-family:Tajawal,sans-serif">' + 
-    (isAr ? 'تثبيت' : 'Install') + 
-    '</button><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:1.2rem;padding:4px">✕</button>';
+  // All styling handled by CSS — no inline styles needed
+  banner.innerHTML = 
+    '<span class="pwa-icon">📲</span>' +
+    '<div class="pwa-text">' +
+      '<strong>' + (isAr ? 'ثبّت نَفَس على جهازك' : 'Install Nafas') + '</strong>' +
+      '<p>' + (isAr ? 'للوصول السريع بدون متصفح' : 'Quick access without browser') + '</p>' +
+    '</div>' +
+    '<button class="pwa-install-btn" onclick="installPWA()">' + (isAr ? 'تثبيت' : 'Install') + '</button>' +
+    '<button class="pwa-close-btn" onclick="dismissInstallBanner()" aria-label="Close">✕</button>';
   document.body.appendChild(banner);
+  
+  // Auto-dismiss after 8 seconds
+  setTimeout(() => { dismissInstallBanner(); }, 8000);
+}
+
+function dismissInstallBanner() {
+  const b = document.getElementById('installBanner');
+  if (!b) return;
+  b.classList.add('pwa-hiding');
+  setTimeout(() => { b.remove(); }, 400);
 }
 
 function installPWA() {
