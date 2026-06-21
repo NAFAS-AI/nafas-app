@@ -39,10 +39,10 @@
   --text-dim: #4A5568;
   
   /* Bubbles */
-  --bot-bubble: rgba(78, 205, 196, 0.07);
-  --bot-bubble-border: rgba(78, 205, 196, 0.15);
-  --user-bubble: rgba(78, 205, 196, 0.14);
-  --user-bubble-border: rgba(78, 205, 196, 0.25);
+  --bot-bubble: rgba(78, 205, 196, 0.12);
+  --bot-bubble-border: rgba(78, 205, 196, 0.22);
+  --user-bubble: rgba(78, 205, 196, 0.18);
+  --user-bubble-border: rgba(78, 205, 196, 0.30);
   
   /* Status */
   --danger: #FF6B6B;
