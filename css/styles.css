@@ -2571,18 +2571,19 @@ button[onclick*="send"],
   left:0!important;
   right:0!important;
   z-index:500!important;
-  background:linear-gradient(170deg, rgba(20,38,48,0.98) 0%, rgba(12,25,32,0.99) 100%)!important;
+  background:linear-gradient(170deg, rgba(15,30,40,0.99) 0%, rgba(10,22,30,0.99) 100%)!important;
   backdrop-filter:blur(24px)!important;
   -webkit-backdrop-filter:blur(24px)!important;
-  border-top:1px solid rgba(94,204,199,0.15)!important;
+  border-top:1px solid rgba(94,204,199,0.2)!important;
   border-radius:24px 24px 0 0!important;
-  padding:28px 24px 32px!important;
+  padding:32px 24px 36px!important;
   text-align:center!important;
-  box-shadow:0 -12px 48px rgba(0,0,0,0.4)!important;
+  box-shadow:0 -16px 64px rgba(0,0,0,0.5)!important;
   animation:nftSlideUp 0.5s cubic-bezier(0.16,1,0.3,1)!important;
   font-family:var(--font)!important;
-  max-width:500px!important;
-  margin:0 auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
 }
 
 @keyframes nftSlideUp{
@@ -2727,9 +2728,10 @@ button[onclick*="send"],
   content:''!important;
   position:fixed!important;
   inset:0!important;
-  background:rgba(0,0,0,0.3)!important;
+  background:rgba(0,0,0,0.5)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
   z-index:-1!important;
-  pointer-events:none!important;
 }
 
 /* ── Mobile adjustments ── */
@@ -2746,4 +2748,389 @@ button[onclick*="send"],
   .nft-emojis{
     gap:8px!important;
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — CHAT BUBBLES + MESSAGE STYLING
+   ══════════════════════════════════════════════════════════════ */
+
+/* Messages container */
+#messages, .messages {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 20px 16px !important;
+    overflow-y: auto !important;
+    flex: 1 !important;
+    direction: rtl !important;
+    scroll-behavior: smooth !important;
+}
+
+/* Base message */
+.msg {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: flex-start !important;
+    max-width: 85% !important;
+    animation: msgFadeIn 0.4s ease !important;
+}
+
+@keyframes msgFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bot message — aligned right (RTL) */
+.msg.bot {
+    align-self: flex-start !important;
+    flex-direction: row !important;
+}
+
+.msg.bot > span:not(.avatar) {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 20px 4px 20px 20px !important;
+    padding: 14px 18px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    word-wrap: break-word !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Bot avatar */
+.msg.bot .avatar {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, var(--teal-primary, #2dd4bf), var(--teal-deep, #0f766e)) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(45, 212, 191, 0.3) !important;
+    flex-shrink: 0 !important;
+}
+
+/* User message — aligned left (RTL = left side) */
+.msg.user {
+    align-self: flex-end !important;
+    flex-direction: row-reverse !important;
+}
+
+.msg.user > span {
+    background: linear-gradient(135deg, var(--teal-primary, #2dd4bf), var(--teal-deep, #0f766e)) !important;
+    border-radius: 4px 20px 20px 20px !important;
+    padding: 14px 18px !important;
+    color: white !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    word-wrap: break-word !important;
+    direction: rtl !important;
+    text-align: right !important;
+    box-shadow: 0 2px 12px rgba(45, 212, 191, 0.2) !important;
+}
+
+/* Typing indicator */
+.msg.bot.typing > span:not(.avatar),
+.msg.typing > span:not(.avatar) {
+    background: rgba(255, 255, 255, 0.05) !important;
+    min-width: 80px !important;
+}
+
+/* Date separator */
+.date-separator, .msg-date, .session-date {
+    text-align: center !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 12px !important;
+    padding: 8px 16px !important;
+    position: relative !important;
+    align-self: center !important;
+}
+
+.date-separator::before, .date-separator::after {
+    content: '' !important;
+    flex: 1 !important;
+    height: 1px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Message time */
+.msg-time {
+    font-size: 11px !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+    margin-top: 4px !important;
+    display: block !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — CHAT INPUT AREA IMPROVEMENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* Chat input container */
+.chat-input, .input-area, #inputArea {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 12px 16px !important;
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Text input */
+.chat-input textarea,
+.chat-input input[type="text"],
+#userInput {
+    flex: 1 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1.5px solid rgba(45, 212, 191, 0.3) !important;
+    border-radius: 24px !important;
+    padding: 12px 20px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 15px !important;
+    font-family: 'Tajawal', sans-serif !important;
+    direction: rtl !important;
+    resize: none !important;
+    outline: none !important;
+    transition: all 0.3s ease !important;
+    min-height: 48px !important;
+    max-height: 120px !important;
+}
+
+.chat-input textarea:focus,
+.chat-input input[type="text"]:focus,
+#userInput:focus {
+    border-color: var(--teal-primary, #2dd4bf) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1) !important;
+}
+
+/* Send button */
+.chat-input button[onclick*="send"],
+#sendBtn,
+button.send-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, var(--teal-primary, #2dd4bf), var(--teal-deep, #0f766e)) !important;
+    border: none !important;
+    color: white !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+/* Voice buttons */
+.chat-input button[aria-label*="voice"],
+.chat-input button[aria-label*="Voice"],
+#voiceBtn, #toggleVoiceBtn, .voice-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.chat-input button[aria-label*="voice"]:hover,
+.chat-input button[aria-label*="Voice"]:hover,
+#voiceBtn:hover, #toggleVoiceBtn:hover, .voice-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: var(--teal-primary, #2dd4bf) !important;
+}
+
+/* SOS button */
+.sos-btn, #sosBtn, [class*="sos"] {
+    position: fixed !important;
+    bottom: 80px !important;
+    left: 16px !important;
+    z-index: 100 !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    color: #ef4444 !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.sos-btn:hover, #sosBtn:hover, [class*="sos"]:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — CHAT HEADER IMPROVEMENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* Chat header / tabs */
+.chat-header, #chatHeader, .mode-tabs {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 12px 16px !important;
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.mode-tabs .tab, .mode-tab, .chat-tab {
+    padding: 8px 24px !important;
+    border-radius: 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.mode-tabs .tab.active, .mode-tab.active, .chat-tab.active {
+    background: rgba(45, 212, 191, 0.15) !important;
+    color: var(--teal-primary, #2dd4bf) !important;
+}
+
+/* Back button in chat */
+#backBtn, .back-btn, button[aria-label*="back"], button[aria-label*="Back"] {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+}
+
+#backBtn:hover, .back-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — VOICE PANEL FIX (covers send button bug)
+   ══════════════════════════════════════════════════════════════ */
+
+/* Voice selection panel - must NOT cover input */
+.voice-panel, #voicePanel, .voice-selector {
+    position: absolute !important;
+    bottom: calc(100% + 8px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    z-index: 200 !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — WELCOME SCREEN BUTTON REFINEMENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* CTA primary - ensure max-width */
+.cta-primary {
+    max-width: 340px !important;
+    width: 100% !important;
+    align-self: center !important;
+    margin: 0 auto !important;
+}
+
+/* CTA row */
+.cta-row {
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    gap: 10px !important;
+}
+
+.cta-row .cta-secondary {
+    flex: 1 !important;
+    max-width: none !important;
+}
+
+/* Footer copyright in chat */
+.chat-footer, footer {
+    text-align: center !important;
+    padding: 8px !important;
+    color: rgba(255, 255, 255, 0.25) !important;
+    font-size: 11px !important;
+    background: transparent !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — DESKTOP CHAT MAX-WIDTH CONTAINER
+   ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+    .msg {
+        max-width: 65% !important;
+    }
+    
+    #messages, .messages {
+        max-width: 800px !important;
+        margin: 0 auto !important;
+        padding: 24px !important;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   v4.4 — JOURNEY SCREEN STYLES
+   ══════════════════════════════════════════════════════════════ */
+
+#journeyScreen {
+    padding: 24px !important;
+}
+
+/* Summary card */
+.summary-card, .session-summary {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    margin: 12px 0 !important;
+}
+
+/* Post-session feedback overlay */
+.post-session, .feedback-overlay, .session-feedback {
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    padding: 32px 24px !important;
+    border-radius: 24px !important;
+    text-align: center !important;
 }
