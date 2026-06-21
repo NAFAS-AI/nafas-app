@@ -15,6 +15,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<style>
+  /* Journey entry — hidden until user clicks 🔑 button */
+  #journeyEntry { display: none !important; }
+  #journeyEntry.visible { display: flex !important; }
+  /* Hide session-count div when empty (0 sessions) */
+  #sessionCount:empty { display: none !important; }
+</style>
 </head>
 <body>
 <!-- Stars Background -->
@@ -214,7 +221,7 @@
       <button onclick="loadJourneyByCode()" aria-label="Load journey">&#128269;</button>
     </div>
     <button class="tour-btn" id="tourBtn" onclick="startTour()" aria-label="App tour">&#127919; جولة تعريفية</button>
-    <div class="copyright" id="copyrightWelcome">&copy; منيرة علي المري 2026 &mdash; نَفَس<br><a onclick="showPrivacyPolicy()" style="color:var(--muted-foreground);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
+    <div class="copyright" id="copyrightWelcome">&copy; 2026 منيرة علي المري &mdash; نَفَس<br><span style="opacity:.4;font-size:.65rem;letter-spacing:.04em;display:block;margin-top:2px">NAFAS FOR ARTIFICIAL INTELLIGENCE &middot; CN-6573712</span><a onclick="showPrivacyPolicy()" style="color:var(--muted-foreground);font-size:.75rem;cursor:pointer;text-decoration:underline">سياسة الخصوصية</a></div>
   </div>
 </div>
 
@@ -228,7 +235,7 @@
   <div class="journey-chart" id="journeyChart"><h3 id="chartTitle">مستوى الإرهاق عبر الزمن</h3><svg id="chartSvg" width="100%" height="120" viewBox="0 0 360 120"></svg></div>
   <div class="journey-sessions" id="journeySessions"></div>
   <button class="journey-new-btn" onclick="goToWelcome()" id="journeyNewBtn">ابدأ جلسة جديدة</button>
-  <div class="copyright">&copy; منيرة علي المري 2026 &mdash; نَفَس</div>
+  <div class="copyright">&copy; 2026 منيرة علي المري &mdash; نَفَس<br><span style="opacity:.4;font-size:.65rem;letter-spacing:.04em">NAFAS FOR ARTIFICIAL INTELLIGENCE &middot; CN-6573712</span></div>
 </div>
 
 <!-- Chat Screen -->

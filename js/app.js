@@ -306,7 +306,7 @@ const i18n = {
   ar:{
     appName:'نَفَس',tagline:'يفهمك من كلامك',
     modes:{quick:{title:'⚡ تحقق سريع',desc:'سؤال واحد • 30 ثانية'},vent:{title:'💙 فضفضة حرة',desc:'أنا أسمع • بلا أسئلة'},deep:{title:'📊 تقييم عميق',desc:'محادثة • 5-10 دقائق'},demo:{title:'🎪 وضع العرض',desc:'عرض سريع • للمعارض'}},
-    sessions:n=>n===0?'لا جلسات سابقة':`${n} جلسة سابقة محفوظة`,
+    sessions:n=>n===0?'':`${n} جلسة سابقة محفوظة`,
     sendPlaceholder:'اكتب هنا... (Enter للإرسال)',
     voiceOn:'🔊 الصوت مفعّل',voiceOff:'🔇 الصوت مُعطّل',
     themeLight:'☀️ الوضع الفاتح',themeDark:'🌙 الوضع الداكن',
