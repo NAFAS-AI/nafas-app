@@ -58,7 +58,7 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || 'pFZP5JQG7iQjIQuC4Bku';
+  const voiceId = process.env.ELEVENLABS_VOICE_ID || 'rUaPbzcZIu8df8iNL9WZ';
 
   if (!apiKey) {
     return res.status(200).json({ 

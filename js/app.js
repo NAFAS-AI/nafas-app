@@ -876,6 +876,62 @@ async function speak(text){
 }
 
 /* ============================================================
+   SILENCE DETECTOR — كاشف الصمت
+   When the user goes silent for 30s after a bot reply:
+   → Text prompt: "أنا هني معك... تبي تكمل؟ 💙"
+   After 30 more seconds:
+   → Voice: "وينك؟ أنا أسمعك... خذ وقتك"
+   Uses Page Visibility API: no triggers if user left the tab.
+   ============================================================ */
+let _silenceTimer1 = null;
+let _silenceTimer2 = null;
+let _silenceActive = false;
+let _silenceMessageInProgress = false;
+
+function resetSilenceDetector() {
+  if (_silenceTimer1) clearTimeout(_silenceTimer1);
+  if (_silenceTimer2) clearTimeout(_silenceTimer2);
+  _silenceTimer1 = null;
+  _silenceTimer2 = null;
+  _silenceActive = false;
+  sessionIntelligence.silenceAlerted = false;
+}
+
+function startSilenceDetector() {
+  resetSilenceDetector();
+  if (!state.mode) return; // Not in chat yet
+  _silenceActive = true;
+
+  _silenceTimer1 = setTimeout(function() {
+    if (!_silenceActive || document.hidden || !state.mode) return;
+    if (sessionIntelligence.silenceAlerted) return;
+    sessionIntelligence.silenceAlerted = true;
+
+    var msg = state.lang === 'ar'
+      ? 'أنا هني معك... تبي تكمل؟ 💙'
+      : "I'm still here with you... want to continue? 💙";
+    _silenceMessageInProgress = true;
+    addMessage('bot', msg);
+    _silenceMessageInProgress = false;
+
+    _silenceTimer2 = setTimeout(function() {
+      if (!_silenceActive || document.hidden) return;
+      var voiceMsg = state.lang === 'ar'
+        ? 'وينك؟ أنا أسمعك... خذ وقتك'
+        : "I'm listening... take your time";
+      speak(voiceMsg);
+    }, 30000);
+  }, 30000);
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    resetSilenceDetector();
+  }
+});
+
+
+/* ============================================================
    SUPABASE (fetch-based, no runCommand) — Enhancement #2
    ============================================================ */
 const supaHeaders = {
@@ -1263,6 +1319,8 @@ function sanitizeHTML(str){
 }
 
 function addMessage(role, text, isHTML){
+  // === SILENCE DETECTOR HOOKS ===
+  if (role === 'user') resetSilenceDetector();
   state.messages.push({role, text: isHTML ? '[card]' : text, timestamp: Date.now()});
   state.unsavedChanges = true;
   saveChatHistory();
@@ -1286,6 +1344,7 @@ function addMessage(role, text, isHTML){
   div.appendChild(content);
   container.appendChild(div);
   requestAnimationFrame(() => { container.scrollTop = container.scrollHeight; });
+  if (role === 'bot' && state.mode && !_silenceMessageInProgress) setTimeout(startSilenceDetector, 500);
   return div;
 }
 
