@@ -2,8 +2,8 @@
    NAFAS TTS API — Text-to-Speech Proxy
    POST /api/tts
    
-   Pipeline: Clean text → Gemini diacritization → ElevenLabs TTS
-   Voice: Sultan — Authentic Emirati Gulf Arabic
+   Pipeline: Clean text → Gemini diacritization → Faseeh TTS (Munsit)
+   Voice: Munira — Authentic Emirati Female Arabic
    Security: Server-side API keys, rate limiting, CORS restricted
    © Munira Ali Al Marri 2026 — NAFAS FOR ARTIFICIAL INTELLIGENCE
    ============================================================ */
@@ -106,10 +106,10 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Rate limit exceeded' });
   }
 
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || 'rUaPbzcZIu8df8iNL9WZ';
+  const munsitKey = process.env.MUNSIT_API_KEY;
+  const voiceId = process.env.MUNSIT_VOICE_ID || 'dq4b0twyF5F4fJPWjHjjI5Zd'; // Munira
 
-  if (!apiKey) {
+  if (!munsitKey) {
     return res.status(200).json({ 
       fallback: true, 
       message: 'TTS not configured — using browser voice' 
@@ -139,40 +139,42 @@ export default async function handler(req, res) {
       return res.status(200).json({ fallback: true, message: 'No speakable text' });
     }
 
-    // Step 1: Add diacritics via Gemini
+    // Step 1: Add diacritics via Gemini (hidden — not shown in UI)
     const diacritizedText = await addDiacritics(cleanText);
 
-    // Step 2: Send diacritized text to ElevenLabs
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-      {
-        method: 'POST',
-        headers: {
-          'xi-api-key': apiKey,
-          'Content-Type': 'application/json',
-          'Accept': 'audio/mpeg'
-        },
-        body: JSON.stringify({
-          text: diacritizedText,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.65,
-            similarity_boost: 0.80,
-            style: 0.35,
-            use_speaker_boost: true
-          }
-        })
-      }
-    );
+    // Step 2: Send diacritized text to Faseeh TTS (Munsit)
+    const ttsResponse = await fetch('https://api.fasihtts.com/v1/tts', {
+      method: 'POST',
+      headers: {
+        'x-api-key': munsitKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: diacritizedText,
+        voice: voiceId,
+        styleInstruction: 'Calm, warm, empathetic therapeutic tone. Speak gently and reassuringly.'
+      })
+    });
 
-    if (!response.ok) {
-      console.error('ElevenLabs error:', response.status);
+    if (!ttsResponse.ok) {
+      const errBody = await ttsResponse.text().catch(() => '');
+      console.error('Faseeh TTS error:', ttsResponse.status, errBody);
       return res.status(200).json({ fallback: true, message: 'TTS service error' });
     }
 
-    res.setHeader('Content-Type', 'audio/mpeg');
-    const buffer = Buffer.from(await response.arrayBuffer());
-    return res.status(200).send(buffer);
+    const data = await ttsResponse.json();
+
+    if (!data.audioContent) {
+      console.error('Faseeh TTS: no audioContent in response');
+      return res.status(200).json({ fallback: true, message: 'TTS error' });
+    }
+
+    // Decode base64 audio and send
+    const audioBuffer = Buffer.from(data.audioContent, 'base64');
+    const format = data.format || 'mp3';
+
+    res.setHeader('Content-Type', format === 'wav' ? 'audio/wav' : 'audio/mpeg');
+    return res.status(200).send(audioBuffer);
 
   } catch (error) {
     console.error('TTS proxy error:', error.message);
