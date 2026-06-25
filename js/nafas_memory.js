@@ -107,11 +107,11 @@ window.fetch = function(url, opts) {
   return originalFetch.apply(this, arguments);
 };
 
-// ── Gender Detection from User Input ──
+// ── Gender Detection from User Input (supports ة and ه endings) ──
 function detectGenderFromInput(text) {
   if (!text) return null;
-  var femaleRe = /تعبانة|محتاجة|زعلانة|خايفة|حاسة|مقهورة|ضايقة|أنا بنت/;
-  var maleRe = /تعبان(?!ة)|محتاج(?!ة)|زعلان(?!ة)|خايف(?!ة)|حاس(?!ة)|مقهور(?!ة)|ضايق(?!ة)|أنا ولد|أنا رجال/;
+  var femaleRe = /تعبان[ةه]|محتاج[ةه]|زعلان[ةه]|خايف[ةه]|حاس[ةه]|مقهور[ةه]|ضايق[ةه]|أنا بنت|متعب[ةه]|خلين[يى]/;
+  var maleRe = /تعبان(?![ةه])|محتاج(?![ةه])|زعلان(?![ةه])|خايف(?![ةه])|حاس(?![ةه])|مقهور(?![ةه])|ضايق(?![ةه])|أنا ولد|أنا رجال/;
   if (femaleRe.test(text)) return 'female';
   if (maleRe.test(text)) return 'male';
   return null;
@@ -221,20 +221,64 @@ function processUserText(text) {
   }
 }
 
+// ── Phase 2: Session Feedback (Learning System) ──
+async function submitSessionFeedback(rating, topics) {
+  var vid = getVisitorId();
+  if (!vid || !rating) return;
+
+  // Save feedback to Supabase via API
+  try {
+    await originalFetch('/api/session-feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitor_id: vid,
+        mood_rating: rating,
+        topics: topics || []
+      })
+    });
+  } catch(e) {
+    // Fallback: save locally
+    try {
+      var feedbacks = JSON.parse(localStorage.getItem('nafas_feedbacks') || '[]');
+      feedbacks.push({ vid: vid, rating: rating, topics: topics, ts: Date.now() });
+      localStorage.setItem('nafas_feedbacks', JSON.stringify(feedbacks.slice(-50)));
+    } catch(e2) {}
+  }
+}
+
+// ── Watch for mood rating clicks ──
+function watchFeedbackRating() {
+  document.addEventListener('click', function(e) {
+    var el = e.target;
+    // Detect emoji rating buttons (😫😔😐🙂😊)
+    var emojiMap = {'😫': 1, '😔': 2, '😐': 3, '🙂': 4, '😊': 5};
+    var text = (el.textContent || el.innerText || '').trim();
+    if (emojiMap[text]) {
+      var rating = emojiMap[text];
+      var currentTopics = [];
+      if (profile && profile.topics) currentTopics = profile.topics;
+      submitSessionFeedback(rating, currentTopics);
+    }
+  }, true);
+}
+
 // ── Expose API ──
 window.NafasMemory = {
   getProfile: function() { return profile; },
   loadProfile: loadProfile,
   saveProfile: saveProfile,
   addCorrection: addCorrection,
-  getVisitorId: getVisitorId
+  getVisitorId: getVisitorId,
+  submitFeedback: submitSessionFeedback
 };
 
 // Auto-init when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', function() { init(); watchFeedbackRating(); });
 } else {
   init();
+  watchFeedbackRating();
 }
 
 })();
