@@ -13,8 +13,12 @@
 
 // ── Config ──
 var PROFILE_API = '/api/user-profile';
+var SESSION_SUMMARY_API = '/api/session-summary';
 var PROFILE_CACHE_KEY = 'nafas_profile_cache';
 var profile = null;
+var sessionId = null;
+var sessionMessages = [];
+var sessionStartTime = null;
 
 // ── Get Visitor ID ──
 function getVisitorId() {
@@ -90,7 +94,31 @@ async function addCorrection(wrong, right) {
   } catch(e) {}
 }
 
-// ── Intercept fetch to add visitorId ──
+// ── Generate Session ID ──
+function generateSessionId() {
+  return 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+function getSessionId() {
+  if (!sessionId) {
+    sessionId = generateSessionId();
+    sessionStartTime = Date.now();
+    sessionMessages = [];
+  }
+  return sessionId;
+}
+
+// ── Track Messages ──
+function trackMessage(role, text) {
+  if (!text || text.trim().length < 1) return;
+  sessionMessages.push({
+    role: role,
+    text: text.trim(),
+    timestamp: Date.now()
+  });
+}
+
+// ── Intercept fetch to add visitorId + sessionId + track messages ──
 var originalFetch = window.fetch;
 window.fetch = function(url, opts) {
   // Only intercept calls to /api/gemini
@@ -98,10 +126,40 @@ window.fetch = function(url, opts) {
     try {
       var body = JSON.parse(opts.body);
       var vid = getVisitorId();
-      if (vid && !body.visitorId) {
-        body.visitorId = vid;
-        opts = Object.assign({}, opts, { body: JSON.stringify(body) });
+      var sid = getSessionId();
+      if (vid && !body.visitorId) body.visitorId = vid;
+      if (sid && !body.sessionId) body.sessionId = sid;
+      opts = Object.assign({}, opts, { body: JSON.stringify(body) });
+
+      // Track user message
+      if (body.contents && Array.isArray(body.contents)) {
+        var lastUserMsg = body.contents.filter(function(m) { return m.role === 'user'; }).pop();
+        if (lastUserMsg && lastUserMsg.parts && lastUserMsg.parts[0]) {
+          trackMessage('user', lastUserMsg.parts[0].text);
+        }
       }
+
+      // Track model response
+      var origCall = originalFetch.apply(this, [url, opts]);
+      return origCall.then(function(response) {
+        // Clone response to read it without consuming
+        var cloned = response.clone();
+        cloned.json().then(function(data) {
+          try {
+            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+              var modelText = data.candidates[0].content.parts[0].text;
+              // Parse JSON response to get actual text
+              try {
+                var parsed = JSON.parse(modelText);
+                if (parsed.response) trackMessage('model', parsed.response);
+              } catch(e) {
+                trackMessage('model', modelText);
+              }
+            }
+          } catch(e) {}
+        }).catch(function() {});
+        return response;
+      });
     } catch(e) {}
   }
   return originalFetch.apply(this, arguments);
@@ -284,6 +342,68 @@ function watchFeedbackRating() {
   }, true);
 }
 
+// ── Phase 4: Send Session Summary ──
+function sendSessionSummary(moodRating) {
+  if (sessionMessages.length < 2 || !sessionId) return;
+
+  var vid = getVisitorId();
+  if (!vid) return;
+
+  var payload = JSON.stringify({
+    visitor_id: vid,
+    session_id: sessionId,
+    messages: sessionMessages.slice(0, 100),
+    mood_rating: moodRating || null
+  });
+
+  // Use sendBeacon for reliability on page close
+  if (navigator.sendBeacon) {
+    var blob = new Blob([payload], { type: 'application/json' });
+    navigator.sendBeacon(SESSION_SUMMARY_API, blob);
+  } else {
+    originalFetch(SESSION_SUMMARY_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload,
+      keepalive: true
+    }).catch(function() {});
+  }
+
+  var completedId = sessionId;
+  sessionId = null;
+  sessionMessages = [];
+  sessionStartTime = null;
+  console.log('[NafasMemory] Session summary sent:', completedId);
+}
+
+// ── Session End Detection ──
+var inactivityTimer = null;
+var INACTIVITY_THRESHOLD = 5 * 60 * 1000; // 5 min inactivity = session end
+
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  if (sessionMessages.length >= 2) {
+    inactivityTimer = setTimeout(function() {
+      console.log('[NafasMemory] Inactivity detected — ending session');
+      sendSessionSummary();
+    }, INACTIVITY_THRESHOLD);
+  }
+}
+
+['mousemove', 'keydown', 'touchstart', 'click'].forEach(function(evt) {
+  document.addEventListener(evt, resetInactivityTimer, { passive: true });
+});
+
+window.addEventListener('beforeunload', function() {
+  sendSessionSummary();
+});
+
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && sessionMessages.length >= 4) {
+    sendSessionSummary();
+  }
+});
+
 // ── Expose API ──
 window.NafasMemory = {
   getProfile: function() { return profile; },
@@ -291,7 +411,10 @@ window.NafasMemory = {
   saveProfile: saveProfile,
   addCorrection: addCorrection,
   getVisitorId: getVisitorId,
-  submitFeedback: submitSessionFeedback
+  getSessionId: getSessionId,
+  submitFeedback: submitSessionFeedback,
+  endSession: sendSessionSummary,
+  getSessionMessages: function() { return sessionMessages; }
 };
 
 // Auto-init when DOM is ready

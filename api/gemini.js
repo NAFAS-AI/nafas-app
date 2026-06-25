@@ -133,9 +133,75 @@ function sanitizeInput(contents) {
   }).filter(Boolean);
 }
 
-function buildSystemInstruction(mode, deepStep, typingPattern, typingMood, profileData) {
-  // Use buildFullPrompt to inject user profile into the prompt
-  let instruction = buildFullPrompt(profileData);
+// ── Phase 4/5/6: Load Enriched Context ──
+async function loadEnrichedContext(visitorId, profileData) {
+  const ctx = { profile: profileData };
+
+  if (!visitorId || !SUPABASE_KEY) return ctx;
+
+  try {
+    // Parallel fetch all enrichment data
+    const [summaries, vocabulary, techniques, selfKnowledge, insights] = await Promise.all([
+      // Phase 4: Last 5 session summaries for this user
+      supabaseFetch(
+        'nafas_session_summaries?visitor_id=eq.' + encodeURIComponent(visitorId) +
+        '&order=created_at.desc&limit=5',
+        'GET'
+      ).catch(() => null),
+
+      // Phase 5: Learned vocabulary (most frequent, active only)
+      supabaseFetch(
+        'nafas_learned_vocabulary?active=eq.true&order=frequency.desc&limit=30',
+        'GET'
+      ).catch(() => null),
+
+      // Phase 5: Top techniques by effectiveness for user's topics
+      supabaseFetch(
+        'nafas_technique_effectiveness?effectiveness_score=gte.0.3&order=effectiveness_score.desc&limit=10',
+        'GET'
+      ).catch(() => null),
+
+      // Phase 6: Active self-knowledge
+      supabaseFetch(
+        'nafas_self_knowledge?active=eq.true&order=confidence.desc&limit=10',
+        'GET'
+      ).catch(() => null),
+
+      // Phase 6: Active collective insights
+      supabaseFetch(
+        'nafas_collective_insights?active=eq.true&order=confidence.desc&limit=5',
+        'GET'
+      ).catch(() => null)
+    ]);
+
+    if (Array.isArray(summaries) && summaries.length > 0) ctx.sessionSummaries = summaries;
+    if (Array.isArray(vocabulary) && vocabulary.length > 0) ctx.learnedVocabulary = vocabulary;
+    if (Array.isArray(techniques) && techniques.length > 0) ctx.techniqueRecommendations = techniques;
+    if (Array.isArray(selfKnowledge) && selfKnowledge.length > 0) ctx.selfKnowledge = selfKnowledge;
+    if (Array.isArray(insights) && insights.length > 0) ctx.collectiveInsights = insights;
+  } catch (e) {
+    console.warn('Enriched context load partial failure:', e.message);
+  }
+
+  return ctx;
+}
+
+// ── Phase 4: Log Conversation Exchange ──
+async function logConversation(visitorId, sessionId, userText, modelText) {
+  if (!visitorId || !sessionId || !SUPABASE_KEY) return;
+  try {
+    const entries = [];
+    if (userText) entries.push({ visitor_id: visitorId, session_id: sessionId, role: 'user', message_text: userText.slice(0, 2000) });
+    if (modelText) entries.push({ visitor_id: visitorId, session_id: sessionId, role: 'model', message_text: modelText.slice(0, 2000) });
+    if (entries.length > 0) {
+      await supabaseFetch('nafas_conversation_log', 'POST', entries);
+    }
+  } catch (e) { /* non-critical */ }
+}
+
+function buildSystemInstruction(mode, deepStep, typingPattern, typingMood, enrichedContext) {
+  // Phase 4/5/6: Use enriched context for dynamic prompt
+  let instruction = buildFullPrompt(enrichedContext);
 
   if (mode === 'quick') {
     instruction += MODE_INSTRUCTIONS.quick;
@@ -197,8 +263,9 @@ export default async function handler(req, res) {
     const typingPattern = typeof body.typingPattern === 'string' ? body.typingPattern.slice(0, 100) : '';
     const typingMood = typeof body.typingMood === 'string' ? body.typingMood.slice(0, 50) : '';
     const visitorId = typeof body.visitorId === 'string' ? body.visitorId.slice(0, 50) : '';
+    const sessionId = typeof body.sessionId === 'string' ? body.sessionId.slice(0, 50) : '';
 
-    // ── Fetch user profile from Supabase (non-blocking if fails) ──
+    // ── Fetch user profile from Supabase ──
     let profileData = null;
     if (visitorId) {
       profileData = await getProfile(visitorId).catch(() => null);
@@ -215,22 +282,25 @@ export default async function handler(req, res) {
       'sleep': /نوم|أرق|سهر|ما أنام|أنام/,
       'anxiety': /قلق|خوف|وسواس|هلع|بانيك/,
       'loneliness': /وحد|محد|وحيد|عزلة/,
-      'burnout': /احتراق|منهك|طاقت|بطارية/
+      'burnout': /احتراق|منهك|طاقت|بطارية/,
+      'grief': /توفى|فقدت|الله يرحم|واحشني|موت/,
+      'health': /مرض|عملية|مستشفى|دكتور|علاج/,
+      'identity': /مين أنا|ما أعرف نفسي|ضايع|هوية/
     };
     let detectedName = null;
+    let latestUserText = '';
     for (const msg of sanitizedContents) {
       if (msg.role === 'user' && msg.parts) {
         for (const p of msg.parts) {
           if (p.text) {
+            latestUserText = p.text;
             const g = detectGenderFromText(p.text);
             if (g) detectedGender = g;
-            // Detect topics
             for (const [topic, re] of Object.entries(topicPatterns)) {
               if (re.test(p.text) && !detectedTopics.includes(topic)) {
                 detectedTopics.push(topic);
               }
             }
-            // Detect name
             const nameMatch = p.text.match(/(?:أنا\s+اسمي|اسمي|أنا)\s+([^\s,،.!؟?]{2,15})/);
             if (nameMatch) {
               const excluded = ['بخير','تمام','تعبان','تعبانة','تعبانه','محتاج','محتاجة','زعلان','هنا','مو','مب','ما','بس','حاسه','حاسة'];
@@ -255,27 +325,14 @@ export default async function handler(req, res) {
       };
     }
 
-    // ── Phase 2: Inject learning data into profile ──
-    if (profileData) {
-      // Fetch top collective patterns for user's topics (Phase 3)
-      try {
-        const topicStr = (profileData.topics || detectedTopics || []).slice(0, 3).join(',');
-        if (topicStr) {
-          const patterns = await supabaseFetch(
-            'nafas_technique_patterns?topic=in.(' + encodeURIComponent(topicStr) + ',general)&avg_rating=gte.3.5&order=avg_rating.desc&limit=5',
-            'GET'
-          ).catch(() => null);
-          if (Array.isArray(patterns) && patterns.length > 0) {
-            profileData._collective_insights = patterns.map(p =>
-              p.technique + ' (نجاح ' + Math.round(p.avg_rating * 20) + '% في موضوع ' + p.topic + ')'
-            );
-          }
-        }
-      } catch(e) {}
+    // ── Phase 4/5/6: Load Enriched Context ──
+    let enrichedContext = { profile: profileData };
+    if (visitorId) {
+      enrichedContext = await loadEnrichedContext(visitorId, profileData).catch(() => ({ profile: profileData }));
     }
 
     const geminiBody = {
-      system_instruction: buildSystemInstruction(mode, deepStep, typingPattern, typingMood, profileData),
+      system_instruction: buildSystemInstruction(mode, deepStep, typingPattern, typingMood, enrichedContext),
       contents: sanitizedContents,
       generationConfig: {
         temperature: 0.85,
@@ -306,7 +363,8 @@ export default async function handler(req, res) {
 
     const geminiData = await geminiRes.json();
 
-    // ── Update profile asynchronously (non-blocking) ──
+    // ── Update profile + log conversation (non-blocking) ──
+    let modelResponseText = '';
     if (visitorId && profileData) {
       try {
         // Extract mood & techniques from response
@@ -316,8 +374,9 @@ export default async function handler(req, res) {
           try {
             const parsed = JSON.parse(geminiData.candidates[0].content.parts[0].text);
             mood = parsed.mood || '';
+            modelResponseText = parsed.response || '';
             // Detect techniques used in response
-            const respText = parsed.response || '';
+            const respText = modelResponseText;
             if (/نفس عميق|تنفس|4-7-8/.test(respText)) techniques.push('breathing');
             if (/تخيّل|تصور|لو صحيت/.test(respText)) techniques.push('visualization');
             if (/صديق|لو صاحب/.test(respText)) techniques.push('reframe');
@@ -325,6 +384,8 @@ export default async function handler(req, res) {
             if (/لاحظت|ذكرت/.test(respText)) techniques.push('reflection');
             if (/سؤال|إيش|شلون|ليش/.test(respText)) techniques.push('socratic');
             if (/قوة|شجاعة|بطل/.test(respText)) techniques.push('strength_finding');
+            if (/5 أشياء|تأريض|حولك/.test(respText)) techniques.push('grounding');
+            if (/اكتب|سجّل|يوميات/.test(respText)) techniques.push('journaling');
           } catch (e) { /* ignore */ }
         }
 
@@ -351,6 +412,12 @@ export default async function handler(req, res) {
 
         // Fire-and-forget — don't block response
         upsertProfile(updateData).catch(e => console.warn('Profile update failed:', e.message));
+
+        // Phase 4: Log conversation exchange
+        if (sessionId && latestUserText) {
+          logConversation(visitorId, sessionId, latestUserText, modelResponseText)
+            .catch(e => console.warn('Convo log failed:', e.message));
+        }
       } catch (e) {
         // Non-critical — don't affect the response
       }
