@@ -58,7 +58,7 @@ async function upsertProfile(profile) {
 // ── Gender Detection ──
 function detectGenderFromText(text) {
   if (!text) return null;
-  const femaleMarkers = /تعبانة|محتاجة|زعلانة|خايفة|حاسة|مقهورة|ضايقة|خايف[ةه]|أنا بنت|حامل|أم |أمي أنا|حاملة|مطلقة|متزوجة|عزباء|زوجي |ريلي /;
+  const femaleMarkers = /تعبان[ةه]|محتاج[ةه]|زعلان[ةه]|خايف[ةه]|حاس[ةه]|مقهور[ةه]|ضايق[ةه]|أنا بنت|حامل|أم |أمي أنا|حامل[ةه]|مطلق[ةه]|متزوج[ةه]|عزباء|زوجي |ريلي |يخليني متعب[ةه]|خلين[يى]/;
   const maleMarkers = /تعبان(?!ة)|محتاج(?!ة)|زعلان(?!ة)|خايف(?!ة)|حاس(?!ة)|مقهور(?!ة)|ضايق(?!ة)|أنا ولد|أنا رجال|أبوي|زوجتي|مطلق(?!ة)|متزوج(?!ة)|أعزب/;
   if (femaleMarkers.test(text)) return 'female';
   if (maleMarkers.test(text)) return 'male';
@@ -204,14 +204,38 @@ export default async function handler(req, res) {
       profileData = await getProfile(visitorId).catch(() => null);
     }
 
-    // ── Auto-detect gender from user messages ──
+    // ── Auto-detect gender & topics from user messages ──
     let detectedGender = null;
+    let detectedTopics = [];
+    const topicPatterns = {
+      'work': /شغل|عمل|مدير|وظيفة|راتب|مكتب|اجتماع|دوام/,
+      'family': /أهل|عائلة|أبوي|أمي|أخوي|أختي|ريلي|زوج/,
+      'relationship': /حب|علاقة|صاحب|صاحبة|كراش|خان|غوست/,
+      'study': /دراسة|امتحان|جامعة|مدرسة|واجب|منهج/,
+      'sleep': /نوم|أرق|سهر|ما أنام|أنام/,
+      'anxiety': /قلق|خوف|وسواس|هلع|بانيك/,
+      'loneliness': /وحد|محد|وحيد|عزلة/,
+      'burnout': /احتراق|منهك|طاقت|بطارية/
+    };
+    let detectedName = null;
     for (const msg of sanitizedContents) {
       if (msg.role === 'user' && msg.parts) {
         for (const p of msg.parts) {
           if (p.text) {
             const g = detectGenderFromText(p.text);
             if (g) detectedGender = g;
+            // Detect topics
+            for (const [topic, re] of Object.entries(topicPatterns)) {
+              if (re.test(p.text) && !detectedTopics.includes(topic)) {
+                detectedTopics.push(topic);
+              }
+            }
+            // Detect name
+            const nameMatch = p.text.match(/(?:أنا\s+اسمي|اسمي|أنا)\s+([^\s,،.!؟?]{2,15})/);
+            if (nameMatch) {
+              const excluded = ['بخير','تمام','تعبان','تعبانة','تعبانه','محتاج','محتاجة','زعلان','هنا','مو','مب','ما','بس','حاسه','حاسة'];
+              if (!excluded.includes(nameMatch[1])) detectedName = nameMatch[1];
+            }
           }
         }
       }
@@ -229,6 +253,25 @@ export default async function handler(req, res) {
         session_count: 1,
         dialect: 'khaleeji'
       };
+    }
+
+    // ── Phase 2: Inject learning data into profile ──
+    if (profileData) {
+      // Fetch top collective patterns for user's topics (Phase 3)
+      try {
+        const topicStr = (profileData.topics || detectedTopics || []).slice(0, 3).join(',');
+        if (topicStr) {
+          const patterns = await supabaseFetch(
+            'nafas_technique_patterns?topic=in.(' + encodeURIComponent(topicStr) + ',general)&avg_rating=gte.3.5&order=avg_rating.desc&limit=5',
+            'GET'
+          ).catch(() => null);
+          if (Array.isArray(patterns) && patterns.length > 0) {
+            profileData._collective_insights = patterns.map(p =>
+              p.technique + ' (نجاح ' + Math.round(p.avg_rating * 20) + '% في موضوع ' + p.topic + ')'
+            );
+          }
+        }
+      } catch(e) {}
     }
 
     const geminiBody = {
@@ -266,26 +309,44 @@ export default async function handler(req, res) {
     // ── Update profile asynchronously (non-blocking) ──
     if (visitorId && profileData) {
       try {
-        // Extract mood from response
+        // Extract mood & techniques from response
         let mood = '';
+        let techniques = [];
         if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
           try {
             const parsed = JSON.parse(geminiData.candidates[0].content.parts[0].text);
             mood = parsed.mood || '';
+            // Detect techniques used in response
+            const respText = parsed.response || '';
+            if (/نفس عميق|تنفس|4-7-8/.test(respText)) techniques.push('breathing');
+            if (/تخيّل|تصور|لو صحيت/.test(respText)) techniques.push('visualization');
+            if (/صديق|لو صاحب/.test(respText)) techniques.push('reframe');
+            if (/أسمع|هنا معا?ك|هنا معاش/.test(respText)) techniques.push('empathy');
+            if (/لاحظت|ذكرت/.test(respText)) techniques.push('reflection');
+            if (/سؤال|إيش|شلون|ليش/.test(respText)) techniques.push('socratic');
+            if (/قوة|شجاعة|بطل/.test(respText)) techniques.push('strength_finding');
           } catch (e) { /* ignore */ }
         }
 
+        // Merge topics (existing + new detected)
+        const existingTopics = profileData.topics || [];
+        const mergedTopics = [...new Set([...existingTopics, ...detectedTopics])].slice(-15);
+
+        const isFirstMessage = sanitizedContents.filter(m => m.role === 'user').length === 1;
         const updateData = {
           visitor_id: visitorId,
           gender: detectedGender || profileData.gender || 'unknown',
           dialect: profileData.dialect || 'khaleeji',
-          session_count: (profileData.session_count || 0) + (sanitizedContents.filter(m => m.role === 'user').length === 1 ? 1 : 0),
+          session_count: (profileData.session_count || 0) + (isFirstMessage ? 1 : 0),
+          total_sessions: (profileData.total_sessions || 0) + (isFirstMessage ? 1 : 0),
           last_mood: mood || profileData.last_mood || '',
-          display_name: profileData.display_name || '',
+          display_name: detectedName || profileData.display_name || '',
           corrections: profileData.corrections || [],
-          topics: profileData.topics || [],
+          topics: mergedTopics,
           preferences: profileData.preferences || {},
-          personality_notes: profileData.personality_notes || ''
+          personality_notes: profileData.personality_notes || '',
+          effective_techniques: profileData.effective_techniques || [],
+          avg_rating: profileData.avg_rating || 0
         };
 
         // Fire-and-forget — don't block response

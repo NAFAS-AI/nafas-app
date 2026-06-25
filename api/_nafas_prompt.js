@@ -931,6 +931,24 @@ export function buildFullPrompt(profileData) {
     if (profileData.personality_notes) {
       parts.push('ملاحظات: ' + profileData.personality_notes);
     }
+    // Phase 2: Effective techniques for this user
+    if (Array.isArray(profileData.effective_techniques) && profileData.effective_techniques.length > 0) {
+      parts.push('🧠 أساليب نجحت مع هذا المستخدم سابقاً (استخدميها أكثر!):');
+      profileData.effective_techniques.slice(-8).forEach(t => {
+        parts.push('  - ✅ ' + t.technique + ' (تقييم: ' + t.rating + '/5)');
+      });
+    }
+    // Phase 3: Collective intelligence insights
+    if (Array.isArray(profileData._collective_insights) && profileData._collective_insights.length > 0) {
+      parts.push('📊 أساليب نجحت مع مستخدمين مشابهين:');
+      profileData._collective_insights.forEach(insight => {
+        parts.push('  - ' + insight);
+      });
+    }
+    // Learning stats
+    if (profileData.total_sessions > 0) {
+      parts.push('📈 إحصائيات: ' + profileData.total_sessions + ' جلسة، متوسط التقييم: ' + (profileData.avg_rating || 'لا يوجد بعد'));
+    }
     const profileText = parts.length > 0 ? parts.join('\n') : 'لا يوجد ملف شخصي بعد — هذه أول جلسة.';
     prompt = prompt.replace('[NAFAS_USER_PROFILE]', profileText);
   } else {
