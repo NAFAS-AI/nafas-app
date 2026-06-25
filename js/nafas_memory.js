@@ -204,33 +204,41 @@ function processUserText(text) {
   if (!text || text.trim().length < 2) return;
   text = text.trim();
 
-  // Detect gender (must run before anything else)
+  // Collect all updates in one object to avoid race conditions
+  var updates = {};
+
+  // Detect gender
   var gender = detectGenderFromInput(text);
   if (gender && (!profile || profile.gender === 'unknown')) {
-    saveProfile({ gender: gender });
+    updates.gender = gender;
   }
 
   // Detect name
   var name = detectName(text);
   if (name && (!profile || !profile.display_name)) {
-    saveProfile({ display_name: name });
+    updates.display_name = name;
   }
 
   // Detect topics
   var topics = detectTopics(text);
-  if (topics.length > 0 && profile) {
-    var existing = profile.topics || [];
+  if (topics.length > 0) {
+    var existing = (profile && profile.topics) ? profile.topics : [];
     var merged = existing.concat(topics);
     // Keep unique, last 10
     merged = merged.filter(function(v, i, a) { return a.indexOf(v) === i; }).slice(-10);
-    saveProfile({ topics: merged });
+    updates.topics = merged;
   }
 
   // Increment session count on first user message of a session
   if (!window._nafasSessionCounted) {
     window._nafasSessionCounted = true;
     var currentCount = (profile && profile.session_count) ? profile.session_count : 0;
-    saveProfile({ session_count: currentCount + 1 });
+    updates.session_count = currentCount + 1;
+  }
+
+  // Single save call with all updates
+  if (Object.keys(updates).length > 0) {
+    saveProfile(updates);
   }
 }
 
