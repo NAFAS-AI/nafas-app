@@ -1,1 +1,303 @@
-Ly8gTmFmYXMg4oCUIEdlbWluaSBBSSBTZWN1cmUgUHJveHkgKFZlcmNlbCBTZXJ2ZXJsZXNzIEZ1bmN0aW9uKQovLyDCqSBNdW5pcmEgQWxpIEFsIE1hcnJpIDIwMjYKLy8gU2VjdXJpdHk6IFJhdGUgbGltaXRpbmcsIENPUlMsIGlucHV0IHZhbGlkYXRpb24sIHNhZmV0eSBmaWx0ZXJzLCBwcm9tcHQgcHJvdGVjdGlvbgovLyBTeXN0ZW0gcHJvbXB0IGlzIGluIF9uYWZhc19wcm9tcHQuanMgKHNlcnZlci1zaWRlIG9ubHksIG5ldmVyIGV4cG9zZWQpCgppbXBvcnQgeyBOQUZBU19TWVNURU1fUFJPTVBULCBNT0RFX0lOU1RSVUNUSU9OUyB9IGZyb20gJy4vX25hZmFzX3Byb21wdC5qcyc7Cgpjb25zdCBHRU1JTklfQVBJX0tFWSA9IHByb2Nlc3MuZW52LkdFTUlOSV9BUElfS0VZOwpjb25zdCBHRU1JTklfTU9ERUwgPSBwcm9jZXNzLmVudi5HRU1JTklfTU9ERUwgfHwgJ2dlbWluaS0yLjUtZmxhc2gnOwpjb25zdCBERUZBVUxUX09SSUdJTlMgPSBbCiAgJ2h0dHBzOi8vbmFmYXMtYXBwLWJsdXNoLnZlcmNlbC5hcHAnLAogICdodHRwczovL25hZmFzLWFwcC5jb20nLAogICdodHRwczovL3d3dy5uYWZhcy1hcHAuY29tJwpdOwpjb25zdCBlbnZPcmlnaW5zID0gKHByb2Nlc3MuZW52LkFMTE9XRURfT1JJR0lOUyB8fCAnJykuc3BsaXQoJywnKS5tYXAocyA9PiBzLnRyaW0oKSkuZmlsdGVyKEJvb2xlYW4pOwpjb25zdCBBTExPV0VEX09SSUdJTlMgPSBbLi4ubmV3IFNldChbLi4uREVGQVVMVF9PUklHSU5TLCAuLi5lbnZPcmlnaW5zXSldOwoKY29uc3QgcmF0ZU1hcCA9IG5ldyBNYXAoKTsKY29uc3QgUkFURV9MSU1JVCA9IDIwOwpjb25zdCBSQVRFX1dJTkRPVyA9IDYwMDAwOwpjb25zdCBNQVhfUkFURV9NQVAgPSAxMDAwMDsKCmZ1bmN0aW9uIGlzUmF0ZUxpbWl0ZWQoaXApIHsKICBjb25zdCBub3cgPSBEYXRlLm5vdygpOwogIGlmIChyYXRlTWFwLnNpemUgPiBNQVhfUkFURV9NQVApIHsKICAgIGZvciAoY29uc3QgW2tleSwgdmFsXSBvZiByYXRlTWFwKSB7CiAgICAgIGlmIChub3cgLSB2YWwuc3RhcnQgPiBSQVRFX1dJTkRPVykgcmF0ZU1hcC5kZWxldGUoa2V5KTsKICAgIH0KICB9CiAgY29uc3QgZW50cnkgPSByYXRlTWFwLmdldChpcCk7CiAgaWYgKCFlbnRyeSB8fCBub3cgLSBlbnRyeS5zdGFydCA+IFJBVEVfV0lORE9XKSB7CiAgICByYXRlTWFwLnNldChpcCwgeyBzdGFydDogbm93LCBjb3VudDogMSB9KTsKICAgIHJldHVybiBmYWxzZTsKICB9CiAgZW50cnkuY291bnQrKzsKICByZXR1cm4gZW50cnkuY291bnQgPiBSQVRFX0xJTUlUOwp9CgpmdW5jdGlvbiBnZXRDb3JzSGVhZGVycyhvcmlnaW4pIHsKICBpZiAoIW9yaWdpbiB8fCBBTExPV0VEX09SSUdJTlMubGVuZ3RoID09PSAwKSB7CiAgICByZXR1cm4gewogICAgICAnQWNjZXNzLUNvbnRyb2wtQWxsb3ctT3JpZ2luJzogJycsCiAgICAgICdBY2Nlc3MtQ29udHJvbC1BbGxvdy1NZXRob2RzJzogJ1BPU1QsIE9QVElPTlMnLAogICAgICAnQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycyc6ICdDb250ZW50LVR5cGUnLAogICAgICAnQWNjZXNzLUNvbnRyb2wtTWF4LUFnZSc6ICc4NjQwMCcsCiAgICB9OwogIH0KICByZXR1cm4gewogICAgJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbic6IEFMTE9XRURfT1JJR0lOUy5pbmNsdWRlcyhvcmlnaW4pID8gb3JpZ2luIDogJycsCiAgICAnQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcyc6ICdQT1NULCBPUFRJT05TJywKICAgICdBY2Nlc3MtQ29udHJvbC1BbGxvdy1IZWFkZXJzJzogJ0NvbnRlbnQtVHlwZScsCiAgICAnQWNjZXNzLUNvbnRyb2wtTWF4LUFnZSc6ICc4NjQwMCcsCiAgfTsKfQoKZnVuY3Rpb24gc2V0U2VjdXJpdHlIZWFkZXJzKHJlcykgewogIHJlcy5zZXRIZWFkZXIoJ1gtQ29udGVudC1UeXBlLU9wdGlvbnMnLCAnbm9zbmlmZicpOwogIHJlcy5zZXRIZWFkZXIoJ1gtRnJhbWUtT3B0aW9ucycsICdERU5ZJyk7CiAgcmVzLnNldEhlYWRlcignWC1YU1MtUHJvdGVjdGlvbicsICcxOyBtb2RlPWJsb2NrJyk7CiAgcmVzLnNldEhlYWRlcignUmVmZXJyZXItUG9saWN5JywgJ3N0cmljdC1vcmlnaW4td2hlbi1jcm9zcy1vcmlnaW4nKTsKICByZXMuc2V0SGVhZGVyKCdDYWNoZS1Db250cm9sJywgJ25vLXN0b3JlLCBuby1jYWNoZSwgbXVzdC1yZXZhbGlkYXRlJyk7CiAgcmVzLnNldEhlYWRlcignUHJhZ21hJywgJ25vLWNhY2hlJyk7Cn0KCmZ1bmN0aW9uIHNhbml0aXplSW5wdXQoY29udGVudHMpIHsKICBpZiAoIUFycmF5LmlzQXJyYXkoY29udGVudHMpKSByZXR1cm4gbnVsbDsKICByZXR1cm4gY29udGVudHMubWFwKGl0ZW0gPT4gewogICAgaWYgKCFpdGVtIHx8IHR5cGVvZiBpdGVtICE9PSAnb2JqZWN0JykgcmV0dXJuIG51bGw7CiAgICBjb25zdCBzYW5pdGl6ZWQgPSB7fTsKICAgIGlmIChpdGVtLnJvbGUgJiYgdHlwZW9mIGl0ZW0ucm9sZSA9PT0gJ3N0cmluZycpIHsKICAgICAgaWYgKCFbJ3VzZXInLCAnbW9kZWwnXS5pbmNsdWRlcyhpdGVtLnJvbGUpKSByZXR1cm4gbnVsbDsKICAgICAgc2FuaXRpemVkLnJvbGUgPSBpdGVtLnJvbGU7CiAgICB9CiAgICBpZiAoaXRlbS5wYXJ0cyAmJiBBcnJheS5pc0FycmF5KGl0ZW0ucGFydHMpKSB7CiAgICAgIHNhbml0aXplZC5wYXJ0cyA9IGl0ZW0ucGFydHMubWFwKHBhcnQgPT4gewogICAgICAgIGlmICghcGFydCB8fCB0eXBlb2YgcGFydCAhPT0gJ29iamVjdCcpIHJldHVybiBudWxsOwogICAgICAgIGlmICh0eXBlb2YgcGFydC50ZXh0ID09PSAnc3RyaW5nJykgcmV0dXJuIHsgdGV4dDogcGFydC50ZXh0IH07CiAgICAgICAgcmV0dXJuIG51bGw7CiAgICAgIH0pLmZpbHRlcihCb29sZWFuKTsKICAgIH0KICAgIHJldHVybiBzYW5pdGl6ZWQ7CiAgfSkuZmlsdGVyKEJvb2xlYW4pOwp9CgpmdW5jdGlvbiBidWlsZFN5c3RlbUluc3RydWN0aW9uKG1vZGUsIGRlZXBTdGVwLCB0eXBpbmdQYXR0ZXJuLCB0eXBpbmdNb29kKSB7CiAgbGV0IGluc3RydWN0aW9uID0gTkFGQVNfU1lTVEVNX1BST01QVDsKICBpZiAobW9kZSA9PT0gJ3F1aWNrJykgewogICAgaW5zdHJ1Y3Rpb24gKz0gTU9ERV9JTlNUUlVDVElPTlMucXVpY2s7CiAgfSBlbHNlIGlmIChtb2RlID09PSAnZGVlcCcpIHsKICAgIGNvbnN0IHFOdW0gPSAoZGVlcFN0ZXAgfHwgMCkgKyAxOwogICAgaW5zdHJ1Y3Rpb24gKz0gcU51bSA+IDUgPyBNT0RFX0lOU1RSVUNUSU9OUy5kZWVwX2ZpbmFsIDogTU9ERV9JTlNUUlVDVElPTlMuZGVlcF9hc2tpbmcocU51bSk7CiAgfSBlbHNlIGlmIChtb2RlID09PSAndmVudCcpIHsKICAgIGluc3RydWN0aW9uICs9IE1PREVfSU5TVFJVQ1RJT05TLnZlbnQ7CiAgfQogIGlmICh0eXBpbmdQYXR0ZXJuICYmIHR5cGluZ01vb2QpIHsKICAgIGluc3RydWN0aW9uICs9IGBcblxuVXNlciB0eXBpbmcgcGF0dGVybjogJHt0eXBpbmdQYXR0ZXJufSwgbW9vZCBpbmRpY2F0b3I6ICR7dHlwaW5nTW9vZH1gOwogIH0KICByZXR1cm4geyBwYXJ0czogW3sgdGV4dDogaW5zdHJ1Y3Rpb24gfV0gfTsKfQoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIGNvbnN0IHJlcXVlc3RJZCA9IGBuZnMtJHtEYXRlLm5vdygpfS0ke01hdGgucmFuZG9tKCkudG9TdHJpbmcoMzYpLnNsaWNlKDIsIDgpfWA7CiAgcmVzLnNldEhlYWRlcignWC1SZXF1ZXN0LUlkJywgcmVxdWVzdElkKTsKICBzZXRTZWN1cml0eUhlYWRlcnMocmVzKTsKCiAgY29uc3Qgb3JpZ2luID0gcmVxLmhlYWRlcnMub3JpZ2luIHx8ICcnOwogIGNvbnN0IGNvcnMgPSBnZXRDb3JzSGVhZGVycyhvcmlnaW4pOwogIE9iamVjdC5lbnRyaWVzKGNvcnMpLmZvckVhY2goKFtrLCB2XSkgPT4gcmVzLnNldEhlYWRlcihrLCB2KSk7CgogIGlmIChyZXEubWV0aG9kID09PSAnT1BUSU9OUycpIHJldHVybiByZXMuc3RhdHVzKDIwNCkuZW5kKCk7CiAgaWYgKHJlcS5tZXRob2QgIT09ICdQT1NUJykgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5qc29uKHsgZXJyb3I6ICdNZXRob2Qgbm90IGFsbG93ZWQnLCByZXF1ZXN0SWQgfSk7CgogIGlmIChvcmlnaW4gJiYgQUxMT1dFRF9PUklHSU5TLmxlbmd0aCA+IDAgJiYgIUFMTE9XRURfT1JJR0lOUy5pbmNsdWRlcyhvcmlnaW4pKSB7CiAgICBjb25zb2xlLndhcm4oYFske3JlcXVlc3RJZH1dIEJsb2NrZWQgb3JpZ2luOiAke29yaWdpbn1gKTsKICAgIHJldHVybiByZXMuc3RhdHVzKDQwMykuanNvbih7IGVycm9yOiAnT3JpZ2luIG5vdCBhbGxvd2VkJywgcmVxdWVzdElkIH0pOwogIH0KCiAgaWYgKCFHRU1JTklfQVBJX0tFWSkgewogICAgY29uc29sZS5lcnJvcihgWyR7cmVxdWVzdElkfV0gR0VNSU5JX0FQSV9LRVkgbm90IGNvbmZpZ3VyZWRgKTsKICAgIHJldHVybiByZXMuc3RhdHVzKDUwMCkuanNvbih7IGVycm9yOiAnU2VydmljZSBjb25maWd1cmF0aW9uIGVycm9yJywgcmVxdWVzdElkIH0pOwogIH0KCiAgY29uc3QgaXAgPSByZXEuaGVhZGVyc1sneC1mb3J3YXJkZWQtZm9yJ10/LnNwbGl0KCcsJylbMF0/LnRyaW0oKSB8fCByZXEuc29ja2V0Py5yZW1vdGVBZGRyZXNzIHx8ICd1bmtub3duJzsKICBpZiAoaXNSYXRlTGltaXRlZChpcCkpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDQyOSkuanNvbih7IGVycm9yOiAnUmF0ZSBsaW1pdCBleGNlZWRlZC4gUGxlYXNlIHdhaXQgYSBtb21lbnQuJywgcmVxdWVzdElkIH0pOwogIH0KCiAgdHJ5IHsKICAgIGNvbnN0IGJvZHkgPSByZXEuYm9keTsKICAgIGlmICghYm9keSB8fCAhYm9keS5jb250ZW50cyB8fCAhQXJyYXkuaXNBcnJheShib2R5LmNvbnRlbnRzKSkgewogICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogJ0ludmFsaWQgcmVxdWVzdDogY29udGVudHMgYXJyYXkgcmVxdWlyZWQnLCByZXF1ZXN0SWQgfSk7CiAgICB9CiAgICBpZiAoSlNPTi5zdHJpbmdpZnkoYm9keSkubGVuZ3RoID4gNTAwMDApIHsKICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAwKS5qc29uKHsgZXJyb3I6ICdSZXF1ZXN0IHRvbyBsYXJnZSAobWF4IDUwS0IpJywgcmVxdWVzdElkIH0pOwogIH0KCiAgICBjb25zdCBzYW5pdGl6ZWRDb250ZW50cyA9IHNhbml0aXplSW5wdXQoYm9keS5jb250ZW50cyk7CiAgICBpZiAoIXNhbml0aXplZENvbnRlbnRzIHx8IHNhbml0aXplZENvbnRlbnRzLmxlbmd0aCA9PT0gMCkgewogICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogJ0ludmFsaWQgY29udGVudCBmb3JtYXQnLCByZXF1ZXN0SWQgfSk7CiAgICB9CgogICAgY29uc3QgbW9kZSA9IHR5cGVvZiBib2R5Lm1vZGUgPT09ICdzdHJpbmcnID8gYm9keS5tb2RlIDogJyc7CiAgICBjb25zdCBkZWVwU3RlcCA9IHR5cGVvZiBib2R5LmRlZXBTdGVwID09PSAnbnVtYmVyJyA/IGJvZHkuZGVlcFN0ZXAgOiAwOwogICAgY29uc3QgdHlwaW5nUGF0dGVybiA9IHR5cGVvZiBib2R5LnR5cGluZ1BhdHRlcm4gPT09ICdzdHJpbmcnID8gYm9keS50eXBpbmdQYXR0ZXJuLnNsaWNlKDAsIDEwMCkgOiAnJzsKICAgIGNvbnN0IHR5cGluZ01vb2QgPSB0eXBlb2YgYm9keS50eXBpbmdNb29kID09PSAnc3RyaW5nJyA/IGJvZHkudHlwaW5nTW9vZC5zbGljZSgwLCA1MCkgOiAnJzsKCiAgICBjb25zdCBnZW1pbmlCb2R5ID0gewogICAgICBzeXN0ZW1faW5zdHJ1Y3Rpb246IGJ1aWxkU3lzdGVtSW5zdHJ1Y3Rpb24obW9kZSwgZGVlcFN0ZXAsIHR5cGluZ1BhdHRlcm4sIHR5cGluZ01vb2QpLAogICAgICBjb250ZW50czogc2FuaXRpemVkQ29udGVudHMsCiAgICAgIGdlbmVyYXRpb25Db25maWc6IHsKICAgICAgICB0ZW1wZXJhdHVyZTogMC44NSwKICAgICAgICB0b3BQOiAwLjk1LAogICAgICAgIG1heE91dHB1dFRva2VuczogNDAwLAogICAgICAgIHJlc3BvbnNlTWltZVR5cGU6ICdhcHBsaWNhdGlvbi9qc29uJwogICAgICB9LAogICAgICBzYWZldHlTZXR0aW5nczogWwogICAgICAgIHsgY2F0ZWdvcnk6ICdIQVJNX0NBVEVHT1JZX0hBUkFTU01FTlQnLCB0aHJlc2hvbGQ6ICdCTE9DS19NRURJVU1fQU5EX0FCT1ZFJyB9LAogICAgICAgIHsgY2F0ZWdvcnk6ICdIQVJNX0NBVEVHT1JZX0hBVEVfU1BFRUNIJywgdGhyZXNob2xkOiAnQkxPQ0tfTUVESVVNX0FORF9BQk9WRScgfSwKICAgICAgICB7IGNhdGVnb3J5OiAnSEFSTV9DQVRFR09SWV9TRVhVQUxMWV9FWFBMSUNJVCcsIHRocmVzaG9sZDogJ0JMT0NLX01FRElVTV9BTkRfQUJPVkUnIH0sCiAgICAgICAgeyBjYXRlZ29yeTogJ0hBUk1fQ0FURUdPUllfREFOR0VST1VTX0NPTlRFTlQnLCB0aHJlc2hvbGQ6ICdCTE9DS19PTkxZX0hJR0gnIH0sCiAgICAgIF0sCiAgICB9OwoKICAgIGNvbnN0IHVybCA9IGBodHRwczovL2dlbmVyYXRpdmVsYW5ndWFnZS5nb29nbGVhcGlzLmNvbS92MWJldGEvbW9kZWxzLyR7R0VNSU5JX01PREVMfTpnZW5lcmF0ZUNvbnRlbnQ/a2V5PSR7R0VNSU5JX0FQSV9LRVl9YDsKICAgIGNvbnN0IGdlbWluaVJlcyA9IGF3YWl0IGZldGNoKHVybCwgewogICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nIH0sCiAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KGdlbWluaUJvZHkpLAogICAgfSk7CgogICAgaWYgKCFnZW1pbmlSZXMub2spIHsKICAgICAgY29uc3QgZXJyVGV4dCA9IGF3YWl0IGdlbWluaVJlcy50ZXh0KCk7CiAgICAgIGNvbnNvbGUuZXJyb3IoYFske3JlcXVlc3RJZH1dIEdlbWluaSBlcnJvcjogJHtnZW1pbmlSZXMuc3RhdHVzfWAsIGVyclRleHQpOwogICAgICByZXR1cm4gcmVzLnN0YXR1cyg1MDIpLmpzb24oeyBlcnJvcjogJ0FJIHNlcnZpY2UgdGVtcG9yYXJpbHkgdW5hdmFpbGFibGUnLCByZXF1ZXN0SWQgfSk7CiAgICB9CgogICAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKGF3YWl0IGdlbWluaVJlcy5qc29uKCkpOwogIH0gY2F0Y2ggKGVycikgewogICAgY29uc29sZS5lcnJvcihgWyR7cmVxdWVzdElkfV0gUHJveHkgZXJyb3I6YCwgZXJyLm1lc3NhZ2UpOwogICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6ICdJbnRlcm5hbCBzZXJ2ZXIgZXJyb3InLCByZXF1ZXN0SWQgfSk7CiAgfQp9Cg==
+// Nafas — Gemini AI Secure Proxy with Memory System (Vercel Serverless Function)
+// © Munira Ali Al Marri 2026
+// Security: Rate limiting, CORS, input validation, safety filters, prompt protection
+// Memory: User profiles stored in Supabase for personalization across sessions
+
+import { buildFullPrompt, MODE_INSTRUCTIONS } from './_nafas_prompt.js';
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const DEFAULT_ORIGINS = [
+  'https://nafas-app-blush.vercel.app',
+  'https://nafas-app.com',
+  'https://www.nafas-app.com'
+];
+const envOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+const ALLOWED_ORIGINS = [...new Set([...DEFAULT_ORIGINS, ...envOrigins])];
+
+// ── Supabase Config ──
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://sqpbusodwdjtlgaxrreg.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGJ1c29kd2RqdGxnYXhycmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTQ2MDksImV4cCI6MjA5NTE5MDYwOX0.bglpaNzXgU4ufK7fuu5wMcvE6XYepD318C7mO54ML7I';
+
+async function supabaseFetch(path, method, body) {
+  if (!SUPABASE_KEY) return null;
+  const opts = {
+    method: method || 'GET',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation,resolution=merge-duplicates' : 'return=representation'
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+async function getProfile(visitorId) {
+  if (!visitorId || !SUPABASE_KEY) return null;
+  const data = await supabaseFetch(
+    'nafas_user_profiles?visitor_id=eq.' + encodeURIComponent(visitorId) + '&limit=1',
+    'GET'
+  );
+  return (Array.isArray(data) && data.length > 0) ? data[0] : null;
+}
+
+async function upsertProfile(profile) {
+  if (!profile || !profile.visitor_id || !SUPABASE_KEY) return;
+  profile.updated_at = new Date().toISOString();
+  await supabaseFetch('nafas_user_profiles', 'POST', profile);
+}
+
+// ── Gender Detection ──
+function detectGenderFromText(text) {
+  if (!text) return null;
+  const femaleMarkers = /تعبانة|محتاجة|زعلانة|خايفة|حاسة|مقهورة|ضايقة|خايف[ةه]|أنا بنت|حامل|أم |أمي أنا|حاملة|مطلقة|متزوجة|عزباء|زوجي |ريلي /;
+  const maleMarkers = /تعبان(?!ة)|محتاج(?!ة)|زعلان(?!ة)|خايف(?!ة)|حاس(?!ة)|مقهور(?!ة)|ضايق(?!ة)|أنا ولد|أنا رجال|أبوي|زوجتي|مطلق(?!ة)|متزوج(?!ة)|أعزب/;
+  if (femaleMarkers.test(text)) return 'female';
+  if (maleMarkers.test(text)) return 'male';
+  return null;
+}
+
+// ── Rate Limiting ──
+const rateMap = new Map();
+const RATE_LIMIT = 20;
+const RATE_WINDOW = 60000;
+const MAX_RATE_MAP = 10000;
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  if (rateMap.size > MAX_RATE_MAP) {
+    for (const [key, val] of rateMap) {
+      if (now - val.start > RATE_WINDOW) rateMap.delete(key);
+    }
+  }
+  const entry = rateMap.get(ip);
+  if (!entry || now - entry.start > RATE_WINDOW) {
+    rateMap.set(ip, { start: now, count: 1 });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
+function getCorsHeaders(origin) {
+  if (!origin || ALLOWED_ORIGINS.length === 0) {
+    return {
+      'Access-Control-Allow-Origin': '',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    };
+  }
+  return {
+    'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : '',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
+
+function setSecurityHeaders(res) {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+}
+
+function sanitizeInput(contents) {
+  if (!Array.isArray(contents)) return null;
+  return contents.map(item => {
+    if (!item || typeof item !== 'object') return null;
+    const sanitized = {};
+    if (item.role && typeof item.role === 'string') {
+      if (!['user', 'model'].includes(item.role)) return null;
+      sanitized.role = item.role;
+    }
+    if (item.parts && Array.isArray(item.parts)) {
+      sanitized.parts = item.parts.map(part => {
+        if (!part || typeof part !== 'object') return null;
+        if (typeof part.text === 'string') return { text: part.text };
+        return null;
+      }).filter(Boolean);
+    }
+    return sanitized;
+  }).filter(Boolean);
+}
+
+function buildSystemInstruction(mode, deepStep, typingPattern, typingMood, profileData) {
+  // Use buildFullPrompt to inject user profile into the prompt
+  let instruction = buildFullPrompt(profileData);
+
+  if (mode === 'quick') {
+    instruction += MODE_INSTRUCTIONS.quick;
+  } else if (mode === 'deep') {
+    const qNum = (deepStep || 0) + 1;
+    instruction += qNum > 5 ? MODE_INSTRUCTIONS.deep_final : MODE_INSTRUCTIONS.deep_asking(qNum);
+  } else if (mode === 'vent') {
+    instruction += MODE_INSTRUCTIONS.vent;
+  }
+  if (typingPattern && typingMood) {
+    instruction += `\n\nUser typing pattern: ${typingPattern}, mood indicator: ${typingMood}`;
+  }
+  return { parts: [{ text: instruction }] };
+}
+
+export default async function handler(req, res) {
+  const requestId = `nfs-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  res.setHeader('X-Request-Id', requestId);
+  setSecurityHeaders(res);
+
+  const origin = req.headers.origin || '';
+  const cors = getCorsHeaders(origin);
+  Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v));
+
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed', requestId });
+
+  if (origin && ALLOWED_ORIGINS.length > 0 && !ALLOWED_ORIGINS.includes(origin)) {
+    console.warn(`[${requestId}] Blocked origin: ${origin}`);
+    return res.status(403).json({ error: 'Origin not allowed', requestId });
+  }
+
+  if (!GEMINI_API_KEY) {
+    console.error(`[${requestId}] GEMINI_API_KEY not configured`);
+    return res.status(500).json({ error: 'Service configuration error', requestId });
+  }
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Rate limit exceeded. Please wait a moment.', requestId });
+  }
+
+  try {
+    const body = req.body;
+    if (!body || !body.contents || !Array.isArray(body.contents)) {
+      return res.status(400).json({ error: 'Invalid request: contents array required', requestId });
+    }
+    if (JSON.stringify(body).length > 50000) {
+      return res.status(400).json({ error: 'Request too large (max 50KB)', requestId });
+    }
+
+    const sanitizedContents = sanitizeInput(body.contents);
+    if (!sanitizedContents || sanitizedContents.length === 0) {
+      return res.status(400).json({ error: 'Invalid content format', requestId });
+    }
+
+    const mode = typeof body.mode === 'string' ? body.mode : '';
+    const deepStep = typeof body.deepStep === 'number' ? body.deepStep : 0;
+    const typingPattern = typeof body.typingPattern === 'string' ? body.typingPattern.slice(0, 100) : '';
+    const typingMood = typeof body.typingMood === 'string' ? body.typingMood.slice(0, 50) : '';
+    const visitorId = typeof body.visitorId === 'string' ? body.visitorId.slice(0, 50) : '';
+
+    // ── Fetch user profile from Supabase (non-blocking if fails) ──
+    let profileData = null;
+    if (visitorId) {
+      profileData = await getProfile(visitorId).catch(() => null);
+    }
+
+    // ── Auto-detect gender from user messages ──
+    let detectedGender = null;
+    for (const msg of sanitizedContents) {
+      if (msg.role === 'user' && msg.parts) {
+        for (const p of msg.parts) {
+          if (p.text) {
+            const g = detectGenderFromText(p.text);
+            if (g) detectedGender = g;
+          }
+        }
+      }
+    }
+
+    // Update profile with detected gender if new
+    if (detectedGender && profileData && profileData.gender === 'unknown') {
+      profileData.gender = detectedGender;
+    }
+    // Create profile if not exists
+    if (!profileData && visitorId) {
+      profileData = {
+        visitor_id: visitorId,
+        gender: detectedGender || 'unknown',
+        session_count: 1,
+        dialect: 'khaleeji'
+      };
+    }
+
+    const geminiBody = {
+      system_instruction: buildSystemInstruction(mode, deepStep, typingPattern, typingMood, profileData),
+      contents: sanitizedContents,
+      generationConfig: {
+        temperature: 0.85,
+        topP: 0.95,
+        maxOutputTokens: 400,
+        responseMimeType: 'application/json'
+      },
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
+      ],
+    };
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    const geminiRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(geminiBody),
+    });
+
+    if (!geminiRes.ok) {
+      const errText = await geminiRes.text();
+      console.error(`[${requestId}] Gemini error: ${geminiRes.status}`, errText);
+      return res.status(502).json({ error: 'AI service temporarily unavailable', requestId });
+    }
+
+    const geminiData = await geminiRes.json();
+
+    // ── Update profile asynchronously (non-blocking) ──
+    if (visitorId && profileData) {
+      try {
+        // Extract mood from response
+        let mood = '';
+        if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
+          try {
+            const parsed = JSON.parse(geminiData.candidates[0].content.parts[0].text);
+            mood = parsed.mood || '';
+          } catch (e) { /* ignore */ }
+        }
+
+        const updateData = {
+          visitor_id: visitorId,
+          gender: detectedGender || profileData.gender || 'unknown',
+          dialect: profileData.dialect || 'khaleeji',
+          session_count: (profileData.session_count || 0) + (sanitizedContents.filter(m => m.role === 'user').length === 1 ? 1 : 0),
+          last_mood: mood || profileData.last_mood || '',
+          display_name: profileData.display_name || '',
+          corrections: profileData.corrections || [],
+          topics: profileData.topics || [],
+          preferences: profileData.preferences || {},
+          personality_notes: profileData.personality_notes || ''
+        };
+
+        // Fire-and-forget — don't block response
+        upsertProfile(updateData).catch(e => console.warn('Profile update failed:', e.message));
+      } catch (e) {
+        // Non-critical — don't affect the response
+      }
+    }
+
+    return res.status(200).json(geminiData);
+  } catch (err) {
+    console.error(`[${requestId}] Proxy error:`, err.message);
+    return res.status(500).json({ error: 'Internal server error', requestId });
+  }
+}

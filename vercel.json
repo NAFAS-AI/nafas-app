@@ -3,7 +3,8 @@
   "rewrites": [
     { "source": "/api/gemini", "destination": "/api/gemini.js" },
     { "source": "/api/nafas-emotion", "destination": "/api/nafas-emotion.js" },
-    { "source": "/api/tts", "destination": "/api/tts.js" }
+    { "source": "/api/tts", "destination": "/api/tts.js" },
+    { "source": "/api/user-profile", "destination": "/api/user-profile.js" }
   ],
   "headers": [
     {
