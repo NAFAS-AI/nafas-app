@@ -204,6 +204,12 @@ function processUserText(text) {
   if (!text || text.trim().length < 2) return;
   text = text.trim();
 
+  // Detect gender (must run before anything else)
+  var gender = detectGenderFromInput(text);
+  if (gender && (!profile || profile.gender === 'unknown')) {
+    saveProfile({ gender: gender });
+  }
+
   // Detect name
   var name = detectName(text);
   if (name && (!profile || !profile.display_name)) {
@@ -218,6 +224,13 @@ function processUserText(text) {
     // Keep unique, last 10
     merged = merged.filter(function(v, i, a) { return a.indexOf(v) === i; }).slice(-10);
     saveProfile({ topics: merged });
+  }
+
+  // Increment session count on first user message of a session
+  if (!window._nafasSessionCounted) {
+    window._nafasSessionCounted = true;
+    var currentCount = (profile && profile.session_count) ? profile.session_count : 0;
+    saveProfile({ session_count: currentCount + 1 });
   }
 }
 
