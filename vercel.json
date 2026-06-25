@@ -1,12 +1,19 @@
 {
   "version": 2,
-  "framework": null,
   "rewrites": [
     { "source": "/api/gemini", "destination": "/api/gemini.js" },
     { "source": "/api/nafas-emotion", "destination": "/api/nafas-emotion.js" },
     { "source": "/api/tts", "destination": "/api/tts.js" },
     { "source": "/api/user-profile", "destination": "/api/user-profile.js" },
-    { "source": "/api/session-feedback", "destination": "/api/session-feedback.js" }
+    { "source": "/api/session-feedback", "destination": "/api/session-feedback.js" },
+    { "source": "/api/session-summary", "destination": "/api/session-summary.js" },
+    { "source": "/api/learn", "destination": "/api/learn.js" }
+  ],
+  "crons": [
+    {
+      "path": "/api/learn",
+      "schedule": "0 3 * * *"
+    }
   ],
   "headers": [
     {
