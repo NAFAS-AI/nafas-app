@@ -48,7 +48,7 @@ async function summarizeWithGemini(messages) {
 
   const conversationText = messages.map(m => {
     const role = m.role === 'user' ? 'المستخدم' : 'نَفَس';
-    return `${role}: ${m.text}`;
+    return `${role}: ${m.text || m.content || m.message || ''}`;
   }).join('\n');
 
   const prompt = `أنتِ محرّك تحليل لمحادثات تطبيق "نَفَس" للدعم النفسي.
