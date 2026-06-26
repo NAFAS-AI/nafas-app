@@ -616,6 +616,12 @@ export default async function handler(req, res) {
       if (isCrisisMsg) {
         fallback = 'اللي تحس فيه حقيقي ومهم... وأنا هني وياك. ما أنت لحالك في هذا أبداً.' + CRISIS_HELPLINES;
       }
+      // Still log the classified exchange even on fallback — don't lose data
+      if (visitorId && latestUserText) {
+        await logConversation(visitorId, sessionId, latestUserText, fallback, '')
+          .catch(e => console.warn('Fallback convo log failed:', e.message));
+      }
+
       return res.status(200).json({
         candidates: [{ content: { parts: [{ text: JSON.stringify({ response: fallback, mood: 'support', vak: 'mixed', score: 3, crisis: isCrisisMsg }) }] } }],
         _fallback: true, requestId
