@@ -31,14 +31,24 @@ async function supabaseFetch(path, method, body) {
   if (body) opts.body = JSON.stringify(body);
   try {
     const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error('[SESSION] Supabase error:', res.status, await res.text().catch(() => ''));
+      return null;
+    }
     return await res.json();
-  } catch (e) { return null; }
+  } catch (e) {
+    console.error('[SESSION] Supabase fetch error:', e.message);
+    return null;
+  }
 }
 
 // Summarize conversation using Gemini
 async function summarizeWithGemini(messages) {
-  if (!GEMINI_API_KEY || !messages || messages.length === 0) return null;
+  if (!GEMINI_API_KEY) {
+    console.error('[SESSION] GEMINI_API_KEY not set!');
+    return null;
+  }
+  if (!messages || messages.length === 0) return null;
 
   const conversationText = messages.map(m => {
     const role = m.role === 'user' ? 'المستخدم' : 'نَفَس';
@@ -65,6 +75,7 @@ ${conversationText}
 
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    console.log('[SESSION] Calling Gemini model:', GEMINI_MODEL);
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -78,13 +89,21 @@ ${conversationText}
       })
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => '');
+      console.error('[SESSION] Gemini API error:', res.status, errBody.slice(0, 500));
+      return null;
+    }
     const data = await res.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return null;
+    if (!text) {
+      console.error('[SESSION] Gemini returned no text. Response:', JSON.stringify(data).slice(0, 500));
+      return null;
+    }
+    console.log('[SESSION] Gemini analysis complete');
     return JSON.parse(text);
   } catch (e) {
-    console.error('Gemini summary error:', e.message);
+    console.error('[SESSION] Gemini error:', e.message);
     return null;
   }
 }
@@ -119,10 +138,11 @@ export default async function handler(req, res) {
     }
 
     // 1. Summarize with Gemini
+    console.log('[SESSION] Starting summary for session:', session_id);
     const analysis = await summarizeWithGemini(messages);
 
     if (!analysis) {
-      // Fallback: save basic summary without AI
+      console.error('[SESSION] Gemini analysis failed — using fallback');
       const fallbackSummary = {
         visitor_id,
         session_id,
@@ -137,7 +157,7 @@ export default async function handler(req, res) {
         mood_rating: mood_rating || null
       };
       await supabaseFetch('nafas_session_summaries', 'POST', fallbackSummary);
-      return res.status(200).json({ ok: true, summary: fallbackSummary });
+      return res.status(200).json({ ok: true, fallback: true, summary: fallbackSummary });
     }
 
     // 2. Save session summary
@@ -157,13 +177,12 @@ export default async function handler(req, res) {
 
     await supabaseFetch('nafas_session_summaries', 'POST', summary);
 
-    // 3. Save classified conversation log — NO raw text (privacy-first architecture)
-    // Only save one summary entry per session, not individual messages
+    // 3. Save classified conversation log — NO raw text (privacy-first)
     const classifiedEntry = {
       visitor_id,
       session_id,
       role: 'session_summary',
-      message_text: null,  // Privacy: raw text NEVER stored
+      message_text: null,
       detected_emotion: (analysis.emotional_arc || '').slice(0, 200),
       detected_topics: analysis.key_topics || []
     };
@@ -178,10 +197,10 @@ export default async function handler(req, res) {
             meaning: (v.meaning || '').slice(0, 200),
             dialect: v.dialect || 'unknown',
             category: v.category || 'expression',
-            example_context: `session:${session_id}`,  // Privacy: no raw text, only session ref
+            example_context: `session:${session_id}`,
             frequency: 1,
             confidence: 0.5
-          }).catch(() => {}); // Ignore duplicates
+          }).catch(() => {});
         }
       }
     }
@@ -236,7 +255,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ ok: true, summary });
   } catch (err) {
-    console.error('Session summary error:', err.message);
-    return res.status(500).json({ error: 'Internal error' });
+    console.error('[SESSION] Error:', err.message, err.stack);
+    return res.status(500).json({ error: 'Internal error', details: err.message });
   }
 }

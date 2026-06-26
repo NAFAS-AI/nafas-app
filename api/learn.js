@@ -27,13 +27,22 @@ async function supabaseFetch(path, method, body) {
   if (body) opts.body = JSON.stringify(body);
   try {
     const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error('[LEARN] Supabase error:', res.status, await res.text().catch(() => ''));
+      return null;
+    }
     return await res.json();
-  } catch (e) { return null; }
+  } catch (e) {
+    console.error('[LEARN] Supabase fetch error:', e.message);
+    return null;
+  }
 }
 
 async function analyzeWithGemini(prompt) {
-  if (!GEMINI_API_KEY) return null;
+  if (!GEMINI_API_KEY) {
+    console.error('[LEARN] GEMINI_API_KEY not set');
+    return null;
+  }
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
     const res = await fetch(url, {
@@ -48,29 +57,32 @@ async function analyzeWithGemini(prompt) {
         }
       })
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.error('[LEARN] Gemini API error:', res.status, errText.slice(0, 500));
+      return null;
+    }
     const data = await res.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    return text ? JSON.parse(text) : null;
+    if (!text) {
+      console.error('[LEARN] Gemini returned no text. Candidates:', JSON.stringify(data.candidates?.slice(0, 1)).slice(0, 500));
+      return null;
+    }
+    return JSON.parse(text);
   } catch (e) {
-    console.error('Gemini learn error:', e.message);
+    console.error('[LEARN] Gemini error:', e.message);
     return null;
   }
 }
 
 // ── Learning Module 1: Vocabulary Promotion ──
-// Privacy-first: raw text is NEVER stored. Vocabulary candidates are
-// detected inline (gemini_new.js) with confidence=0.3, category='pending_review'.
-// This module promotes them using Gemini to classify meaning/dialect.
 async function learnVocabulary(conversations) {
-  // Get pending vocabulary candidates (detected during conversations)
   const pendingVocab = await supabaseFetch(
     'nafas_learned_vocabulary?category=eq.pending_review&limit=50',
     'GET'
   );
   if (!pendingVocab || pendingVocab.length === 0) return { added: 0, promoted: 0 };
 
-  // Get existing confirmed vocabulary
   const existingVocab = await supabaseFetch(
     'nafas_learned_vocabulary?select=word&category=neq.pending_review&limit=500',
     'GET'
@@ -105,25 +117,25 @@ ${pendingWords.join(', ')}
 }`;
 
   const result = await analyzeWithGemini(prompt);
-  let promoted = 0;
+  let added = 0;
 
   if (result?.vocabulary) {
     for (const v of result.vocabulary) {
       if (!v.word || !v.useful) continue;
-      // Update the pending entry to confirmed
       await supabaseFetch('nafas_learned_vocabulary', 'POST', {
         word: v.word.slice(0, 50),
-      meaning: (v.meaning || '').slice(0, 200),
-      dialect: v.dialect || 'unknown',
-      category: v.category || 'expression',
-      example_context: (v.usage_tip || '').slice(0, 200),
-      frequency: 1,
-      confidence: 0.6
-    }).catch(() => {});
-    added++;
+        meaning: (v.meaning || '').slice(0, 200),
+        dialect: v.dialect || 'unknown',
+        category: v.category || 'expression',
+        example_context: (v.usage_tip || '').slice(0, 200),
+        frequency: 1,
+        confidence: 0.6
+      }).catch(() => {});
+      added++;
+    }
   }
 
-  return { added };
+  return { added, promoted: added };
 }
 
 // ── Learning Module 2: Pattern Discovery ──
@@ -154,8 +166,8 @@ ${summaryTexts.slice(0, 4000)}
       "type": "timing/correlation/cultural/effectiveness/improvement",
       "title": "عنوان قصير",
       "description": "وصف تفصيلي",
-      "confidence": 0.5-1.0,
-      "actionable": true/false
+      "confidence": 0.7,
+      "actionable": true
     }
   ],
   "self_improvements": [
@@ -173,17 +185,14 @@ ${summaryTexts.slice(0, 4000)}
 
   let discovered = 0;
 
-  // Save patterns as collective insights
   if (result.patterns) {
     for (const p of result.patterns) {
       if (!p.title) continue;
-      // Check if similar insight exists
       const existing = await supabaseFetch(
         'nafas_collective_insights?title=eq.' + encodeURIComponent(p.title) + '&limit=1',
         'GET'
       );
       if (Array.isArray(existing) && existing.length > 0) {
-        // Reinforce existing insight
         const e = existing[0];
         await supabaseFetch('nafas_collective_insights', 'POST', {
           id: e.id,
@@ -209,7 +218,6 @@ ${summaryTexts.slice(0, 4000)}
     }
   }
 
-  // Save self-improvements
   if (result.self_improvements) {
     for (const si of result.self_improvements) {
       if (!si.insight) continue;
@@ -233,7 +241,6 @@ async function optimizeTechniques(summaries) {
   if (!summaries || summaries.length < 2) return { updated: 0 };
 
   let updated = 0;
-  // Aggregate technique results from summaries
   const techMap = {};
 
   for (const s of summaries) {
@@ -256,7 +263,6 @@ async function optimizeTechniques(summaries) {
     }
   }
 
-  // Update database
   for (const [key, data] of Object.entries(techMap)) {
     const avgRating = data.ratings.reduce((a, b) => a + b, 0) / data.ratings.length;
     const existing = await supabaseFetch(
@@ -303,12 +309,10 @@ async function optimizeTechniques(summaries) {
 
 // ── Main Handler ──
 export default async function handler(req, res) {
-  // Allow GET for Vercel Cron
   if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'POST or GET only' });
   }
 
-  // Verify cron secret for GET requests (Vercel Cron)
   if (req.method === 'GET') {
     const authHeader = req.headers.authorization;
     const cronSecret = process.env.CRON_SECRET;
@@ -320,19 +324,16 @@ export default async function handler(req, res) {
   try {
     console.log('[LEARN] Starting learning cycle...');
 
-    // 1. Fetch recent session summaries (last 24 hours for cron, or all unprocessed)
     const summaries = await supabaseFetch(
       'nafas_session_summaries?order=created_at.desc&limit=50',
       'GET'
     );
 
-    // 2. Fetch recent conversations
     const conversations = await supabaseFetch(
       'nafas_conversation_log?order=created_at.desc&limit=200',
       'GET'
     );
 
-    // 3. Run learning modules
     const vocabResult = await learnVocabulary(conversations || []);
     console.log('[LEARN] Vocabulary:', vocabResult);
 
@@ -342,13 +343,12 @@ export default async function handler(req, res) {
     const techResult = await optimizeTechniques(summaries || []);
     console.log('[LEARN] Techniques:', techResult);
 
-    // 4. Return results
     const result = {
       ok: true,
       timestamp: new Date().toISOString(),
       sessions_analyzed: (summaries || []).length,
       conversations_analyzed: (conversations || []).length,
-      vocabulary_added: vocabResult.added,
+      vocabulary_added: vocabResult.added || 0,
       patterns_discovered: patternResult.discovered,
       techniques_updated: techResult.updated
     };
@@ -356,7 +356,7 @@ export default async function handler(req, res) {
     console.log('[LEARN] Complete:', result);
     return res.status(200).json(result);
   } catch (err) {
-    console.error('[LEARN] Error:', err.message);
-    return res.status(500).json({ error: 'Learning engine error' });
+    console.error('[LEARN] Error:', err.message, err.stack);
+    return res.status(500).json({ error: 'Learning engine error', details: err.message });
   }
 }
