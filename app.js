@@ -53,6 +53,18 @@ window.onunhandledrejection = function(event) {
 const SUPA_URL = 'https://sqpbusodwdjtlgaxrreg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGJ1c29kd2RqdGxnYXhycmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTQ2MDksImV4cCI6MjA5NTE5MDYwOX0.bglpaNzXgU4ufK7fuu5wMcvE6XYepD318C7mO54ML7I';
 
+// === VISITOR ID — persistent across sessions ===
+function getOrCreateVisitorId() {
+  var stored = localStorage.getItem('nafas_visitor_id');
+  if (stored && stored.startsWith('v_')) return stored;
+  var ts = Date.now().toString(36);
+  var rand = Math.random().toString(36).slice(2, 8);
+  var vid = 'v_' + ts + '_' + rand;
+  localStorage.setItem('nafas_visitor_id', vid);
+  return vid;
+}
+const NAFAS_VISITOR_ID = getOrCreateVisitorId();
+
 const state = {
   lang:'ar', mode:null, messages:[], vakPattern:'mixed',
   vakCounts:{v:0,a:0,k:0}, burnoutLevel:1, burnoutScore:0,
@@ -265,7 +277,9 @@ async function callGeminiAI(userMessage, mode) {
         mode: mode,
         deepStep: state.deepStep || 0,
         typingPattern: typingData ? typingData.pattern : '',
-        typingMood: typingData ? typingData.mood : ''
+        typingMood: typingData ? typingData.mood : '',
+        visitorId: NAFAS_VISITOR_ID,
+        sessionId: state.sessionId || ''
       })
     });
 
@@ -304,32 +318,32 @@ async function callGeminiAI(userMessage, mode) {
    ============================================================ */
 const i18n = {
   ar:{
-    appName:'نَفَس',tagline:'يفهمكِ من كلامكِ',
+    appName:'نَفَس',tagline:'يفهمك من كلامك',
     modes:{quick:{title:'⚡ تحقق سريع',desc:'سؤال واحد • 30 ثانية'},vent:{title:'💙 فضفضة حرة',desc:'أنا أسمع • بلا أسئلة'},deep:{title:'📊 تقييم عميق',desc:'محادثة • 5-10 دقائق'},demo:{title:'🎪 وضع العرض',desc:'عرض سريع • للمعارض'}},
-    sessions:n=>n===0?'لا جلسات سابقة':`${n} جلسة سابقة محفوظة`,
-    sendPlaceholder:'اكتبي هنا... (Enter للإرسال)',
+    sessions:n=>n===0?'':`${n} جلسة سابقة محفوظة`,
+    sendPlaceholder:'اكتب هنا... (Enter للإرسال)',
     voiceOn:'🔊 الصوت مفعّل',voiceOff:'🔇 الصوت مُعطّل',
     themeLight:'☀️ الوضع الفاتح',themeDark:'🌙 الوضع الداكن',
     langToggle:'🌐 العربية / English',
-    exportBtn:'📤 شاركي مع معالجكِ',
+    exportBtn:'📤 شارك مع معالجك',
     tour:'🎯 جولة تعريفية', journeyLink:'🔑 لديّ رمز رحلة',
     vakLabels:{visual:'👁️ بصري',auditory:'👂 سمعي',kinesthetic:'🤲 حسّي',mixed:'🌟 متنوع'},
-    levels:['','تعب خفيف','إرهاق متوسط','إرهاق واضح','إرهاق شديد','أزمة — أنتِ لستِ وحدكِ'],
+    levels:['','تعب خفيف','إرهاق متوسط','إرهاق واضح','إرهاق شديد','أزمة — لست وحدك'],
     resources:'الموارد والمساعدة',
     disclaimer:'هذه الأداة للدعم الوجداني وليست بديلاً عن الرعاية الطبية أو النفسية المتخصصة.',
-    saveMsg:'💾 تم حفظ جلستكِ',newSession:'🔄 جلسة جديدة بدأت',
-    crisisText:'💙 أنتِ لستِ وحدكِ... هناك من يسمعكِ الآن',
-    crisisResponse:'ما كتبتِه وصلني... وأنا هنا معكِ. أنتِ لستِ وحدكِ في هذا 💙 أرقام الدعم في الشريط أعلاه — هناك من يسمعكِ الآن.',
-    journeySave:'هل تريدين حفظ رحلتكِ للعودة لاحقاً؟',
+    saveMsg:'💾 تم حفظ جلستك',newSession:'🔄 جلسة جديدة بدأت',
+    crisisText:'💙 لست وحدك... هناك من يسمعك الآن',
+    crisisResponse:'ما كتبته وصلني... وأنا هنا معك. لست وحدك في هذا 💙 أرقام الدعم في الشريط أعلاه — هناك من يسمعك الآن.',
+    journeySave:'هل تريد حفظ رحلتك للعودة لاحقاً؟',
     journeySaveCode:'احفظي هذا الرمز:',
-    journeySaveNote:'أدخليه لاحقاً لتري رحلتكِ',
-    journeyTitle:'📍 رحلتي',journeyNew:'ابدأي جلسة جديدة',
+    journeySaveNote:'أدخليه لاحقاً لتري رحلتك',
+    journeyTitle:'📍 رحلتي',journeyNew:'ابدأ جلسة جديدة',
     journeyTotal:'إجمالي الجلسات',journeyAvg:'متوسط الإرهاق',journeyDominant:'النمط السائد',
     chartTitle:'مستوى الإرهاق عبر الزمن',
     exportTitle:'📤 ملخص الجلسة',exportCopy:'📋 نسخ للحافظة',exportCopied:'✅ تم النسخ!',
-    deeperQ:'📊 هل تريدين تقييماً أعمق؟', ventQ:'💙 أريد فضفضة',
-    returnWelcome:d=>`أهلاً بعودتكِ 💙 آخر جلسة كانت ${d}`,
-    welcomeBack:'مرحباً بعودتكِ 💙',
+    deeperQ:'📊 هل تريد تقييماً أعمق؟', ventQ:'💙 أريد فضفضة',
+    returnWelcome:d=>`أهلاً بعودتك 💙 آخر جلسة كانت ${d}`,
+    welcomeBack:'مرحباً بعودتك 💙',
     yes:'نعم',no:'لا'
   },
   en:{
@@ -368,12 +382,12 @@ const i18n = {
    ============================================================ */
 const tourSteps = {
   ar:[
-    {title:'مرحباً في نَفَس',text:'أداة الدعم العاطفي الذكية التي تفهمكِ من كلامكِ'},
-    {title:'ثلاثة أوضاع',text:'اختاري الوضع المناسب لكِ الآن — سريع، فضفضة، أو تقييم عميق'},
-    {title:'الصوت الذكي',text:'نَفَس يتحدث إليكِ بنبرة تتكيّف مع حالتكِ — هادئة إن كنتِ مرهقة، دافئة دائماً'},
+    {title:'مرحباً في نَفَس',text:'أداة الدعم العاطفي الذكية التي تفهمك من كلامك'},
+    {title:'ثلاثة أوضاع',text:'اختر الوضع المناسب لك الآن — سريع، فضفضة، أو تقييم عميق'},
+    {title:'الصوت الذكي',text:'نَفَس يتحدث إليك بنبرة تتكيّف مع حالتك — هادئة إن كنت مرهقاً، دافئة دائماً'},
     {title:'زر المساعدة',text:'في أي وقت — اضغطي هنا لموارد فعلية وأرقام دعم'},
-    {title:'الإعدادات ⚙️',text:'غيّري اللغة أو المظهر أو شاركي نتائجكِ مع معالجكِ'},
-    {title:'رحلتكِ',text:'بعد كل جلسة يمكنكِ حفظ رمز رحلتكِ لتتابعي تقدّمكِ لاحقاً'}
+    {title:'الإعدادات ⚙️',text:'غيّر اللغة أو المظهر أو شارك نتائجك مع معالجك'},
+    {title:'رحلتك',text:'بعد كل جلسة يمكنك حفظ رمز رحلتك لتتابع تقدّمك لاحقاً'}
   ],
   en:[
     {title:'Welcome to Nafas',text:'The intelligent emotional support tool that understands you from your words'},
@@ -425,7 +439,9 @@ const crisisWords = {
   // === تعبيرات دقيقة يستخدمها المكتئب فعلاً ===
   'أحسن لو ما كنت','احسن لو ما كنت','لو اختفيت','ما أحد بيفرق','ما احد بيفرق','أحسن بدوني','احسن بدوني','العالم أحسن بدوني','لو ما كنت موجود','ما فيه سبب أعيش','ما فيه سبب اعيش','ما فيه فايدة من وجودي','تعبت من الحياة','ما أبي أصحى','ما ابي اصحى','أتمنى ما أصحى','اتمنى ما اصحى','يا ريت ما كنت','نفسي أنام وما أقوم','نفسي انام وما اقوم','ما فيه أمل','ما فيه امل','ما عاد أقدر أكمل','ما عاد اقدر اكمل','ودي أختفي','ودي اختفي','ودي أروح','ودي اروح','ما فيه داعي أعيش','ما فيه داعي اعيش','ضاقت فيني الدنيا','ما يفرق أحد','ما يفرق احد','ما أحد يحتاجني','ما احد يحتاجني','زي ما أني ميتة','ميت من جوا','أحس إني عبء','احس اني عبء','ثقيلة على الناس','ثقيل على الناس',
   // === كلمات مفردة خطيرة ===
-  'أبي أختفي','ابي اختفي','أبي أروح','ابي اروح','بدوني أحسن','بدوني احسن','ما لي لازمة','مالي لازمه','ما لي قيمة','مالي قيمه','ابي اموت','أبي أختفي من الوجود'],
+  'أبي أختفي','ابي اختفي','أبي أروح','ابي اروح','بدوني أحسن','بدوني احسن','ما لي لازمة','مالي لازمه','ما لي قيمة','مالي قيمه','ابي اموت','أبي أختفي من الوجود',
+  // === تعبيرات إماراتية/خليجية دقيقة ===
+  'مب طايقة روحي','مب طايق روحي','مب طايقه روحي','مب قادر أكمل','مب قادرة أكمل','مب قادره اكمل','ما يهمني شي','خلاص مب قادر','خلاص مب قادرة','ما فيها فايدة','ما فيه فايدة','الدنيا ما فيها فايدة','مب قادر','مب قادرة','ما بقى شي فيني','كل شي أسود','حاسة إني غلطة','حاس إني غلطة','بس خلاص'],
   en:['suicide','want to die','kill myself','end my life','end it all',"don't want to live","can't go on","no reason to live",'better off dead','rather be dead',
   // === Subtle expressions depressed people actually use ===
   'better without me','world without me','no point living','wish i was never born','wish i could disappear','nobody would notice','nobody cares','want to sleep forever','never wake up','no hope left','burden to everyone','tired of living','tired of life','fade away','give up on life','no one needs me','pointless existence']
@@ -437,9 +453,9 @@ const crisisWords = {
 const deepQuestionPool = {
   ar:{
     work:[
-      {q:'ما الجانب الأكثر استنزافاً في عملكِ؟',keywords:['عمل','وظيفة','شغل','مدير','زملاء','اجتماعات']},
-      {q:'كيف تصفين علاقتكِ بزملائكِ؟',keywords:['زملاء','فريق','ناس','أحد']},
-      {q:'هل تشعرين أن عملكِ له معنى بالنسبة لكِ؟',keywords:['معنى','هدف','قيمة','فائدة']},
+      {q:'ما الجانب الأكثر استنزافاً في عملك؟',keywords:['عمل','وظيفة','شغل','مدير','زملاء','اجتماعات']},
+      {q:'كيف تصف علاقتك بزملائك؟',keywords:['زملاء','فريق','ناس','أحد']},
+      {q:'هل تشعر أن عملك له معنى بالنسبة لك؟',keywords:['معنى','هدف','قيمة','فائدة']},
       {q:'من متى تحس بهالشعور تجاه الشغل؟ أسابيع؟ شهور؟',keywords:['فترة','مدة','بداية','من متى','شهر','سنة']},
       {q:'إيش أكثر شي يستنزف طاقتك في يومك العملي؟',keywords:['طاقة','استنزاف','يوم','روتين','ضغط']},
       {q:'هل فيه وقت محدد في اليوم تحس فيه بالإرهاق أكثر؟',keywords:['صباح','مساء','ليل','بعد','قبل','وقت']},
@@ -447,33 +463,33 @@ const deepQuestionPool = {
       {q:'هل تحس إنك تعطي للشغل أكثر مما تاخذ منه؟',keywords:['عطاء','مقابل','راتب','تقدير','ظلم']}
     ],
     physical:[
-      {q:'كيف نومكِ مؤخراً؟',keywords:['نوم','أنام','سهر','أرق','تعب']},
-      {q:'هل تشعرين بأعراض جسدية مرتبطة بالتوتر؟',keywords:['جسم','صداع','ألم','توتر','كتف']},
+      {q:'كيف نومك مؤخراً؟',keywords:['نوم','أنام','سهر','أرق','تعب']},
+      {q:'هل تشعر بأعراض جسدية مرتبطة بالتوتر؟',keywords:['جسم','صداع','ألم','توتر','كتف']},
       {q:'متى آخر مرة مارستِ نشاطاً تستمتعين به؟',keywords:['رياضة','نشاط','هواية','مشي']},
       {q:'هل جسمك يرسلك إشارات تتجاهلها؟ مثل الصداع أو التعب المستمر؟',keywords:['إشارة','جسد','تجاهل','مستمر','دائم']},
       {q:'كيف تبدأ يومك عادةً؟ هل تصحى متعب حتى بعد النوم؟',keywords:['صباح','صحيان','يبدأ','بداية','متعب']},
       {q:'هل تغيرت شهيتك للأكل مؤخراً؟',keywords:['أكل','شهية','وزن','جوع','طعام']}
     ],
     relationships:[
-      {q:'هل لديكِ شخص تثقين به تتحدثين معه؟',keywords:['صديقة','أهل','عائلة','شخص','أحد']},
-      {q:'كيف يؤثر إرهاقكِ على علاقاتكِ؟',keywords:['علاقات','زوج','أطفال','أسرة','صبر']},
-      {q:'هل تشعرين بأن من حولكِ يفهمون ما تمرّين به؟',keywords:['يفهم','يسمع','يحس','وحيدة']},
+      {q:'هل لديك شخص تثق به تتحدث معه؟',keywords:['صديقة','أهل','عائلة','شخص','أحد']},
+      {q:'كيف يؤثر إرهاقك على علاقاتك؟',keywords:['علاقات','زوج','أطفال','أسرة','صبر']},
+      {q:'هل تشعر بأن من حولك يفهمون ما تمر به؟',keywords:['يفهم','يسمع','يحس','وحيدة']},
       {q:'لو فيه شخص واحد تقدر تتصل فيه الحين... مين يكون؟',keywords:['اتصال','شخص','قريب','صديق','ثقة']},
       {q:'هل تحس إنك تخبي مشاعرك عن الناس اللي حولك؟',keywords:['أخبي','أخفي','ما أبين','قناع','تظاهر']},
       {q:'لما تكون لحالك... إيش أول شعور يجيك؟',keywords:['وحدة','لحالي','بروحي','وحيد','فراغ']}
     ],
     meaning:[
-      {q:'ما الذي كان يسعدكِ وأصبح بعيداً؟',keywords:['سعادة','سعيدة','فرح','هواية','شغف']},
-      {q:'لو أعطيتكِ يوماً لنفسكِ فقط — ماذا ستفعلين؟',keywords:['يوم','وقت','راحة','نفسي']},
-      {q:'ما حلمكِ الذي تأجّل بسبب الضغوط؟',keywords:['حلم','أمنية','مستقبل','تغيير']},
+      {q:'ما الذي كان يسعدك وأصبح بعيداً؟',keywords:['سعادة','سعيدة','فرح','هواية','شغف']},
+      {q:'لو أعطيتك يوماً لنفسك فقط — ماذا ستفعل؟',keywords:['يوم','وقت','راحة','نفسي']},
+      {q:'ما حلمك الذي تأجّل بسبب الضغوط؟',keywords:['حلم','أمنية','مستقبل','تغيير']},
       {q:'هل تحس إن اللي تسويه يومياً يعبر عن اللي تبيه فعلاً في حياتك؟',keywords:['حياة','يومي','روتين','معنى','هدف']},
       {q:'لو تقدر تغير شي واحد في حياتك الحين... إيش يكون؟',keywords:['تغيير','لو','أمنية','واحد','شي']},
       {q:'إيش كان حلمك قبل؟ هل لسا نفس الحلم؟',keywords:['قبل','أول','حلم','طموح','كان']}
     ],
     selfcare:[
-      {q:'ما آخر شيء فعلتِه لنفسكِ فقط؟',keywords:['نفسي','أنا','لي','خاص']},
-      {q:'هل تأخذين وقتاً كافياً للراحة؟',keywords:['راحة','إجازة','عطلة','وقت']},
-      {q:'ما هو الشيء الذي تحتاجينه الآن أكثر من أي شيء؟',keywords:['أحتاج','أريد','أبي','نقص']},
+      {q:'ما آخر شيء فعلتِه لنفسك فقط؟',keywords:['نفسي','أنا','لي','خاص']},
+      {q:'هل تأخذ وقتاً كافياً للراحة؟',keywords:['راحة','إجازة','عطلة','وقت']},
+      {q:'ما هو الشيء الذي تحتاجه الآن أكثر من أي شيء؟',keywords:['أحتاج','أريد','أبي','نقص']},
       {q:'هل فيه شي كنت تحبه وتوقفت عنه بسبب الضغط؟',keywords:['توقفت','حب','كنت','قبل','تركت']},
       {q:'إيش الشيء الصغير اللي يفرحك عادةً حتى لو بسيط؟',keywords:['صغير','بسيط','فرح','يسعد','شي']},
       {q:'حاول تحط يدك على صدرك وتحس بنبض قلبك... كيف تحس؟',keywords:['قلب','نبض','صدر','تنفس','هدوء']}
@@ -531,12 +547,12 @@ const deepQuestionPool = {
 const ventTemplates = {
   ar:{
     mild:[
-      {t:p=>`"${p}"... أسمعكِ 💙`,id:'m1'},
+      {t:p=>`"${p}"... أسمعك 💙`,id:'m1'},
       {t:p=>`شكراً لمشاركتي... "${p}"`,id:'m2'},
-      {t:p=>'أنا هنا معكِ... أخبريني أكثر إن أردتِ.',id:'m3'},
-      {t:p=>'هذا يبدو مهماً لكِ... أسمعكِ.',id:'m4'},
+      {t:p=>'أنا هنا معك... أخبرني أكثر إن أردت.',id:'m3'},
+      {t:p=>'هذا يبدو مهماً لك... أسمعك.',id:'m4'},
       {t:p=>`"${p}"... وهذا حقيقي ومهم.`,id:'m5'},
-      {t:p=>'أفهم ما تقولينه... استمري.',id:'m6'},
+      {t:p=>'أفهم ما تقوله... استمر.',id:'m6'},
       {t:p=>'خذ وقتك... ما فيه عجلة. أنا هنا وما راح أروح 💙',id:'m7'},
       {t:p=>`لو تقدر تصف شعورك بلون... أي لون يكون؟ 🎨`,id:'m8'},
       {t:p=>'كلامك مهم... ومشاعرك مهمة.',id:'m9'},
@@ -548,12 +564,12 @@ const ventTemplates = {
     ],
     moderate:[
       {t:p=>`"${p}"... وهذا ثقيل جداً. أنا هنا.`,id:'mod1'},
-      {t:p=>'سمعتُكِ... ومعكِ في هذه اللحظة.',id:'mod2'},
-      {t:p=>`ما قلتِه عن "${p}" يخبرني أنكِ تحملين الكثير.`,id:'mod3'},
+      {t:p=>'سمعتُك... ومعك في هذه اللحظة.',id:'mod2'},
+      {t:p=>`ما قلته عن "${p}" يخبرني أنك تحمل الكثير.`,id:'mod3'},
       {t:p=>'هذا يبدو صعباً جداً... 💙',id:'mod4'},
-      {t:p=>'أنتِ لستِ وحدكِ في هذا...',id:'mod5'},
-      {t:p=>`"${p}"... أحسستُ بثقل كلماتكِ.`,id:'mod6'},
-      {t:p=>'ما تشعرين به طبيعي ومفهوم تماماً.',id:'mod7'},
+      {t:p=>'لست وحدك في هذا...',id:'mod5'},
+      {t:p=>`"${p}"... أحسستُ بثقل كلماتك.`,id:'mod6'},
+      {t:p=>'ما تشعر به طبيعي ومفهوم تماماً.',id:'mod7'},
       {t:p=>'أحياناً أصعب شيء هو إنك تعترف إنك تعبان... وأنت سويتها الآن. هذي شجاعة.',id:'mod8'},
       {t:p=>`"${p}"... اللي تحس فيه حقيقي ومهم... لا تقلل من مشاعرك أبداً.`,id:'mod9'},
       {t:p=>'الإرهاق رسالة مو عقوبة... جسمك يقولك أنا أحتاجك تهتم فيني.',id:'mod10'},
@@ -565,11 +581,11 @@ const ventTemplates = {
       {t:p=>'هل جربت تكتب اللي تحس فيه على ورقة؟ أحياناً الكتابة تطلع أشياء ما نقدر نقولها 📝',id:'mod16'}
     ],
     heavy:[
-      {t:p=>`"${p}"... هذا ثقيل جداً، وأنا ممتنة لثقتكِ بي.`,id:'h1'},
-      {t:p=>'شكراً لثقتكِ... هذا يتطلب شجاعة 💙',id:'h2'},
-      {t:p=>`كلماتكِ "${p}" وصلتني بعمق... أنتِ تستحقين الراحة.`,id:'h3'},
-      {t:p=>'ما تمرّين به حقيقي وصعب... وأنتِ قوية لأنكِ تتحدثين عنه.',id:'h4'},
-      {t:p=>'أسمعكِ بكل قلبي... وأنتِ لستِ وحدكِ 💙',id:'h5'},
+      {t:p=>`"${p}"... هذا ثقيل جداً، وأنا ممتنة لثقتك بي.`,id:'h1'},
+      {t:p=>'شكراً لثقتك... هذا يتطلب شجاعة 💙',id:'h2'},
+      {t:p=>`كلماتك "${p}" وصلتني بعمق... تستحق الراحة.`,id:'h3'},
+      {t:p=>'ما تمر به حقيقي وصعب... وأنت قوي لأنك تتحدث عنه.',id:'h4'},
+      {t:p=>'أسمعك بكل قلبي... ولست وحدك 💙',id:'h5'},
       {t:p=>`"${p}"... أعرف أن هذا مؤلم. أنا هنا.`,id:'h6'},
       {t:p=>'ما أقدر أشيل عنك الحمل... بس أقدر أسمعك وأنا هنا.',id:'h7'},
       {t:p=>`"${p}"... شخص مرّ بنفس الشيء قال: اكتشفت إني مو فاشل... كنت بس مرهق 💙`,id:'h8'},
@@ -583,19 +599,19 @@ const ventTemplates = {
       {t:p=>'حقك تتعب... وحقك تستريح.',id:'h16'}
     ],
     microValidations:[
-      'شكراً لثقتكِ... هذا يتطلب شجاعة 💙',
-      'مشاركتكِ لهذا دليل قوة، لا ضعف.',
-      'أنتِ شجاعة لأنكِ تعبّرين عن هذا.',
-      'ثقتكِ بي تعني الكثير... شكراً لكِ.',
+      'شكراً لثقتك... هذا يتطلب شجاعة 💙',
+      'مشاركتك لهذا دليل قوة، لا ضعف.',
+      'شجاع لأنك تعبّر عن هذا.',
+      'ثقتك بي تعني الكثير... شكراً لك.',
       'ما فيه شي غلط فيك... الظروف هي اللي صعبة.',
       'صعبة... بس أنت أقوى منها.',
       'شكراً إنك شاركتني... هذا يحتاج شجاعة كبيرة 💙',
       'أنت مو لوحدك في هذا... كثير ناس مروا بنفس الشعور وطلعوا منه.'
     ],
     vakAdapt:{
-      visual:' أتخيّل المشهد الذي ترسمينه بكلماتكِ...',
-      auditory:' أسمع صدى ما تشعرين به في كلامكِ...',
-      kinesthetic:' أحسّ بثقل ما تحملينه...'
+      visual:' أتخيّل المشهد الذي ترسمه بكلماتك...',
+      auditory:' أسمع صدى ما تشعر به في كلامك...',
+      kinesthetic:' أحسّ بثقل ما تحمله...'
     }
   },
   en:{
@@ -764,7 +780,7 @@ function getVoiceParams(lvl,vak){
 let recognition = null;
 let isRecording = false;
 let selectedVoiceIndex = -1; // -1 = auto
-const TTS_PROVIDER = 'web'; // 'web' or 'elevenlabs'
+const TTS_PROVIDER = 'elevenlabs'; // 'web' or 'elevenlabs'
 const ELEVENLABS_API_KEY = ''; // Add when ready
 const ELEVENLABS_VOICE_ID = ''; // Add when ready
 
@@ -831,30 +847,33 @@ function changeVoice(v){selectedVoiceIndex=parseInt(v)}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=populateVoiceList;setTimeout(populateVoiceList,500)}
 
 async function speakElevenLabs(text){
-  if(!ELEVENLABS_API_KEY||!ELEVENLABS_VOICE_ID)return false;
   try{
-    const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+ELEVENLABS_VOICE_ID,{
-      method:'POST',headers:{'xi-api-key':ELEVENLABS_API_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.6,similarity_boost:.75}})
+    const clean=text.replace(/<[^>]*>/g,'').replace(/[*_~\`#]/g,'').replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆💡📝😊📚🌸🤍💚🩵🫂🧠❤️🙏💛💪🫁🍃]/g,'').trim();
+    if(!clean||clean.length<2)return false;
+    const r=await fetch('/api/tts',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:clean,lang:state.lang})
     });
     if(!r.ok)return false;
-    const blob=await r.blob();const url=URL.createObjectURL(blob);const audio=new Audio(url);
+    const ct=r.headers.get('content-type')||'';
+    if(ct.includes('json')){const j=await r.json();if(j.fallback)return false}
+    const blob=await r.blob();
+    if(blob.size<100)return false;
+    const url=URL.createObjectURL(blob);const audio=new Audio(url);
     state.isSpeaking=true;const msgs=document.querySelectorAll('.msg.bot');const last=msgs[msgs.length-1];
     if(last)last.classList.add('speaking');
     audio.onended=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    audio.play();return true;
-  }catch(e){console.warn('ElevenLabs:',e);return false}
+    audio.onerror=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
+    await audio.play();return true;
+  }catch(e){console.warn('ElevenLabs TTS:',e);return false}
 }
 
 async function speak(text){
   if(!state.voiceEnabled)return;
-  // Try server-side ElevenLabs first (realistic voice)
-  const serverOk = await speakServerTTS(text);
-  if(serverOk) return;
-  // Fallback to Web Speech API
+  if(TTS_PROVIDER==='elevenlabs'){const ok=await speakElevenLabs(text);if(ok)return}
   if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
-  const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆🫁]/g,'').replace(/<[^>]*>/g,'');
+  const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆]/g,'').replace(/<[^>]*>/g,'');
   const utt=new SpeechSynthesisUtterance(clean);
   const p=getVoiceParams(state.burnoutLevel,state.vakPattern);
   utt.rate=p.rate;utt.pitch=p.pitch;utt.volume=p.volume;
@@ -873,104 +892,75 @@ async function speak(text){
 }
 
 /* ============================================================
-   SERVER-SIDE TTS (ElevenLabs via /api/tts)
+   SILENCE DETECTOR — كاشف الصمت
+   When the user goes silent for 30s after a bot reply:
+   → Text prompt: "أنا هني معك... تبي تكمل؟ 💙"
+   After 30 more seconds:
+   → Voice: "وينك؟ أنا أسمعك... خذ وقتك"
+   Uses Page Visibility API: no triggers if user left the tab.
    ============================================================ */
-async function speakServerTTS(text){
-  try{
-    const clean=text.replace(/[🆘💙✨🌿👁️👂🤲🌟📊⚡🎬📞🚨🌐✍️🎙️🎵🌬️🚶📤📋📍🔑🎯⚙️🌙☀️🔊🔇🏆🫁]/g,'').replace(/<[^>]*>/g,'').trim();
-    if(!clean)return false;
-    const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})});
-    if(!r.ok)return false;
-    const blob=await r.blob();
-    if(blob.size<200)return false;
-    const url=URL.createObjectURL(blob);
-    const audio=new Audio(url);
-    state.isSpeaking=true;
-    const msgs=document.querySelectorAll('.msg.bot');const last=msgs[msgs.length-1];
-    if(last)last.classList.add('speaking');
-    audio.onended=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    audio.onerror=()=>{state.isSpeaking=false;if(last)last.classList.remove('speaking');URL.revokeObjectURL(url)};
-    await audio.play();
-    return true;
-  }catch(e){console.warn('Server TTS fallback:',e);return false}
+let _silenceTimer1 = null;
+let _silenceTimer2 = null;
+let _silenceActive = false;
+let _silenceMessageInProgress = false;
+
+function resetSilenceDetector() {
+  if (_silenceTimer1) clearTimeout(_silenceTimer1);
+  if (_silenceTimer2) clearTimeout(_silenceTimer2);
+  _silenceTimer1 = null;
+  _silenceTimer2 = null;
+  _silenceActive = false;
+  // DON'T reset silenceAlerted here — only reset when user types
 }
 
-/* ============================================================
-   SILENCE DETECTOR — "أنا هني معك"
-   Detects when user goes silent while still on page.
-   Stage 1 (30s): Text check-in
-   Stage 2 (+30s): Voice check-in  
-   Stage 3 (+45s): Deeper voice
-   ============================================================ */
-const SilenceDetector = {
-  timer1:null, timer2:null, timer3:null,
-  isUserOnPage:true, silenceStage:0, active:false,
+// Called when user sends a message — resets the one-time flag
+function userResetSilence() {
+  resetSilenceDetector();
+  sessionIntelligence.silenceAlerted = false;
+}
 
-  messages:{
-    ar:{
-      stage1:['أنا هني معك... تبي تكمل؟ 💙','خذ وقتك... أنا ما راح أروح 💙','لا تستعجل... أنا معك في هالمكان الآمن 💙'],
-      stage2:['وينك؟ أنا أسمعك... خذ وقتك','أنا لسّا هني... تكلّم متى ما تبي','ما عليك... أنا معك حتى لو بالسكوت 💙'],
-      stage3:['أنت مو لحالك... أنا معك 💙','السكوت أحياناً يقول أكثر من الكلام... أنا أسمعك حتى بصمتك','خذ نَفَس عميق معي... شهيق 4 ثوانٍ... زفير 8 ثوانٍ 🫁']
-    },
-    en:{
-      stage1:["I'm still here with you... want to continue? 💙","Take your time... I'm not going anywhere 💙","No rush... this is your safe space 💙"],
-      stage2:["Hey... I'm listening... take your time","I'm still here... talk whenever you're ready","It's okay... I'm with you even in silence 💙"],
-      stage3:["You're not alone... I'm here with you 💙","Sometimes silence says more than words... I hear you","Take a deep breath with me... inhale 4... exhale 8 🫁"]
-    }
-  },
+function startSilenceDetector() {
+  // Cancel any existing timer but DON'T reset silenceAlerted
+  if (_silenceTimer1) clearTimeout(_silenceTimer1);
+  if (_silenceTimer2) clearTimeout(_silenceTimer2);
+  _silenceTimer1 = null;
+  _silenceTimer2 = null;
 
-  init(){
-    const self=this;
-    document.addEventListener('visibilitychange',()=>{
-      self.isUserOnPage=!document.hidden;
-      if(document.hidden){self.clearAll()}
-      else if(self.active&&state.mode){self.startWatching()}
-    });
-    window.addEventListener('blur',()=>{self.isUserOnPage=false;self.clearAll()});
-    window.addEventListener('focus',()=>{self.isUserOnPage=true;if(self.active&&state.mode)self.startWatching()});
-  },
+  if (!state.mode) return;
+  // If already alerted this session, don't set up another timer
+  if (sessionIntelligence.silenceAlerted) return;
+  _silenceActive = true;
 
-  startWatching(){
-    this.clearAll();
-    this.silenceStage=0;
-    this.active=true;
-    const self=this;
-    const msgs=self.messages[state.lang]||self.messages.ar;
+  // Increased from 30s to 90s — less intrusive
+  _silenceTimer1 = setTimeout(function() {
+    if (!_silenceActive || document.hidden || !state.mode) return;
+    if (sessionIntelligence.silenceAlerted) return;
+    sessionIntelligence.silenceAlerted = true;
 
-    self.timer1=setTimeout(()=>{
-      if(!self.isUserOnPage||!state.mode)return;
-      self.silenceStage=1;
-      const msg=msgs.stage1[Math.floor(Math.random()*msgs.stage1.length)];
-      addMessage('bot',msg);
-      // Stage 1 = text only, no voice
+    var msg = state.lang === 'ar'
+      ? 'أنا هني معك... تبي تكمل؟ 💙'
+      : "I'm still here with you... want to continue? 💙";
+    _silenceMessageInProgress = true;
+    addMessage('bot', msg);
+    _silenceMessageInProgress = false;
 
-      self.timer2=setTimeout(()=>{
-        if(!self.isUserOnPage||!state.mode)return;
-        self.silenceStage=2;
-        const msg2=msgs.stage2[Math.floor(Math.random()*msgs.stage2.length)];
-        addMessage('bot',msg2);
-        speak(msg2);
+    // Voice nudge after ANOTHER 60s (increased from 30s)
+    _silenceTimer2 = setTimeout(function() {
+      if (!_silenceActive || document.hidden) return;
+      var voiceMsg = state.lang === 'ar'
+        ? 'وينك؟ أنا أسمعك... خذ وقتك'
+        : "I'm listening... take your time";
+      speak(voiceMsg);
+    }, 60000);
+  }, 90000);
+}
 
-        self.timer3=setTimeout(()=>{
-          if(!self.isUserOnPage||!state.mode)return;
-          self.silenceStage=3;
-          const msg3=msgs.stage3[Math.floor(Math.random()*msgs.stage3.length)];
-          addMessage('bot',msg3);
-          speak(msg3);
-        },45000);
-      },30000);
-    },30000);
-  },
-
-  userSpoke(){this.clearAll();this.silenceStage=0},
-  botSpoke(){if(state.mode){this.startWatching()}},
-  clearAll(){
-    if(this.timer1)clearTimeout(this.timer1);
-    if(this.timer2)clearTimeout(this.timer2);
-    if(this.timer3)clearTimeout(this.timer3);
-    this.timer1=this.timer2=this.timer3=null;
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    resetSilenceDetector();
   }
-};
+});
+
 
 /* ============================================================
    SUPABASE (fetch-based, no runCommand) — Enhancement #2
@@ -1059,17 +1049,53 @@ function buildSaveData(){
   };
 }
 
+// === Session Summary: call /api/session-summary at end of session ===
+function callSessionSummary(){
+  if(!state.messages || state.messages.length < 4 || !state.sessionId || state.sessionSaved) return;
+  state.sessionSaved = true;
+  try{
+    const payload = JSON.stringify({
+      visitor_id: NAFAS_VISITOR_ID,
+      session_id: state.sessionId,
+      messages: state.messages.slice(-50).map(function(m){
+        return { role: m.role || 'user', text: m.text || m.content || '' };
+      })
+    });
+    // Use sendBeacon for reliability on page close; fall back to keepalive fetch
+    if(navigator.sendBeacon){
+      var blob = new Blob([payload], {type:'application/json'});
+      navigator.sendBeacon('/api/session-summary', blob);
+    } else {
+      fetch('/api/session-summary', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: payload,
+        keepalive: true
+      }).catch(function(){});
+    }
+  }catch(e){ console.warn('Session summary failed:', e); }
+}
+
 window.addEventListener('beforeunload', ()=>{
   const data = buildSaveData();
-  if(!data) return;
-  try{
-    fetch(SUPA_URL + '/rest/v1/nafas_sessions', {
-      method: 'POST',
-      headers: supaHeaders,
-      body: JSON.stringify(data),
-      keepalive: true
-    });
-  }catch(e){}
+  if(data){
+    try{
+      fetch(SUPA_URL + '/rest/v1/nafas_sessions', {
+        method: 'POST',
+        headers: supaHeaders,
+        body: JSON.stringify(data),
+        keepalive: true
+      });
+    }catch(e){}
+  }
+  callSessionSummary();
+});
+
+// Also trigger on visibility change (more reliable on mobile)
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){
+    callSessionSummary();
+  }
 });
 
 // Periodic auto-save every 60s
@@ -1261,7 +1287,7 @@ function updateUI(){
   document.getElementById('expCopyBtn').textContent = L.exportCopy;
   // Crisis location button
   const shareLocEl = document.getElementById('shareLocText');
-  if(shareLocEl) shareLocEl.textContent = state.lang === 'ar' ? 'شاركي موقعك مع شخص تثقين به' : 'Share your location with someone you trust';
+  if(shareLocEl) shareLocEl.textContent = state.lang === 'ar' ? 'شارك موقعك مع شخص تثق به' : 'Share your location with someone you trust';
   // Journey link
   const jLink = document.getElementById('journeyLink');
   jLink.textContent = L.journeyLink;
@@ -1360,8 +1386,11 @@ function sanitizeHTML(str){
 }
 
 function addMessage(role, text, isHTML){
+  // === SILENCE DETECTOR HOOKS ===
+  if (role === 'user') userResetSilence();
   state.messages.push({role, text: isHTML ? '[card]' : text, timestamp: Date.now()});
   state.unsavedChanges = true;
+  saveChatHistory();
   const container = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = `msg ${role === 'user' ? 'user' : 'bot'}`;
@@ -1382,8 +1411,7 @@ function addMessage(role, text, isHTML){
   div.appendChild(content);
   container.appendChild(div);
   requestAnimationFrame(() => { container.scrollTop = container.scrollHeight; });
-  // Silence Detector hooks
-  if(role==='bot'&&typeof SilenceDetector!=='undefined'&&SilenceDetector.silenceStage===0){SilenceDetector.botSpoke()}
+  if (role === 'bot' && state.mode && !_silenceMessageInProgress) setTimeout(startSilenceDetector, 500);
   return div;
 }
 
@@ -1396,6 +1424,90 @@ function addCardToChat(html){
   requestAnimationFrame(() => { container.scrollTop = container.scrollHeight; });
   return div;
 }
+
+/* ============================================================
+   PERSISTENT CHAT — المحادثة المستمرة
+   ============================================================ */
+function saveChatHistory(){
+  try{
+    const h=state.messages.filter(m=>m.role!=='_meta').slice(-200).map(m=>({
+      role:m.role,text:m.text,timestamp:m.timestamp
+    }));
+    localStorage.setItem('nafas_chat_history',JSON.stringify(h));
+  }catch(e){}
+}
+
+function loadChatHistory(){
+  try{const s=localStorage.getItem('nafas_chat_history');return s?JSON.parse(s):[];}catch(e){return[];}
+}
+
+function addDateSeparator(timestamp){
+  const container=document.getElementById('messages');
+  if(!container)return;
+  const div=document.createElement('div');
+  div.className='date-separator';
+  const d=new Date(timestamp);const now=new Date();
+  const isToday=d.toDateString()===now.toDateString();
+  const y=new Date(now);y.setDate(y.getDate()-1);
+  const isYesterday=d.toDateString()===y.toDateString();
+  let label;
+  if(state.lang==='ar'){
+    label=isToday?'اليوم':isYesterday?'أمس':d.toLocaleDateString('ar-SA',{day:'numeric',month:'long'});
+  }else{
+    label=isToday?'Today':isYesterday?'Yesterday':d.toLocaleDateString('en-US',{day:'numeric',month:'short'});
+  }
+  const time=d.toLocaleTimeString(state.lang==='ar'?'ar-SA':'en-US',{hour:'2-digit',minute:'2-digit'});
+  div.innerHTML='<span>'+label+' \u00b7 '+time+'</span>';
+  container.appendChild(div);
+}
+
+function restoreChatHistory(){
+  const history=loadChatHistory();
+  if(!history.length)return false;
+  const container=document.getElementById('messages');
+  if(!container)return false;
+  let lastDate='';
+  history.forEach(function(m){
+    if(m.role==='_meta')return;
+    const msgDate=new Date(m.timestamp).toDateString();
+    if(msgDate!==lastDate){
+      addDateSeparator(m.timestamp);
+      lastDate=msgDate;
+    }
+    const div=document.createElement('div');
+    div.className='msg '+(m.role==='user'?'user':'bot');
+    if(m.role==='bot'){
+      const av=document.createElement('span');
+      av.className='avatar';av.textContent='\u0646\u0640';av.setAttribute('aria-hidden','true');
+      div.appendChild(av);
+    }
+    const ct=document.createElement('span');
+    if(m.text==='[card]'){ct.textContent='[\u0645\u062d\u062a\u0648\u0649 \u062a\u0641\u0627\u0639\u0644\u064a]';ct.style.opacity='0.5';}
+    else{ct.textContent=m.text;}
+    div.appendChild(ct);
+    div.style.opacity='0.75';
+    container.appendChild(div);
+  });
+  state.messages=history;
+  // Rebuild geminiHistory from last messages
+  geminiHistory=[];
+  var recent=history.filter(function(m){return m.role==='user'||m.role==='bot'}).slice(-10);
+  recent.forEach(function(m){
+    if(m.role==='user')geminiHistory.push({role:'user',parts:[{text:m.text}]});
+    else if(m.text!=='[card]')geminiHistory.push({role:'model',parts:[{text:JSON.stringify({response:m.text})}]});
+  });
+  requestAnimationFrame(function(){container.scrollTop=container.scrollHeight;});
+  return true;
+}
+
+function clearChatHistory(){
+  localStorage.removeItem('nafas_chat_history');
+  state.messages=[];
+  geminiHistory=[];
+  var container=document.getElementById('messages');
+  if(container)container.innerHTML='';
+}
+
 
 
 // Skeleton loading
@@ -1557,8 +1669,9 @@ async function detectUserCountry(){
 }
 
 function getCrisisInfo(){
-  const info = crisisDB[detectedCountry] || crisisDB._default;
-  return info;
+  if (detectedCountry && crisisDB[detectedCountry]) return crisisDB[detectedCountry];
+  // Default to UAE for Arabic users, international for English
+  return (state.lang === 'ar') ? crisisDB.AE : crisisDB._default;
 }
 
 function buildCrisisNumbersHTML(isAr){
@@ -1641,7 +1754,7 @@ function shareMyLocation(){
       userLocation = {lat: pos.coords.latitude, lng: pos.coords.longitude};
       const mapUrl = `https://maps.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
       
-      status.textContent = isAr ? '✅ تم تحديد موقعك — اختاري طريقة المشاركة:' : '✅ Location found — choose how to share:';
+      status.textContent = isAr ? '✅ تم تحديد موقعك — اختر طريقة المشاركة:' : '✅ Location found — choose how to share:';
       
       const mapLink = document.getElementById('locationMapLink');
       mapLink.innerHTML = `<a href="${mapUrl}" target="_blank" style="color:var(--accent-primary);text-decoration:underline">${isAr ? '🗺️ عرض على الخريطة' : '🗺️ View on Map'}</a>`;
@@ -1689,7 +1802,7 @@ function sendLocationWhatsApp(){
   // Check if online before sharing
   if (!navigator.onLine) {
     const offlineMsg = state.lang === 'ar' 
-      ? '📍 موقعك محفوظ — شاركيه عند اتصالك بالشبكة' 
+      ? '📍 موقعك محفوظ — شاركه عند اتصالك بالشبكة' 
       : '📍 Location saved — share it when you reconnect';
     sessionStorage.setItem('nafas_pending_location', JSON.stringify(userLocation));
     alert(offlineMsg);
@@ -1704,7 +1817,7 @@ function sendLocationSMS(){
   // Check if online before sharing
   if (!navigator.onLine) {
     const offlineMsg = state.lang === 'ar' 
-      ? '📍 موقعك محفوظ — شاركيه عند اتصالك بالشبكة' 
+      ? '📍 موقعك محفوظ — شاركه عند اتصالك بالشبكة' 
       : '📍 Location saved — share it when you reconnect';
     sessionStorage.setItem('nafas_pending_location', JSON.stringify(userLocation));
     alert(offlineMsg);
@@ -1757,10 +1870,10 @@ function quickResponse(text){
     // Simple positive (بخير, الحمدلله)
     if(isSimplePositiveAr){
       const opts = [
-        'الحمدلله 💙 جميل أنكِ بخير. لكن حتى من يبدو بخير... يستحق وقفة مع نفسه أحياناً.',
+        'الحمدلله 💙 جميل أنك بخير. لكن حتى من يبدو بخير... يستحق وقفة مع نفسه أحياناً.',
         'سعيدة لسماع ذلك 💙 أحياناً نقول "بخير" ونحتاج فقط من يسألنا مرة أخرى.',
-        'الحمدلله ✨ بخير هي إجابة جميلة. لكنكِ جئتِ إلى هنا... وهذا بحد ذاته يعني شيئاً.',
-        'جميل 💙 حتى لو كنتِ بخير — تذكّري: التحقق من نفسكِ بانتظام ليس ضعفاً، بل وعي.'
+        'الحمدلله ✨ بخير هي إجابة جميلة. لكنك جئت إلى هنا... وهذا بحد ذاته يعني شيئاً.',
+        'جميل 💙 حتى لو كنت بخير — تذكّر: التحقق من نفسك بانتظام ليس ضعفاً، بل وعي.'
       ];
       return opts[Math.floor(Math.random() * opts.length)];
     }
@@ -1769,36 +1882,36 @@ function quickResponse(text){
       state.burnoutScore = Math.max(state.burnoutScore, 6);
       state.burnoutLevel = Math.max(state.burnoutLevel, 2);
       const opts = [
-        'شكراً لصدقكِ 💙 هذا الإحساس مهم ويستحق أن يُسمع. أنتِ لستِ وحدكِ.',
-        'سمعتكِ... وما تشعرين به حقيقي ومهم 💙 أحياناً الاعتراف بالتعب هو أول خطوة.',
-        'ما قلتِه يتطلب شجاعة 💙 التعب ليس ضعفاً — هو إشارة أن جسمكِ وروحكِ يحتاجان اهتمامكِ.'
+        'شكراً لصدقك 💙 هذا الإحساس مهم ويستحق أن يُسمع. لست وحدك.',
+        'سمعتك... وما تشعر به حقيقي ومهم 💙 أحياناً الاعتراف بالتعب هو أول خطوة.',
+        'ما قلتِه يتطلب شجاعة 💙 التعب ليس ضعفاً — هو إشارة أن جسمك وروحك يحتاجان اهتمامك.'
       ];
       return opts[Math.floor(Math.random() * opts.length)];
     }
     // Uncertain (مدري, عادي)
     if(isSimpleUncertainAr){
       const opts = [
-        '"مدري" هي أصدق إجابة أحياناً 💙 لا بأس ألا تعرفي بالضبط كيف تشعرين الآن.',
+        '"مدري" هي أصدق إجابة أحياناً 💙 لا بأس ألا تعرف بالضبط كيف تشعر الآن.',
         'أحياناً نحتاج لحظة لنفهم مشاعرنا... وهذا طبيعي تماماً 💙',
-        'هذا الشعور الضبابي... كثيرون يمرون به. الجميل أنكِ توقفتِ لتسألي نفسكِ 💙'
+        'هذا الشعور الضبابي... كثيرون يمرون به. الجميل أنك توقفت لتسأل نفسك 💙'
       ];
       return opts[Math.floor(Math.random() * opts.length)];
     }
 
     // VAK-based responses for longer/detailed text
     if(lvl <= 2){
-      if(vak === 'visual') return 'أرى في كلامكِ إنسانة تستحق وقفة مع نفسها ✨ — خذي نفساً عميقاً الآن.';
-      if(vak === 'auditory') return 'سمعتُ كلامكِ... وهو يقول أكثر مما تظنين. أنتِ لستِ وحدكِ 💙';
-      if(vak === 'kinesthetic') return 'أحسستُ ثقل ما تحمليه من كلامكِ... جسمكِ يخبركِ بشيء مهم 🌿';
-      return 'كلامكِ وصلني... وأنا هنا معكِ في هذه اللحظة 💙 ما شعرتِ به وأنتِ تكتبين هذه الكلمات... مهم.';
+      if(vak === 'visual') return 'أرى في كلامك إنساناً يستحق وقفة مع نفسه ✨ — خذ نفساً عميقاً الآن.';
+      if(vak === 'auditory') return 'سمعتُ كلامك... وهو يقول أكثر مما تظن. لست وحدك 💙';
+      if(vak === 'kinesthetic') return 'أحسستُ ثقل ما تحمله من كلامك... جسمك يخبرك بشيء مهم 🌿';
+      return 'كلامك وصلني... وأنا هنا معك في هذه اللحظة 💙 ما شعرت به وأنت تكتب هذه الكلمات... مهم.';
     }
     if(lvl === 3){
-      if(vak === 'visual') return 'الصورة التي رسمتِها بكلامكِ... تخبرني أنكِ تحملين كثيراً. أنتِ تستحقين وقفة حقيقية.';
-      if(vak === 'auditory') return 'الكلمات التي اخترتِها... تقول أكثر مما تظنين. دعيني أسمعكِ أكثر.';
-      if(vak === 'kinesthetic') return 'جسمكِ يحمل ما لا يمكن للكلمات وصفه... أنتِ تحتاجين إلى تنفّس حقيقي.';
-      return 'ما قلتِه... ثقيل ومهم. أنتِ شجاعة لأنكِ قلتيه.';
+      if(vak === 'visual') return 'الصورة التي رسمتها بكلامك... تخبرني أنك تحمل كثيراً. تستحق وقفة حقيقية.';
+      if(vak === 'auditory') return 'الكلمات التي اخترتها... تقول أكثر مما تظن. دعني أسمعك أكثر.';
+      if(vak === 'kinesthetic') return 'جسمك يحمل ما لا يمكن للكلمات وصفه... تحتاج إلى تنفّس حقيقي.';
+      return 'ما قلته... ثقيل ومهم. شجاع لأنك قلته.';
     }
-    return 'ما كتبتِه وصلني بعمق. أنتِ لستِ وحدكِ في هذا — وما تشعرين به حقيقي ومهم. اضغطي على زر 🆘 لأرشدكِ لمساعدة فعلية الآن.';
+    return 'ما كتبته وصلني بعمق. لست وحدك في هذا — وما تشعر به حقيقي ومهم. اضغط على زر 🆘 لأرشدك لمساعدة فعلية الآن.';
   }else{
     // English simple responses
     if(isSimplePositiveEn){
@@ -1852,7 +1965,7 @@ function showQuickResultCard(){
   const colors = ['','var(--level-1)','var(--level-2)','var(--level-3)','var(--level-4)','var(--level-5)'];
   const pct = lvl * 20;
   const levelLabel = i18n[state.lang].levels[lvl];
-  const summaryAr = ['','حالتكِ تبدو مستقرة — لكن لا بأس أن تتحققي 💙','هناك إرهاق ملحوظ — جسمكِ يحتاج اهتمامكِ','الإرهاق واضح — أنتِ تستحقين وقفة حقيقية','إرهاقكِ شديد — أنتِ بحاجة لدعم الآن','أنتِ لستِ وحدكِ — يرجى طلب المساعدة 💙'][lvl];
+  const summaryAr = ['','حالتك تبدو مستقرة — لكن لا بأس أن تتحقق 💙','هناك إرهاق ملحوظ — جسمك يحتاج اهتمامك','الإرهاق واضح — تستحق وقفة حقيقية','إرهاقك شديد — بحاجة لدعم الآن','لست وحدك — يرجى طلب المساعدة 💙'][lvl];
   const summaryEn = ['','Your state seems stable — but it\'s okay to check 💙','Noticeable burnout — your body needs attention','Clear burnout — you deserve a real pause','Severe burnout — you need support now','You\'re not alone — please seek help 💙'][lvl];
   const summary = L === 'ar' ? summaryAr : summaryEn;
   const deeperLabel = i18n[state.lang].deeperQ;
@@ -1881,11 +1994,11 @@ function switchToMode(newMode){
   let msg;
   if(newMode === 'deep'){
     msg = L === 'ar'
-      ? 'رائع... لنبدأ تقييماً أعمق. أنا هنا أستمع إليكِ بكل اهتمام.\n\nمتى كانت آخر مرة شعرتِ بالرضا الحقيقي في عملكِ؟'
+      ? 'رائع... لنبدأ تقييماً أعمق. أنا هنا أستمع إليك بكل اهتمام.\n\nمتى كانت آخر مرة شعرت بالرضا الحقيقي في عملك؟'
       : "Great... let's start a deeper assessment. I'm here listening with full attention.\n\nWhen was the last time you felt truly satisfied at work?";
   }else{
     msg = L === 'ar'
-      ? 'أنا هنا فقط لأسمعكِ... قولي ما تريدين بلا حكم ولا مقاطعة 💙'
+      ? 'أنا هنا فقط لأسمعك... قول ما تريد بلا حكم ولا مقاطعة 💙'
       : "I'm here just to listen... say whatever you need, no judgment 💙";
   }
   addMessage('bot', msg);
@@ -1946,9 +2059,9 @@ function deepEchoAndAsk(text){
   if(L === 'ar'){
     const echoes = [
       `"${phrase}"... شكراً لمشاركتي هذا.`,
-      `أسمعكِ... "${phrase}" — هذا مهم.`,
+      `أسمعك... "${phrase}" — هذا مهم.`,
       `"${phrase}"... أفهم ما تقولينه.`,
-      `ما قلتِه عن "${phrase}" يخبرني بالكثير.`
+      `ما قلته عن "${phrase}" يخبرني بالكثير.`
     ];
     echo = echoes[state.deepStep % echoes.length];
   }else{
@@ -1974,11 +2087,11 @@ function deepResponse(text){
     let reflection;
     if(L === 'ar'){
       if(['اليوم','أمس','هذا الأسبوع','البارحة','قريب'].some(w=>low.includes(w)))
-        reflection = 'سعيدة بهذا... وما الذي تغيّر مؤخراً ليجعلكِ تفكرين في هذا؟';
+        reflection = 'سعيد بهذا... وما الذي تغيّر مؤخراً ليجعلك تفكر في هذا؟';
       else if(['ما أذكر','ما أعرف','زمان','منذ وقت طويل','من زمان','ما أتذكر'].some(w=>low.includes(w)))
-        reflection = 'هذا يخبرني بكثير عن صبركِ وقوتكِ... ما الذي كان يجعلكِ تستمرين رغم ذلك؟';
+        reflection = 'هذا يخبرني بكثير عن صبرك وقوتك... ما الذي كان يجعلك تستمر رغم ذلك؟';
       else
-        reflection = 'أخبريني أكثر عن تلك اللحظة...';
+        reflection = 'أخبرني أكثر عن تلك اللحظة...';
     }else{
       if(['today','yesterday','this week','recently','last week'].some(w=>low.includes(w)))
         reflection = 'Glad to hear that... what changed recently to make you think about this?';
@@ -1999,10 +2112,10 @@ function deepResponse(text){
     }
     // Fallback VAK-based questions
     if(L === 'ar'){
-      if(vak === 'visual') return echo + '\n\nكيف تبدو حياتكِ المهنية في ذهنكِ الآن — هل الصورة واضحة أم ضبابية؟';
-      if(vak === 'auditory') return echo + '\n\nما أكثر جملة أو صوت تسمعينه في بيئة عملكِ يجعلكِ تشعرين بالإرهاق؟';
-      if(vak === 'kinesthetic') return echo + '\n\nأين تحسين الإجهاد في جسمكِ أكثر — الرأس؟ الكتفان؟ الصدر؟';
-      return echo + '\n\nما الجانب الأكثر استنزافاً لكِ في يومكِ؟';
+      if(vak === 'visual') return echo + '\n\nكيف تبدو حياتك المهنية في ذهنك الآن — هل الصورة واضحة أم ضبابية؟';
+      if(vak === 'auditory') return echo + '\n\nما أكثر جملة أو صوت تسمعه في بيئة عملك يجعلك تشعر بالإرهاق؟';
+      if(vak === 'kinesthetic') return echo + '\n\nأين تحسين الإجهاد في جسمك أكثر — الرأس؟ الكتفان؟ الصدر؟';
+      return echo + '\n\nما الجانب الأكثر استنزافاً لك في يومك؟';
     }else{
       if(vak === 'visual') return echo + "\n\nHow does your professional life look in your mind right now — is the picture clear or blurry?";
       if(vak === 'auditory') return echo + "\n\nWhat's the most draining phrase or sound you hear in your work environment?";
@@ -2048,17 +2161,19 @@ function detectGender(text) {
 
 // Adapt text based on detected gender
 function genderAdapt(text, gender) {
-  if(gender === 'male') {
+  if(gender === 'female') {
     return text
-      .replace(/أسمعكِ/g,'أسمعك').replace(/معكِ/g,'معك').replace(/لكِ/g,'لك')
-      .replace(/أخبريني/g,'أخبرني').replace(/استمري/g,'استمر').replace(/تقولينه/g,'تقوله')
-      .replace(/تشعرين/g,'تشعر').replace(/تحملينه/g,'تحمله').replace(/تحتاجينه/g,'تحتاجه')
-      .replace(/لثقتكِ/g,'لثقتك').replace(/كلماتكِ/g,'كلماتك').replace(/تستحقين/g,'تستحق')
-      .replace(/أنتِ/g,'أنت').replace(/تتحدثين/g,'تتحدث').replace(/تمرّين/g,'تمر')
-      .replace(/لمشاركتكِ/g,'لمشاركتك').replace(/أردتِ/g,'أردت').replace(/تريدين/g,'تريد')
-      .replace(/ترسمينه/g,'ترسمه').replace(/تعبّرين/g,'تعبّر').replace(/لأنكِ/g,'لأنك')
-      .replace(/بمشاعركِ/g,'بمشاعرك').replace(/نمطكِ/g,'نمطك').replace(/قولي/g,'قول')
-      .replace(/يا غالية/g,'يا غالي').replace(/يا صديقتي/g,'يا صديقي');
+      .replace(/أسمعك(?!ِ)/g,'أسمعكِ').replace(/أخبرني/g,'أخبريني').replace(/استمر(?!ي)/g,'استمري')
+      .replace(/تقوله/g,'تقولينه').replace(/تشعر(?! ب)/g,'تشعرين').replace(/تحمله/g,'تحملينه')
+      .replace(/تستحق(?! )/g,'تستحقين').replace(/تتحدث(?! )/g,'تتحدثين').replace(/تريد(?! )/g,'تريدين')
+      .replace(/تعبّر(?! )/g,'تعبّرين').replace(/ترسمه/g,'ترسمينه').replace(/أردت(?!ِ)/g,'أردتِ')
+      .replace(/لست وحدك/g,'لستِ وحدكِ').replace(/يا غالي(?!ة)/g,'يا غالية').replace(/يا صديقي(?!ة)/g,'يا صديقتي')
+      .replace(/شجاع لأنك/g,'شجاعة لأنكِ').replace(/قوي لأنك/g,'قوية لأنكِ')
+      .replace(/خذ وقتك/g,'خذي وقتك').replace(/خذ نفساً/g,'خذي نفساً')
+      .replace(/تمر به/g,'تمرّين به').replace(/تحتاج إلى/g,'تحتاجين إلى')
+      .replace(/اختر /g,'اختاري ').replace(/اكتب /g,'اكتبي ').replace(/قلل /g,'قللي ')
+      .replace(/ذكّر نفسك/g,'ذكّري نفسك').replace(/كرره /g,'كرريه ')
+      .replace(/شارك /g,'شاركي ').replace(/ابدأ /g,'ابدأي ').replace(/غيّر /g,'غيّري ');
   }
   return text;
 }
@@ -2514,7 +2629,7 @@ function handleSpecialInput(text) {
       'حزينه':'الحزن ثقيل... أنا هنا معك 💙 إيش اللي يحزنك؟',
       'حزينة':'الحزن ثقيل... أنا هنا معك 💙 إيش اللي يحزنك؟',
       'وحيد':'الوحدة صعبة... بس أنت مو لوحدك الحين — أنا هنا 💙',
-      'وحيده':'الوحدة صعبة... بس أنتِ مو لوحدك الحين — أنا هنا 💙',
+      'وحيده':'الوحدة صعبة... بس مو لوحدك الحين — أنا هنا 💙',
       'خلاص':'"خلاص"... كلمة ثقيلة. إيش اللي وصلك لهالنقطة؟ 💙',
       'تعبت':'سمعتك... "تعبت" — وهذا كلام صادق. تبي تحكيلي إيش اللي يتعبك؟ 💙',
       'ضايق':'الضيق خانق أحياناً... أنا هنا أسمعك. إيش اللي ضايقك؟ 💙',
@@ -2529,7 +2644,23 @@ function handleSpecialInput(text) {
       'ليش':'سؤال عميق... "ليش" — إيش اللي يخليك تسأل هالسؤال؟ 💙',
       'مدري':'"مدري" — وهذا عادي. أحياناً مو لازم نعرف... بس لازم نحكي. أنا أسمعك 💙',
       'يمكن':'"يمكن"... خذ وقتك — ما فيه عجلة 💙',
-      'هلا':'هلا فيك 💙 إيش تبي تحكيلي؟'
+      'هلا':'هلا فيك 💙 إيش تبي تحكيلي؟',
+      'كيف حالك':'الحمدلله 💙 وأنت شحالك؟ كيف يومك معاك؟',
+      'كيف حالج':'الحمدلله 💙 وأنتي شحالج؟ كيف يومج؟',
+      'شحالك':'الحمدلله 💙 شحالك أنت؟ كيف يومك معاك؟',
+      'شحالج':'الحمدلله 💙 شحالج أنتي؟ كيف يومج؟',
+      'شلونك':'الحمدلله 💙 أنت شلونك؟ خبّرني عن يومك',
+      'وش أخبارك':'الحمدلله 💙 خبّرني عنك أنت',
+      'وش اخبارك':'الحمدلله 💙 خبّرني عنك أنت',
+      'شخبارك':'الحمدلله 💙 خبّرني عنك أنت',
+      'ايش لونك':'الحمدلله 💙 وأنت إيش لونك؟',
+      'كيف الحال':'الحمدلله 💙 كيف حالك أنت؟ إيش جديدك؟',
+      'صباح الخير':'صباح النور 💙 كيف بديت يومك؟',
+      'مساء الخير':'مساء النور 💙 كيف كان يومك؟',
+      'السلام عليكم':'وعليكم السلام 💙 أهلاً فيك... كيف حالك؟',
+      'سلام عليكم':'وعليكم السلام 💙 أهلاً فيك... كيف حالك؟',
+      'عساك بخير':'الله يعافيك 💙 وأنت عساك بخير؟',
+      'الله يعافيك':'الله يعافيك ويسلمك 💙'
     };
     // Check exact match or close match
     const cleanText = trimmed.replace(/[.!؟?،,]/g,'').trim();
@@ -2539,7 +2670,7 @@ function handleSpecialInput(text) {
       }
     }
     // Check if it's a common word (not slang) — don't ask about these
-    const commonShort = ['اوكي','اوك','خلاص','تمام','لا','نعم','ايه','اي','هاي','مرحبا','مرحبا','اهلا','اهلا','اهلين','شكرا','شكرا','باي','ها','هه','ههه','هههه','حياك','حياكم','هلا','يا هلا','هلا والله','السلام عليكم','سلام عليكم','السلام','سلام','صباح الخير','مساء الخير','صباح النور','مساء النور','كيفك','كيف الحال','شخبارك','شلونك','اشلونك','شحالك','عساك بخير','الله بالخير','يالله','ان شاء الله','انشالله','الحمدلله','ماشاء الله','سبحان الله','يارب','الله','الله يسلمك','الله يعافيك','بالسلامة','في امان الله','بحفظ الرحمن','مع السلامه','مع السلامة','وداعا','ok','yes','no','hi','hey','bye','thanks','ya','yep','yup','nah','nope','sup','yo','k','kk','hello','goodbye','see you','ty','thx','plz','pls','hmm','wow','omg','oh'];
+    const commonShort = ['اوكي','اوك','خلاص','تمام','لا','نعم','ايه','اي','هاي','مرحبا','مرحبا','اهلا','اهلا','اهلين','شكرا','شكرا','باي','ها','هه','ههه','هههه','حياك','حياكم','هلا','يا هلا','هلا والله','السلام عليكم','سلام عليكم','السلام','سلام','صباح الخير','مساء الخير','صباح النور','مساء النور','كيفك','كيف حالك','كيف حالج','كيف الحال','كيف حالك','كيف حالج','شخبارك','وش أخبارك','وش اخبارك','شلونك','اشلونك','شحالك','عساك بخير','الله بالخير','يالله','ان شاء الله','انشالله','الحمدلله','ماشاء الله','سبحان الله','يارب','الله','الله يسلمك','الله يعافيك','بالسلامة','في امان الله','بحفظ الرحمن','مع السلامه','مع السلامة','وداعا','ok','yes','no','hi','hey','bye','thanks','ya','yep','yup','nah','nope','sup','yo','k','kk','hello','goodbye','see you','ty','thx','plz','pls','hmm','wow','omg','oh'];
     const isCommon = commonShort.some(function(w) { 
       return normalizeArabic(trimmed) === normalizeArabic(w) || trimmed.toLowerCase() === w; 
     });
@@ -2578,7 +2709,7 @@ function handleSpecialInput(text) {
 
 
   // --- Greetings / تحيات ---
-  const greetings = ['السلام عليكم','سلام عليكم','السلام','سلام','صباح الخير','مساء الخير','صباح النور','مساء النور','هاي','هلا والله','اهلا','أهلاً','اهلين','مرحبا','مرحباً','حياك','حياكم','كيفك','كيف الحال','شخبارك','شلونك','اشلونك','شحالك','عساك بخير','الله بالخير','يا هلا'];
+  const greetings = ['السلام عليكم','سلام عليكم','السلام','سلام','صباح الخير','مساء الخير','صباح النور','مساء النور','هاي','هلا والله','اهلا','أهلاً','اهلين','مرحبا','مرحباً','حياك','حياكم','كيفك','كيف حالك','كيف حالج','كيف الحال','كيف حالك','كيف حالج','شخبارك','وش أخبارك','وش اخبارك','شلونك','اشلونك','شحالك','عساك بخير','الله بالخير','يا هلا'];
   if(greetings.some(g => low === normalizeArabic(g) || (low.length < 30 && low.startsWith(normalizeArabic(g))))) {
     const responses = isAr ? [
       'وعليكم السلام 💙 أهلاً فيك... أنا نَفَس، هنا أسمعك. كيف حالك اليوم؟',
@@ -3376,8 +3507,8 @@ function handleSpecialInput(text) {
   const femaleBurden = /(لازم أكون أم مثالية|لازم أكون زوجة مثالية|المرأة لازم|البنت لازم|ما أقدر أقول لا لأهلي|لازم أرضي زوجي|لازم أرضي أهلي|حقي ضايع|أمي تضغط|تعبت من المسؤوليات|كل شي علي|محد يساعدني بالبيت|الأمومة صعبة)/i;
   if(femaleBurden.test(low)) {
     const r = [
-      'من حقك تكونين متعبة — مو لازم ترضين الكل. أنتِ أيضاً شخص يستاهل الراحة 💙',
-      '"كل شي عليك" — وهذا بالضبط ليش أنتِ تعبانة. من حقك تطلبين مساعدة 🌱',
+      'من حقك تكون متعب — مو لازم ترضي الكل. أنت أيضاً شخص يستاهل الراحة 💙',
+      '"كل شي عليك" — وهذا بالضبط ليش أنت تعبان. من حقك تطلب مساعدة 🌱',
       'المجتمع يتوقع منك تكونين كل شي لكل أحد — بس مَن يكون شي لك؟ 💙',
       '"لازم أكون مثالية" — ما فيه أم أو زوجة مثالية. فيه إنسانة تسوي أحسن ما تقدر 💙',
       'الأمومة + الشغل + البيت + الأهل = ماراثون ما ينتهي. من حقك تقولين "واقفة" 💙'
@@ -3699,7 +3830,7 @@ function handleSpecialInput(text) {
       'تعب الأمومة حقيقي — ومو معناه إنك أم سيئة. معناه إنك إنسانة 💙',
       '"ما أحد يشوف تعبي" — أنا أشوفه. واللي تسوينه = معجزة يومية 🌱',
       'من حقك تقولين "أنا تعبانة" — بدون ما أحد يحسسك بالذنب. من حقك ترتاحين 💙',
-      '24/7 بدون توقف — حتى الآلة تحتاج صيانة. أنتِ أولى بالراحة 💙'
+      '24/7 بدون توقف — حتى الآلة تحتاج صيانة. أنت أولى بالراحة 💙'
     ];
     return r[Math.floor(Math.random()*r.length)];
   }
@@ -4271,7 +4402,7 @@ function handleSpecialInput(text) {
   const motherhoodBurnout = /(تعبت من عيالي|أحس بذنب.*أم|ما أقدر أشتكي.*أم|حياتي كلها ل(هم|عيالي)|أم سيئة|ما أصلح أكون أم|عيالي ياخذون كل وقتي|ما عندي وقت لنفسي.*عيال|أبي أرتاح من.*عيال|أكره نفسي لما أصرخ عليهم)/i;
   if(motherhoodBurnout.test(low)) {
     const r = [
-      'أنتِ إنسانة قبل ما تكونين أم — و**تعبك حقيقي**. من حقك تحبينهم وبنفس الوقت تكونين تعبانة 💙',
+      'إنسان قبل كل شي — و**تعبك حقيقي**. من حقك تحبهم وبنفس الوقت تكون تعبان 💙',
       'الأمومة أصعب وظيفة بالعالم — وما فيها إجازة. اللي تحسين فيه **طبيعي** مو تقصير 💙',
       'لما الأم تتعب من عيالها — هذا مو معناته إنها ما تحبهم. هذا معناته إنها **إنسانة** 💙',
       'كل أم تحتاج لحظة تقول فيها: أنا تعبت. و**هذا مو أنانية** — هذا بقاء 💙'
@@ -5046,7 +5177,7 @@ function ventResponse(text){
   // After 3+ messages, occasionally offer deeper assessment
   if(state.ventMsgCount >= 3 && state.ventMsgCount % 3 === 0){
     resp += '\n\n' + (L === 'ar'
-      ? 'شكراً لمشاركتي هذا. هل تريدين تقييماً أعمق لمعرفة ما تحتاجينه؟'
+      ? 'شكراً لمشاركتي هذا. هل تريد تقييماً أعمق لمعرفة ما تحتاجه؟'
       : 'Thank you for sharing this. Would you like a deeper assessment to understand what you need?');
   }
   return resp;
@@ -5060,19 +5191,19 @@ function getVAKRecommendations(){
   const vak = state.vakPattern;
   const recs = {
     visual: {
-      ar: ['🎨 جربي التلوين العلاجي أو الرسم الحر — حتى لو ما تعرفين ترسمين','📸 صوّري لحظة جميلة كل يوم — بناء ألبوم إيجابي','🧘‍♀️ جربي التأمل المرئي: أغمضي عينيكِ وتخيلي مكاناً هادئاً بكل تفاصيله','📊 ارسمي خريطة ذهنية لمشاعرك — الرؤية تساعدك على الفهم','🌅 شاهدي فيديوهات طبيعة (غروب، بحر، غابات) — 10 دقائق يومياً'],
+      ar: ['🎨 جرب التلوين العلاجي أو الرسم الحر — حتى لو ما تعرف ترسم','📸 صوّر لحظة جميلة كل يوم — بناء ألبوم إيجابي','🧘‍♀️ جرب التأمل المرئي: أغمض عينيك وتخيلي مكاناً هادئاً بكل تفاصيله','📊 ارسمي خريطة ذهنية لمشاعرك — الرؤية تساعدك على الفهم','🌅 شاهدي فيديوهات طبيعة (غروب، بحر، غابات) — 10 دقائق يومياً'],
       en: ['🎨 Try therapeutic coloring or free drawing — no skills needed','📸 Take a photo of one beautiful moment daily — build a positivity album','🧘‍♀️ Try visual meditation: close your eyes and imagine a peaceful place in detail','📊 Draw a mind map of your feelings — seeing helps understanding','🌅 Watch nature videos (sunsets, oceans, forests) — 10 minutes daily']
     },
     auditory: {
-      ar: ['🎵 أنشئي قائمة "موسيقى الراحة" — استمعي لها 15 دقيقة يومياً','🎙️ سجّلي رسالة صوتية لنفسك — اسمعيها بعد أسبوع','📞 تكلمي مع شخص تثقين به — الصوت البشري شفاء','🎧 جربي البودكاست العلاجي — ابحثي عن "mindfulness podcast"','🤫 خصصي 10 دقائق صمت تام يومياً — الصمت يُعيد ضبط أذنيكِ'],
+      ar: ['🎵 أنشئ قائمة "موسيقى الراحة" — استمع لها 15 دقيقة يومياً','🎙️ سجّل رسالة صوتية لنفسك — اسمعها بعد أسبوع','📞 تكلم مع شخص تثق به — الصوت البشري شفاء','🎧 جرب البودكاست العلاجي — ابحث عن "mindfulness podcast"','🤫 خصص 10 دقائق صمت تام يومياً — الصمت يُعيد ضبط أذنيك'],
       en: ['🎵 Create a "comfort music" playlist — listen 15 minutes daily','🎙️ Record a voice message to yourself — listen back after a week','📞 Talk to someone you trust — the human voice heals','🎧 Try therapeutic podcasts — search "mindfulness podcast"','🤫 Dedicate 10 minutes of complete silence daily — silence recalibrates']
     },
     kinesthetic: {
-      ar: ['🚶‍♀️ امشي 20 دقيقة يومياً — الحركة تطرد التوتر من جسمك','✍️ اكتبي مشاعرك على ورق حقيقي — الكتابة اليدوية علاج','🧘 تمرين 4-7-8: شهيق 4 ثوانٍ، احبسي 7، زفير 8 — كرريه 3 مرات','🤲 جربي العجن أو الصلصال — اليدين تُفرِّغ الضغط','💧 اغمري يديكِ في ماء بارد 30 ثانية — يُعيد ضبط جهازك العصبي'],
+      ar: ['🚶‍♀️ امش 20 دقيقة يومياً — الحركة تطرد التوتر من جسمك','✍️ اكتب مشاعرك على ورق حقيقي — الكتابة اليدوية علاج','🧘 تمرين 4-7-8: شهيق 4 ثوانٍ، احبس 7، زفير 8 — كرره 3 مرات','🤲 جرب العجن أو الصلصال — اليدين تُفرِّغ الضغط','💧 اغمر يديك في ماء بارد 30 ثانية — يُعيد ضبط جهازك العصبي'],
       en: ['🚶‍♀️ Walk 20 minutes daily — movement releases tension','✍️ Write your feelings on real paper — handwriting is therapeutic','🧘 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s — repeat 3 times','🤲 Try clay or dough — hands release pressure','💧 Immerse your hands in cold water for 30 seconds — resets your nervous system']
     },
     mixed: {
-      ar: ['🌿 اختاري نشاطاً واحداً يُسعدك وكرريه يومياً — أي شيء','📝 اكتبي 3 أشياء إيجابية حصلت اليوم قبل النوم','🧘‍♀️ تمرين التنفس الواعي: دقيقة واحدة فقط صباحاً ومساءً','🔇 قللي وقت الشاشة ساعة قبل النوم','💙 ذكّري نفسك: "أنا أبذل ما أستطيع — وهذا كافٍ"'],
+      ar: ['🌿 اختر نشاطاً واحداً يُسعدك وكرره يومياً — أي شيء','📝 اكتب 3 أشياء إيجابية حصلت اليوم قبل النوم','🧘‍♀️ تمرين التنفس الواعي: دقيقة واحدة فقط صباحاً ومساءً','🔇 قلل وقت الشاشة ساعة قبل النوم','💙 ذكّر نفسك: "أنا أبذل ما أستطيع — وهذا كافٍ"'],
       en: ['🌿 Choose one joyful activity and repeat it daily — anything','📝 Write 3 positive things that happened today before bed','🧘‍♀️ Mindful breathing: just one minute morning and evening','🔇 Reduce screen time one hour before bed','💙 Remind yourself: "I am doing my best — and that is enough"']
     }
   };
@@ -5092,12 +5223,12 @@ function buildProfileCard(){
   const vakTipsHtml = vakRecs.map(r => `<li>${r}</li>`).join('');
   if(L === 'ar'){
     const vakDesc = {
-      visual:'أنتِ تدركين العالم بصرياً — الصور والألوان والمشاهد تؤثر فيكِ بعمق.',
-      auditory:'أنتِ تدركين العالم سمعياً — الكلمات والأصوات والنغمات تؤثر فيكِ بعمق.',
-      kinesthetic:'أنتِ تدركين العالم حسياً — المشاعر الجسدية والأحاسيس تؤثر فيكِ بعمق.',
-      mixed:'لديكِ نمط إدراكي متنوع — تستخدمين حواساً متعددة لفهم العالم حولكِ.'
+      visual:'تدرك العالم بصرياً — الصور والألوان والمشاهد تؤثر فيك بعمق.',
+      auditory:'تدرك العالم سمعياً — الكلمات والأصوات والنغمات تؤثر فيك بعمق.',
+      kinesthetic:'تدرك العالم حسياً — المشاعر الجسدية والأحاسيس تؤثر فيك بعمق.',
+      mixed:'لديك نمط إدراكي متنوع — تستخدم حواساً متعددة لفهم العالم حولك.'
     }[vak];
-    return `<div class="profile-card"><h3>نتيجة تقييمكِ</h3><div class="pattern"><strong>نمطكِ الإدراكي:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>مستوى الإرهاق:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>توصياتكِ الشخصية:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 نصائح يومية حسب نمطكِ (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.ar.disclaimer}</p><div style="text-align:center;margin-top:12px"><button onclick="shareNafas()" style="background:linear-gradient(135deg,var(--accent-primary),#14B8A6);border:none;color:#fff;padding:10px 24px;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:inherit">📤 شارك نَفَس</button></div></div>`;
+    return `<div class="profile-card"><h3>نتيجة تقييمك</h3><div class="pattern"><strong>نمطك الإدراكي:</strong> ${vakEmoji} ${vakLabel}<br>${vakDesc}</div><div class="level"><strong>مستوى الإرهاق:</strong> ${levelLabel}<div class="level-bar"><div class="level-bar-fill" style="width:${pct}%;background:${colors[lvl]}"></div></div></div><div class="recommendations"><strong>توصياتكِ الشخصية:</strong><ul>${resources}</ul></div><div class="recommendations" style="margin-top:12px"><strong>💡 نصائح يومية حسب نمطك (${vakLabel}):</strong><ul>${vakTipsHtml}</ul></div><p class="disclaimer">${i18n.ar.disclaimer}</p><div style="text-align:center;margin-top:12px"><button onclick="shareNafas()" style="background:linear-gradient(135deg,var(--accent-primary),#14B8A6);border:none;color:#fff;padding:10px 24px;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:inherit">📤 شارك نَفَس</button></div></div>`;
   }else{
     const vakDesc = {
       visual:'You perceive the world visually — images, colors, and scenes affect you deeply.',
@@ -5116,7 +5247,7 @@ function getRecommendations(vak, lvl){
       visual:[
         '<li>🎬 <a href="https://www.youtube.com/results?search_query=تأمل+مرئي+عربي" target="_blank">تأمل مرئي هادئ — يوتيوب</a></li>',
         '<li>📊 إنفوجرافيك: الإرهاق الوظيفي — <a href="https://ar.who.int" target="_blank">منظمة الصحة العالمية</a></li>',
-        '<li>✍️ تخيّلي: اكتبي 3 مناظر طبيعية تشعرينكِ بالهدوء</li>'
+        '<li>✍️ تخيّل: اكتب 3 مناظر طبيعية تشعرك بالهدوء</li>'
       ],
       auditory:[
         '<li>🎙️ بودكاست "نفساني" — أول بودكاست نفسي عربي: <a href="https://open.spotify.com/search/نفساني" target="_blank">Spotify</a></li>',
@@ -5173,7 +5304,7 @@ function buildDrawerContent(){
       visual:{title:'موارد بصرية',items:[
         '<a href="https://www.youtube.com/results?search_query=تأمل+مرئي+عربي" target="_blank">🎬 تأمل مرئي هادئ — يوتيوب</a>',
         '<a href="https://ar.who.int" target="_blank">📊 الإرهاق الوظيفي — منظمة الصحة العالمية</a>',
-        '<p>✍️ تخيّلي: اكتبي 3 مناظر طبيعية تشعرينكِ بالهدوء</p>'
+        '<p>✍️ تخيّل: اكتب 3 مناظر طبيعية تشعرك بالهدوء</p>'
       ]},
       auditory:{title:'موارد سمعية',items:[
         '<a href="https://open.spotify.com/search/نفساني" target="_blank">🎙️ بودكاست "نفساني"</a>',
@@ -5445,7 +5576,7 @@ function startBreathing(){
   breathTimeout = setTimeout(function() {
     if (breathAnimFrame) cancelAnimationFrame(breathAnimFrame);
     breathAnimFrame = null;
-    const doneMsg = state.lang === 'ar' ? '🌟 أحسنتِ! كيف تشعرين الآن بعد التمرين؟' : '🌟 Well done! How do you feel after the exercise?';
+    const doneMsg = state.lang === 'ar' ? '🌟 أحسنت! كيف تشعر الآن بعد التمرين؟' : '🌟 Well done! How do you feel after the exercise?';
     if (label) label.textContent = state.lang === 'ar' ? 'أحسنتِ 💙' : 'Well done 💙';
     if(state.voiceEnabled) speak(state.lang === 'ar' ? 'أحسنتِ' : 'Well done');
     if (typeof addMessage === 'function') addMessage('bot', doneMsg);
@@ -5478,7 +5609,7 @@ function renderTourStep(){
   const dots = document.getElementById('tourDots');
   dots.innerHTML = steps.map((_,i)=>`<span class="${i===tourStep?'active':''}"></span>`).join('');
   const nextBtn = document.getElementById('tourNext');
-  nextBtn.textContent = tourStep === steps.length - 1 ? (state.lang === 'ar' ? 'ابدأي' : 'Start') : (state.lang === 'ar' ? 'التالي' : 'Next');
+  nextBtn.textContent = tourStep === steps.length - 1 ? (state.lang === 'ar' ? 'ابدأ' : 'Start') : (state.lang === 'ar' ? 'التالي' : 'Next');
   const backBtn = document.getElementById('tourBack');
   if(tourStep > 0){
     backBtn.style.display = 'inline-block';
@@ -5582,7 +5713,7 @@ function renderBurnoutChart(sessions){
   const sorted = [...sessions].reverse(); // oldest first
   if(sorted.length < 2){
     svg.innerHTML = '<text x="180" y="60" text-anchor="middle" fill="var(--text-secondary)" font-size="12">' +
-      (state.lang === 'ar' ? 'تحتاجين جلستين على الأقل لعرض الرسم' : 'Need at least 2 sessions for chart') + '</text>';
+      (state.lang === 'ar' ? 'تحتاج جلستين على الأقل لعرض الرسم' : 'Need at least 2 sessions for chart') + '</text>';
     return;
   }
   const w = 360; const h = 120; const pad = 20;
@@ -5679,15 +5810,30 @@ function goToWelcome(){
 function startMode(mode){
   state.mode = mode;
   state.sessionId = genId();
-  state.messages = []; state.vakCounts = {v:0,a:0,k:0};
-  state.vakPattern = 'mixed'; state.burnoutScore = 0; state.burnoutLevel = 1;
+  // Persistent chat: don't clear messages
+  if(!state.messages)state.messages=[];
+  if(!state.vakCounts)state.vakCounts={v:0,a:0,k:0};
   state.deepStep = 0; state.deepUsedThemes = [];
   state.ventMsgCount = 0; state.ventUsedTemplates = [];
   state.resourcesOpened = false; state.quickCheckDone = false;
   state.sessionSaved = false; state.crisisDetected = false;
-  geminiHistory = []; // Reset AI conversation history
   state.anonymousName = state.journeyCode || ('user_' + Math.random().toString(36).slice(2,6));
-  document.getElementById('messages').innerHTML = '';
+  // Restore previous messages or add separator
+  var container = document.getElementById('messages');
+  if(state.messages.length===0){
+    container.innerHTML='';
+    var restored=restoreChatHistory();
+    if(restored){addDateSeparator(Date.now());}
+  }else if(container.children.length>0){
+    addDateSeparator(Date.now());
+  }
+  // Rebuild geminiHistory from recent messages for AI continuity
+  geminiHistory=[];
+  var recent=state.messages.filter(function(m){return m.role==='user'||m.role==='bot'}).slice(-10);
+  recent.forEach(function(m){
+    if(m.role==='user')geminiHistory.push({role:'user',parts:[{text:m.text}]});
+    else if(m.text!=='[card]')geminiHistory.push({role:'model',parts:[{text:JSON.stringify({response:m.text})}]});
+  });
   closeCrisisBanner();
   updateUI();
   showScreen('chatScreen');
@@ -5701,11 +5847,11 @@ function startMode(mode){
     if(mode === 'demo'){
       greeting = L === 'ar' ? 'مرحباً! أنا نَفَس 💙 جرّبني بسؤال واحد — كيف حالك اليوم؟' : 'Hi! I\'m Nafas 💙 Try me with one question — how are you today?';
     }else if(mode === 'quick'){
-      greeting = L === 'ar' ? 'أهلاً... أخبريني بكلمات بسيطة: كيف حالكِ الآن؟ 💙' : 'Hi... tell me simply: how are you feeling right now? 💙';
+      greeting = L === 'ar' ? 'أهلاً... أخبرني بكلمات بسيطة: كيف حالك الآن؟ 💙' : 'Hi... tell me simply: how are you feeling right now? 💙';
     }else if(mode === 'vent'){
-      greeting = L === 'ar' ? 'أنا هنا فقط لأسمعكِ... قولي ما تريدين بلا حكم ولا مقاطعة 💙' : "I'm here just to listen... say whatever you need, no judgment 💙";
+      greeting = L === 'ar' ? 'أنا هنا فقط لأسمعك... قول ما تريد بلا حكم ولا مقاطعة 💙' : "I'm here just to listen... say whatever you need, no judgment 💙";
     }else{
-      greeting = L === 'ar' ? 'مرحباً... أنا هنا أستمع إليكِ بكل اهتمام. لنبدأ برفق:\n\nمتى كانت آخر مرة شعرتِ بالرضا الحقيقي في عملكِ؟' : "Hello... I'm here listening with full attention. Let's start gently:\n\nWhen was the last time you felt truly satisfied at work?";
+      greeting = L === 'ar' ? 'مرحباً... أنا هنا أستمع إليك بكل اهتمام. لنبدأ برفق:\n\nمتى كانت آخر مرة شعرت بالرضا الحقيقي في عملك؟' : "Hello... I'm here listening with full attention. Let's start gently:\n\nWhen was the last time you felt truly satisfied at work?";
     }
     addMessage('bot', greeting);
     speak(greeting);
@@ -5742,7 +5888,6 @@ async function sendMessage(){
   input.value = ''; input.style.height = 'auto';
   haptic('light');
   if (typeof SoundFX !== 'undefined') SoundFX.play('send');
-  if(typeof SilenceDetector!=='undefined')SilenceDetector.userSpoke();
   addMessage('user', text);
 
   // === LEARN NEW WORD ===
@@ -5885,7 +6030,7 @@ async function sendMessage(){
     if(state.vakPattern === 'kinesthetic' && state.burnoutLevel >= 3 && state.messages.filter(m=>m.role==='user').length === 2){
       setTimeout(()=>{
         const offer = state.lang === 'ar'
-          ? '💡 أحسستُ بثقل ما تحملينه. هل تودّين تجربة تمرين تنفس 4-7-8 الآن؟ <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">ابدأي التمرين</a>'
+          ? '💡 أحسستُ بثقل ما تحمله. هل تود تجربة تمرين تنفس 4-7-8 الآن؟ <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">ابدأ التمرين</a>'
           : '💡 I sense the weight you\'re carrying. Would you like to try a 4-7-8 breathing exercise? <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">Start exercise</a>';
         addMessage('bot', offer, true);
       }, 1500);
@@ -5963,7 +6108,7 @@ async function sendMessage(){
     if(state.vakPattern === 'kinesthetic' && state.burnoutLevel >= 3 && state.messages.filter(m=>m.role==='user').length === 2){
       setTimeout(()=>{
         const offer = state.lang === 'ar'
-          ? '💡 أحسستُ بثقل ما تحملينه. هل تودّين تجربة تمرين تنفس 4-7-8 الآن؟ <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">ابدأي التمرين</a>'
+          ? '💡 أحسستُ بثقل ما تحمله. هل تود تجربة تمرين تنفس 4-7-8 الآن؟ <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">ابدأ التمرين</a>'
           : '💡 I sense the weight you\'re carrying. Would you like to try a 4-7-8 breathing exercise? <a href="#" onclick="startBreathing();return false;" style="color:var(--accent-primary)">Start exercise</a>';
         addMessage('bot', offer, true);
       }, 1500);
@@ -6110,10 +6255,6 @@ function updateOnlineStatus() {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
-// Initialize Silence Detector
-if(typeof SilenceDetector!=='undefined')SilenceDetector.init();
-console.log('🤫 Silence Detector initialized — أنا هني معك');
-
 // Auto-share saved location when coming back online
 window.addEventListener('online', function() {
   const pending = sessionStorage.getItem('nafas_pending_location');
@@ -6121,7 +6262,7 @@ window.addEventListener('online', function() {
     try {
       const coords = JSON.parse(pending);
       sessionStorage.removeItem('nafas_pending_location');
-      const msg = state.lang === 'ar' ? '🌐 عادت الشبكة! هل تريدين مشاركة موقعك المحفوظ؟' : '🌐 You are back online! Share your saved location?';
+      const msg = state.lang === 'ar' ? '🌐 عادت الشبكة! هل تريد مشاركة موقعك المحفوظ؟' : '🌐 You are back online! Share your saved location?';
       if (confirm(msg)) {
         const url = `https://www.google.com/maps?q=${coords.lat},${coords.lng}`;
         window.open(url, '_blank');
@@ -6145,15 +6286,26 @@ function showInstallBanner() {
   const isAr = state.lang === 'ar';
   const banner = document.createElement('div');
   banner.id = 'installBanner';
-  banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--accent-primary);border-radius:16px;padding:12px 20px;display:flex;align-items:center;gap:12px;z-index:150;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:msgIn .4s;max-width:90vw';
-  banner.innerHTML = '<span style="font-size:1.5rem">📲</span><div><strong style="color:var(--accent-primary);font-size:.9rem">' + 
-    (isAr ? 'ثبّت نَفَس على جهازك' : 'Install Nafas on your device') + 
-    '</strong><p style="font-size:.75rem;color:var(--text-secondary);margin-top:2px">' + 
-    (isAr ? 'للوصول السريع بدون متصفح' : 'Quick access without browser') + 
-    '</p></div><button onclick="installPWA()" style="padding:8px 16px;border-radius:12px;border:none;background:var(--accent-primary);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap;font-family:Tajawal,sans-serif">' + 
-    (isAr ? 'تثبيت' : 'Install') + 
-    '</button><button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:1.2rem;padding:4px">✕</button>';
+  // All styling handled by CSS — no inline styles needed
+  banner.innerHTML = 
+    '<span class="pwa-icon">📲</span>' +
+    '<div class="pwa-text">' +
+      '<strong>' + (isAr ? 'ثبّت نَفَس على جهازك' : 'Install Nafas') + '</strong>' +
+      '<p>' + (isAr ? 'للوصول السريع بدون متصفح' : 'Quick access without browser') + '</p>' +
+    '</div>' +
+    '<button class="pwa-install-btn" onclick="installPWA()">' + (isAr ? 'تثبيت' : 'Install') + '</button>' +
+    '<button class="pwa-close-btn" onclick="dismissInstallBanner()" aria-label="Close">✕</button>';
   document.body.appendChild(banner);
+  
+  // Auto-dismiss after 8 seconds
+  setTimeout(() => { dismissInstallBanner(); }, 8000);
+}
+
+function dismissInstallBanner() {
+  const b = document.getElementById('installBanner');
+  if (!b) return;
+  b.classList.add('pwa-hiding');
+  setTimeout(() => { b.remove(); }, 400);
 }
 
 function installPWA() {

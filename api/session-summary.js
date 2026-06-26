@@ -157,21 +157,17 @@ export default async function handler(req, res) {
 
     await supabaseFetch('nafas_session_summaries', 'POST', summary);
 
-    // 3. Save conversation log
-    const logEntries = messages.map((m, i) => ({
+    // 3. Save classified conversation log — NO raw text (privacy-first architecture)
+    // Only save one summary entry per session, not individual messages
+    const classifiedEntry = {
       visitor_id,
       session_id,
-      role: m.role || (i % 2 === 0 ? 'user' : 'model'),
-      message_text: (m.text || '').slice(0, 2000),
-      detected_emotion: '',
+      role: 'session_summary',
+      message_text: null,  // Privacy: raw text NEVER stored
+      detected_emotion: (analysis.emotional_arc || '').slice(0, 200),
       detected_topics: analysis.key_topics || []
-    }));
-
-    // Batch insert (up to 50 messages)
-    for (let i = 0; i < logEntries.length; i += 10) {
-      const batch = logEntries.slice(i, i + 10);
-      await supabaseFetch('nafas_conversation_log', 'POST', batch);
-    }
+    };
+    await supabaseFetch('nafas_conversation_log', 'POST', [classifiedEntry]);
 
     // 4. Save any new vocabulary discovered
     if (analysis.detected_vocabulary && analysis.detected_vocabulary.length > 0) {
@@ -182,7 +178,7 @@ export default async function handler(req, res) {
             meaning: (v.meaning || '').slice(0, 200),
             dialect: v.dialect || 'unknown',
             category: v.category || 'expression',
-            example_context: (messages.find(m => m.text && m.text.includes(v.word))?.text || '').slice(0, 200),
+            example_context: `session:${session_id}`,  // Privacy: no raw text, only session ref
             frequency: 1,
             confidence: 0.5
           }).catch(() => {}); // Ignore duplicates

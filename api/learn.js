@@ -58,39 +58,39 @@ async function analyzeWithGemini(prompt) {
   }
 }
 
-// ── Learning Module 1: Vocabulary Discovery ──
+// ── Learning Module 1: Vocabulary Promotion ──
+// Privacy-first: raw text is NEVER stored. Vocabulary candidates are
+// detected inline (gemini_new.js) with confidence=0.3, category='pending_review'.
+// This module promotes them using Gemini to classify meaning/dialect.
 async function learnVocabulary(conversations) {
-  if (!conversations || conversations.length === 0) return { added: 0 };
+  // Get pending vocabulary candidates (detected during conversations)
+  const pendingVocab = await supabaseFetch(
+    'nafas_learned_vocabulary?category=eq.pending_review&limit=50',
+    'GET'
+  );
+  if (!pendingVocab || pendingVocab.length === 0) return { added: 0, promoted: 0 };
 
-  // Get existing vocabulary
+  // Get existing confirmed vocabulary
   const existingVocab = await supabaseFetch(
-    'nafas_learned_vocabulary?select=word&limit=500',
+    'nafas_learned_vocabulary?select=word&category=neq.pending_review&limit=500',
     'GET'
   );
   const knownWords = new Set((existingVocab || []).map(v => v.word));
 
-  // Extract user messages
-  const userTexts = conversations
-    .filter(c => c.role === 'user')
-    .map(c => c.message_text)
-    .join('\n');
+  const pendingWords = pendingVocab
+    .filter(v => v.word && !knownWords.has(v.word))
+    .map(v => v.word);
 
-  if (userTexts.length < 20) return { added: 0 };
+  if (pendingWords.length === 0) return { added: 0, promoted: 0 };
 
   const prompt = `أنتِ محلل لغوي لتطبيق "نَفَس" (تطبيق دعم نفسي عربي خليجي).
 
-حللي النصوص التالية من المستخدمين واستخرجي:
-1. كلمات أو تعبيرات عربية (لهجية) غير شائعة أو تعبيرات شبابية جديدة
-2. كلمات إنجليزية معرّبة أو مصطلحات إنترنت
-3. تعبيرات عاطفية فريدة تصف حالات نفسية
-4. أي كلمة أو تعبير يمكن أن يكون مفيداً لفهم المستخدمين أفضل
+الكلمات التالية اكتُشفت تلقائياً من محادثات المستخدمين. صنّفيها:
+${pendingWords.join(', ')}
 
 الكلمات المعروفة مسبقاً (لا تكرريها): ${Array.from(knownWords).slice(0, 100).join(', ')}
 
-نصوص المستخدمين:
-${userTexts.slice(0, 3000)}
-
-أجيبي بـ JSON:
+لكل كلمة مفيدة (تجاهلي الأخطاء الإملائية أو الكلمات العادية):
 {
   "vocabulary": [
     {
@@ -98,21 +98,21 @@ ${userTexts.slice(0, 3000)}
       "meaning": "معناها بالعربية الفصيحة",
       "dialect": "khaleeji/egyptian/shami/maghrebi/gen_z/internet",
       "category": "emotion/slang/greeting/expression/borrowed/gen_z",
-      "usage_tip": "كيف يستخدمها المتحدث وكيف يجب أن أتعامل معها"
+      "usage_tip": "كيف يستخدمها المتحدث وكيف يجب أن أتعامل معها",
+      "useful": true
     }
   ]
-}
-
-ملاحظة: ركّزي على الكلمات اللي فعلاً تحتاج تعلّم — لا تضيفي كلمات عربية أساسية معروفة.`;
+}`;
 
   const result = await analyzeWithGemini(prompt);
-  if (!result?.vocabulary) return { added: 0 };
+  let promoted = 0;
 
-  let added = 0;
-  for (const v of result.vocabulary) {
-    if (!v.word || knownWords.has(v.word)) continue;
-    await supabaseFetch('nafas_learned_vocabulary', 'POST', {
-      word: v.word.slice(0, 50),
+  if (result?.vocabulary) {
+    for (const v of result.vocabulary) {
+      if (!v.word || !v.useful) continue;
+      // Update the pending entry to confirmed
+      await supabaseFetch('nafas_learned_vocabulary', 'POST', {
+        word: v.word.slice(0, 50),
       meaning: (v.meaning || '').slice(0, 200),
       dialect: v.dialect || 'unknown',
       category: v.category || 'expression',

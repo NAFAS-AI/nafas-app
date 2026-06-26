@@ -189,16 +189,121 @@ async function loadEnrichedContext(visitorId, profileData) {
 }
 
 // ── Phase 4: Log Conversation Exchange ──
-async function logConversation(visitorId, sessionId, userText, modelText) {
-  if (!visitorId || !sessionId || !SUPABASE_KEY) return;
-  try {
-    const entries = [];
-    if (userText) entries.push({ visitor_id: visitorId, session_id: sessionId, role: 'user', message_text: userText.slice(0, 2000) });
-    if (modelText) entries.push({ visitor_id: visitorId, session_id: sessionId, role: 'model', message_text: modelText.slice(0, 2000) });
-    if (entries.length > 0) {
-      await supabaseFetch('nafas_conversation_log', 'POST', entries);
+// ── Emotion Detection (code-level, not prompt-dependent) ──
+const EMOTION_PATTERNS = {
+  'sadness':     /حزين|حزن|أبكي|بكيت|دموع|كئيب|مكتئب|اكتئاب|ما أقدر أفرح/,
+  'anxiety':     /قلق|خايف|خوف|هلع|بانيك|وسواس|توتر|متوتر|عصبي|أعصاب/,
+  'anger':       /معصب|زعلان|مقهور|ظلم|ظالم|طفشت|طفش|مطفوق|كرهت|أكره/,
+  'exhaustion':  /تعبان|منهك|طاقت|ما فيني|مب قادر|خلاص|احتراق|بطارية|مب طايق/,
+  'loneliness':  /وحيد|وحدي|محد|عزلة|مفقود|ما أحد يهتم|ما أحد يسأل/,
+  'confusion':   /ضايع|محتار|مب عارف|ما أعرف|مشوش|ما أدري/,
+  'grief':       /فقدت|توفى|الله يرحم|واحشني|موت|مات|رحل/,
+  'hope':        /أمل|إن شاء الله|بتحسن|أحسن|ارتحت|حمدلله|الحمدلله/,
+  'gratitude':   /شكراً|مشكور|الله يعطيك|يزاك|حلو كلامك|ساعدتني/,
+  'shame':       /خجل|عيب|حرام علي|ما أقدر أقول|سري|لو يدرون/
+};
+
+// ── Dialect Word Detection (new/slang words) ──
+const KNOWN_DIALECT_WORDS = new Set([
+  'مب','ابي','أبي','وايد','يعني','خلاص','شي','حيل','عاد','يالله',
+  'هالشي','هالموضوع','حسيت','يعور','القلب','الخاطر','وياك','وياش'
+]);
+
+function extractNewWords(text) {
+  if (!text || text.length < 5) return [];
+  const words = [];
+  // Detect potential new dialect/slang patterns
+  const dialectPatterns = [
+    { re: /(?:^|\s)([\u0600-\u06FF]{3,12})(?:\s|$)/g, type: 'arabic' },
+  ];
+  // Look for words with distinctive dialect markers
+  const dialectMarkers = /ش$|چ|گ|ڤ|tion|ment|بيب[يى]|فايب|مود|فري|ديل|تريند|سيف|فايف|لايف|هايب|كيوت|ريلاكس|فلكس|كرنج|بايسك|تكسك|تروما/g;
+  let match;
+  while ((match = dialectMarkers.exec(text)) !== null) {
+    const word = match[0].trim();
+    if (word.length >= 2 && !KNOWN_DIALECT_WORDS.has(word)) {
+      words.push(word);
     }
-  } catch (e) { /* non-critical */ }
+  }
+  return [...new Set(words)].slice(0, 5);
+}
+
+function detectEmotions(text) {
+  if (!text) return [];
+  const detected = [];
+  for (const [emotion, pattern] of Object.entries(EMOTION_PATTERNS)) {
+    if (pattern.test(text)) detected.push(emotion);
+  }
+  return detected;
+}
+
+// ── Privacy-First Conversation Logging ──
+// Saves ONLY classified features — NEVER raw text (Noor's decision: 26 June 2026)
+async function logConversation(visitorId, sessionId, userText, modelText, techniqueUsed) {
+  if (!visitorId || !SUPABASE_KEY) {
+    console.warn('[LOG] Skipped — missing:', { visitorId: !!visitorId, key: !!SUPABASE_KEY });
+    return;
+  }
+  const logSessionId = sessionId || ('auto_' + Date.now().toString(36));
+  try {
+    // Extract features from user text (NO raw text saved)
+    const emotions = detectEmotions(userText);
+    const topics = [];
+    const topicPats = {
+      'work': /شغل|عمل|مدير|وظيفة|راتب|مكتب|دوام/,
+      'family': /أهل|عائلة|أبوي|أمي|أخوي|أختي|ريلي|زوج/,
+      'relationship': /حب|علاقة|صاحب|صاحبة|كراش|خان|غوست/,
+      'study': /دراسة|امتحان|جامعة|مدرسة|واجب/,
+      'sleep': /نوم|أرق|سهر|ما أنام/,
+      'health': /مرض|عملية|مستشفى|دكتور|علاج/,
+      'identity': /مين أنا|ما أعرف نفسي|ضايع|هوية/,
+      'grief': /توفى|فقدت|الله يرحم|واحشني/,
+      'burnout': /احتراق|منهك|طاقت|بطارية/
+    };
+    for (const [topic, re] of Object.entries(topicPats)) {
+      if (re.test(userText || '')) topics.push(topic);
+    }
+
+    // Detect new dialect/slang words
+    const newWords = extractNewWords(userText);
+
+    // Determine interaction quality
+    const userLen = (userText || '').length;
+    const interactionType = userLen < 10 ? 'short' : userLen < 80 ? 'medium' : 'detailed';
+
+    // Save classified entry — NO message_text
+    const entry = {
+      visitor_id: visitorId,
+      session_id: logSessionId,
+      role: 'exchange',
+      message_text: null,  // 🔐 Privacy: raw text NEVER saved
+      detected_emotion: emotions.join(',') || null,
+      detected_topics: topics
+    };
+    const result = await supabaseFetch('nafas_conversation_log', 'POST', [entry]);
+    console.log('[LOG] Saved classified exchange for', visitorId, '→ emotions:', emotions, 'topics:', topics, result ? '✅' : '❌');
+
+    // Save new dialect words to vocabulary table for learn.js
+    if (newWords.length > 0) {
+      for (const word of newWords) {
+        await supabaseFetch('nafas_learned_vocabulary', 'POST', {
+          word: word.slice(0, 50),
+          meaning: '',
+          dialect: 'auto_detected',
+          category: 'pending_review',
+          example_context: `Detected in session ${logSessionId}`,
+          frequency: 1,
+          confidence: 0.3
+        }).catch(() => {});
+      }
+      console.log('[LOG] Saved', newWords.length, 'new words:', newWords);
+    }
+
+    return { emotions, topics, newWords, interactionType };
+  } catch (e) {
+    console.error('[LOG] Error:', e.message);
+    return null;
+  }
 }
 
 // ── PROGRAMMATIC SAFETY LAYER ──
@@ -553,7 +658,7 @@ export default async function handler(req, res) {
     }
 
     // ── Update profile + log conversation (non-blocking) ──
-    if (visitorId && profileData) {
+    if (visitorId) {
       try {
         // Extract mood & techniques from response
         let mood = '';
@@ -577,42 +682,44 @@ export default async function handler(req, res) {
         }
 
         // Merge topics (existing + new detected)
-        const existingTopics = profileData.topics || [];
+        const existingTopics = (profileData && profileData.topics) ? profileData.topics : [];
         const mergedTopics = [...new Set([...existingTopics, ...detectedTopics])].slice(-15);
 
         const isFirstMessage = sanitizedContents.filter(m => m.role === 'user').length === 1;
         const updateData = {
           visitor_id: visitorId,
-          gender: detectedGender || profileData.gender || 'unknown',
-          dialect: profileData.dialect || 'khaleeji',
-          session_count: (profileData.session_count || 0) + (isFirstMessage ? 1 : 0),
-          total_sessions: (profileData.total_sessions || 0) + (isFirstMessage ? 1 : 0),
-          last_mood: mood || profileData.last_mood || '',
-          display_name: detectedName || profileData.display_name || '',
-          corrections: profileData.corrections || [],
+          gender: detectedGender || (profileData && profileData.gender) || 'unknown',
+          dialect: (profileData && profileData.dialect) || 'khaleeji',
+          session_count: ((profileData && profileData.session_count) || 0) + (isFirstMessage ? 1 : 0),
+          total_sessions: ((profileData && profileData.total_sessions) || 0) + (isFirstMessage ? 1 : 0),
+          last_mood: mood || (profileData && profileData.last_mood) || '',
+          display_name: detectedName || (profileData && profileData.display_name) || '',
+          corrections: (profileData && profileData.corrections) || [],
           topics: mergedTopics,
-          preferences: profileData.preferences || {},
-          personality_notes: profileData.personality_notes || '',
-          effective_techniques: profileData.effective_techniques || [],
-          avg_rating: profileData.avg_rating || 0
+          preferences: (profileData && profileData.preferences) || {},
+          personality_notes: (profileData && profileData.personality_notes) || '',
+          effective_techniques: (profileData && profileData.effective_techniques) || [],
+          avg_rating: (profileData && profileData.avg_rating) || 0
         };
 
         // Fire-and-forget — don't block response
         upsertProfile(updateData).catch(e => console.warn('Profile update failed:', e.message));
 
-        // Phase 4: Log conversation exchange
-        if (sessionId && latestUserText) {
-          logConversation(visitorId, sessionId, latestUserText, modelResponseText)
+        // Phase 4: Log classified exchange — privacy-first (no raw text saved)
+        if (latestUserText) {
+          const techniqueUsed = techniques.length > 0 ? techniques[0] : '';
+          logConversation(visitorId, sessionId, latestUserText, modelResponseText, techniqueUsed)
             .catch(e => console.warn('Convo log failed:', e.message));
         }
       } catch (e) {
         // Non-critical — don't affect the response
+        console.warn('Profile/log update error:', e.message);
       }
     }
 
     return res.status(200).json(geminiData);
   } catch (err) {
     console.error(`[${requestId}] Proxy error:`, err.message, err.stack);
-    return res.status(500).json({ error: 'Internal server error', requestId, _debug: err.message, _stack: (err.stack || '').split('\n').slice(0, 3).join(' | ') });
+    return res.status(500).json({ error: 'Internal server error', requestId });
   }
 }
