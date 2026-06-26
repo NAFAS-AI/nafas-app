@@ -500,7 +500,7 @@ export default async function handler(req, res) {
     if (!geminiRes || !geminiRes.ok) {
       console.error(`[${requestId}] Gemini final error: ${geminiRes?.status}`, lastErrText);
       // Instead of raw error, return a warm fallback response
-      const isCrisisMsg = CRISIS_KEYWORDS.some(re => re.test(lastUserText));
+      const isCrisisMsg = CRISIS_KEYWORDS.some(re => re.test(latestUserText));
       const fallbackResponses = [
         'أسمعك... وأنا هني وياك. قولي أكثر عن اللي تحس فيه 💙',
         'شكراً إنك شاركتني... هذا شي شجاع. إيش أكثر شي يثقل عليك الحين؟',
@@ -612,7 +612,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(geminiData);
   } catch (err) {
-    console.error(`[${requestId}] Proxy error:`, err.message);
-    return res.status(500).json({ error: 'Internal server error', requestId });
+    console.error(`[${requestId}] Proxy error:`, err.message, err.stack);
+    return res.status(500).json({ error: 'Internal server error', requestId, _debug: err.message, _stack: (err.stack || '').split('\n').slice(0, 3).join(' | ') });
   }
 }
