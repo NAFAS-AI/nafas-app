@@ -702,15 +702,14 @@ export default async function handler(req, res) {
           avg_rating: (profileData && profileData.avg_rating) || 0
         };
 
-        // Fire-and-forget — don't block response
-        upsertProfile(updateData).catch(e => console.warn('Profile update failed:', e.message));
-
-        // Phase 4: Log classified exchange — privacy-first (no raw text saved)
-        if (latestUserText) {
-          const techniqueUsed = techniques.length > 0 ? techniques[0] : '';
-          logConversation(visitorId, sessionId, latestUserText, modelResponseText, techniqueUsed)
-            .catch(e => console.warn('Convo log failed:', e.message));
-        }
+        // MUST await in Vercel serverless — fire-and-forget gets killed when response is sent
+        await Promise.all([
+          upsertProfile(updateData).catch(e => console.warn('Profile update failed:', e.message)),
+          latestUserText
+            ? logConversation(visitorId, sessionId, latestUserText, modelResponseText, techniques.length > 0 ? techniques[0] : '')
+                .catch(e => console.warn('Convo log failed:', e.message))
+            : Promise.resolve()
+        ]);
       } catch (e) {
         // Non-critical — don't affect the response
         console.warn('Profile/log update error:', e.message);
