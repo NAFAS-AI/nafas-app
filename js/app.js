@@ -894,14 +894,28 @@ function resetSilenceDetector() {
   _silenceTimer1 = null;
   _silenceTimer2 = null;
   _silenceActive = false;
+  // DON'T reset silenceAlerted here — only reset when user types
+}
+
+// Called when user sends a message — resets the one-time flag
+function userResetSilence() {
+  resetSilenceDetector();
   sessionIntelligence.silenceAlerted = false;
 }
 
 function startSilenceDetector() {
-  resetSilenceDetector();
-  if (!state.mode) return; // Not in chat yet
+  // Cancel any existing timer but DON'T reset silenceAlerted
+  if (_silenceTimer1) clearTimeout(_silenceTimer1);
+  if (_silenceTimer2) clearTimeout(_silenceTimer2);
+  _silenceTimer1 = null;
+  _silenceTimer2 = null;
+
+  if (!state.mode) return;
+  // If already alerted this session, don't set up another timer
+  if (sessionIntelligence.silenceAlerted) return;
   _silenceActive = true;
 
+  // Increased from 30s to 90s — less intrusive
   _silenceTimer1 = setTimeout(function() {
     if (!_silenceActive || document.hidden || !state.mode) return;
     if (sessionIntelligence.silenceAlerted) return;
@@ -914,14 +928,15 @@ function startSilenceDetector() {
     addMessage('bot', msg);
     _silenceMessageInProgress = false;
 
+    // Voice nudge after ANOTHER 60s (increased from 30s)
     _silenceTimer2 = setTimeout(function() {
       if (!_silenceActive || document.hidden) return;
       var voiceMsg = state.lang === 'ar'
         ? 'وينك؟ أنا أسمعك... خذ وقتك'
         : "I'm listening... take your time";
       speak(voiceMsg);
-    }, 30000);
-  }, 30000);
+    }, 60000);
+  }, 90000);
 }
 
 document.addEventListener('visibilitychange', function() {
@@ -1320,7 +1335,7 @@ function sanitizeHTML(str){
 
 function addMessage(role, text, isHTML){
   // === SILENCE DETECTOR HOOKS ===
-  if (role === 'user') resetSilenceDetector();
+  if (role === 'user') userResetSilence();
   state.messages.push({role, text: isHTML ? '[card]' : text, timestamp: Date.now()});
   state.unsavedChanges = true;
   saveChatHistory();

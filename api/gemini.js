@@ -199,6 +199,122 @@ async function logConversation(visitorId, sessionId, userText, modelText) {
   } catch (e) { /* non-critical */ }
 }
 
+// ── PROGRAMMATIC SAFETY LAYER ──
+// These run AFTER Gemini responds — they override any bad behavior
+
+const CRISIS_KEYWORDS = [
+  /ما فيها? فايدة/,
+  /مب (طايق|طايقة|طايقه) روحي/,
+  /مب قادر أكمل/,
+  /مب قادر$/,
+  /خلاص مب قادر/,
+  /تعبت من الحياة/,
+  /أبي (أرتاح|ارتاح) للأبد/,
+  /أحسن لو ما كنت موجود/,
+  /محد بيفتقدني/,
+  /ودي أختفي/,
+  /ما عندي سبب أعيش/,
+  /أفكر أ[اأ]ذي نفسي/,
+  /كل شي أسود/,
+  /ما بقى شي فيني/,
+  /الدنيا ما فيها فايدة/,
+  /ما يهمني شي خلاص/,
+  /ما يهمني شي$/,
+  /حاس[ةه]? إني? غلطة/,
+  /أبي أموت/,
+  /أبي أنتحر/,
+  /بس خلاص$/
+];
+
+const BANNED_PHRASES = [
+  'عادي جداً',
+  'فاهم المصطلح',
+  'أشوف إنك تستخدم مصطلحات هالجيل',
+  'مصطلحات هالجيل',
+  'هذا موسم وبيعدي',
+  'ليش جيت لنَفَس',
+  'ليش جيت لنفس',
+];
+
+const BANNED_CRISIS_EMOJIS = ['😄', '😊', '😂', '🤣', '😁', '😆', '😀', '😃', '🙂'];
+
+const CRISIS_HELPLINES = '\n\n💙 إذا حسيت إنك تحتاج أحد يتكلم وياه الحين:\n🇦🇪 الإمارات: 800-HOPE (4673)\n🇸🇦 السعودية: 920033360\n🌍 أو روح أقرب طوارئ';
+
+function detectCrisis(text) {
+  if (!text) return false;
+  return CRISIS_KEYWORDS.some(re => re.test(text));
+}
+
+function postProcessResponse(responseText, userText, profileData, detectedName) {
+  let text = responseText;
+  const isCrisis = detectCrisis(userText);
+  const gender = profileData?.gender || 'unknown';
+  const name = detectedName || profileData?.display_name || '';
+
+  // 1. Remove banned phrases
+  for (const phrase of BANNED_PHRASES) {
+    if (text.includes(phrase)) {
+      text = text.replace(phrase, '');
+    }
+  }
+
+  // 2. Crisis: Remove happy emojis and append helplines
+  if (isCrisis) {
+    for (const emoji of BANNED_CRISIS_EMOJIS) {
+      text = text.replaceAll(emoji, '💙');
+    }
+    // If helplines not already present, append them
+    if (!text.includes('800') && !text.includes('920033360')) {
+      text = text.trimEnd() + CRISIS_HELPLINES;
+    }
+  }
+
+  // 3. Even without crisis — remove happy emojis from sad content
+  const sadIndicators = /تعب|حزن|أصيح|بكاء|ألم|مكسور|مقهور|ضايق|خنق/;
+  if (sadIndicators.test(userText)) {
+    for (const emoji of ['😄', '😂', '🤣']) {
+      text = text.replaceAll(emoji, '💙');
+    }
+  }
+
+  // 4. Fix gender in response if known
+  if (gender === 'female') {
+    // Fix common masculine→feminine issues
+    text = text
+      .replace(/\bأنت\b(?!\s*[بت])/g, 'أنتِ')
+      .replace(/\bتحمل\b/g, 'تحملين')
+      .replace(/\bتقول\b(?!ي)/g, 'تقولين')
+      .replace(/\bتستاهل\b/g, 'تستاهلين')
+      .replace(/\bتقدر\b/g, 'تقدرين')
+      .replace(/\bتبي\b(?!ن)/g, 'تبين')
+      .replace(/\bعندك\b/g, 'عندش')
+      .replace(/\bقلّي\b/g, 'قوليلي')
+      .replace(/\bيا صديقي\b/g, 'يا صديقتي')
+      .replace(/\bيا غالي\b(?!ة|ت)/g, 'يا غاليتي')
+      .replace(/\bيا بطل\b(?!ة)/g, 'يا بطلة');
+  } else if (gender === 'male') {
+    // Fix common feminine→masculine issues  
+    text = text
+      .replace(/\bقولي\b/g, 'قلّي')
+      .replace(/\bيا غاليتي\b/g, 'يا غالي')
+      .replace(/\bيا صديقتي\b/g, 'يا صديقي');
+  }
+
+  // 5. Inject name if known but not present in response
+  if (name && name.length >= 2 && !text.includes(name)) {
+    // Add name at a natural point — beginning or after first sentence
+    const firstPeriod = text.indexOf('💙');
+    if (firstPeriod > 10 && firstPeriod < text.length - 5) {
+      text = text.slice(0, firstPeriod) + ' يا ' + name + ' 💙' + text.slice(firstPeriod + 2);
+    } else {
+      // Prepend with name
+      text = 'يا ' + name + '، ' + text;
+    }
+  }
+
+  return text.trim();
+}
+
 function buildSystemInstruction(mode, deepStep, typingPattern, typingMood, enrichedContext) {
   // Phase 4/5/6: Use enriched context for dynamic prompt
   let instruction = buildFullPrompt(enrichedContext);
@@ -363,18 +479,49 @@ export default async function handler(req, res) {
 
     const geminiData = await geminiRes.json();
 
-    // ── Update profile + log conversation (non-blocking) ──
+    // ── SAFETY POST-PROCESSING ──
     let modelResponseText = '';
+    let crisisForced = false;
+    if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
+      try {
+        const parsed = JSON.parse(geminiData.candidates[0].content.parts[0].text);
+        modelResponseText = parsed.response || '';
+        
+        // Apply programmatic safety layer
+        const processedText = postProcessResponse(modelResponseText, latestUserText, profileData, detectedName);
+        parsed.response = processedText;
+        
+        // Force crisis flag if keywords detected
+        if (detectCrisis(latestUserText)) {
+          parsed.crisis = true;
+          crisisForced = true;
+        }
+        
+        // Write back the processed response
+        geminiData.candidates[0].content.parts[0].text = JSON.stringify(parsed);
+        modelResponseText = processedText;
+      } catch (e) {
+        // If JSON parsing fails, still try to clean up raw text
+        let rawText = geminiData.candidates[0].content.parts[0].text;
+        if (detectCrisis(latestUserText)) {
+          for (const emoji of BANNED_CRISIS_EMOJIS) {
+            rawText = rawText.replaceAll(emoji, '💙');
+          }
+        }
+        geminiData.candidates[0].content.parts[0].text = rawText;
+      }
+    }
+
+    // ── Update profile + log conversation (non-blocking) ──
     if (visitorId && profileData) {
       try {
         // Extract mood & techniques from response
         let mood = '';
         let techniques = [];
-        if (geminiData.candidates?.[0]?.content?.parts?.[0]?.text) {
+        if (modelResponseText) {
           try {
-            const parsed = JSON.parse(geminiData.candidates[0].content.parts[0].text);
-            mood = parsed.mood || '';
-            modelResponseText = parsed.response || '';
+            const reparsed = JSON.parse(geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '{}');
+            mood = reparsed.mood || '';
             // Detect techniques used in response
             const respText = modelResponseText;
             if (/نفس عميق|تنفس|4-7-8/.test(respText)) techniques.push('breathing');
