@@ -53,6 +53,18 @@ window.onunhandledrejection = function(event) {
 const SUPA_URL = 'https://sqpbusodwdjtlgaxrreg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGJ1c29kd2RqdGxnYXhycmVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTQ2MDksImV4cCI6MjA5NTE5MDYwOX0.bglpaNzXgU4ufK7fuu5wMcvE6XYepD318C7mO54ML7I';
 
+// === VISITOR ID — persistent across sessions ===
+function getOrCreateVisitorId() {
+  var stored = localStorage.getItem('nafas_visitor_id');
+  if (stored && stored.startsWith('v_')) return stored;
+  var ts = Date.now().toString(36);
+  var rand = Math.random().toString(36).slice(2, 8);
+  var vid = 'v_' + ts + '_' + rand;
+  localStorage.setItem('nafas_visitor_id', vid);
+  return vid;
+}
+const NAFAS_VISITOR_ID = getOrCreateVisitorId();
+
 const state = {
   lang:'ar', mode:null, messages:[], vakPattern:'mixed',
   vakCounts:{v:0,a:0,k:0}, burnoutLevel:1, burnoutScore:0,
@@ -265,7 +277,9 @@ async function callGeminiAI(userMessage, mode) {
         mode: mode,
         deepStep: state.deepStep || 0,
         typingPattern: typingData ? typingData.pattern : '',
-        typingMood: typingData ? typingData.mood : ''
+        typingMood: typingData ? typingData.mood : '',
+        visitorId: NAFAS_VISITOR_ID,
+        sessionId: state.sessionId || ''
       })
     });
 
@@ -1035,17 +1049,53 @@ function buildSaveData(){
   };
 }
 
+// === Session Summary: call /api/session-summary at end of session ===
+function callSessionSummary(){
+  if(!state.messages || state.messages.length < 4 || !state.sessionId || state.sessionSaved) return;
+  state.sessionSaved = true;
+  try{
+    const payload = JSON.stringify({
+      visitor_id: NAFAS_VISITOR_ID,
+      session_id: state.sessionId,
+      messages: state.messages.slice(-50).map(function(m){
+        return { role: m.role || 'user', text: m.text || m.content || '' };
+      })
+    });
+    // Use sendBeacon for reliability on page close; fall back to keepalive fetch
+    if(navigator.sendBeacon){
+      var blob = new Blob([payload], {type:'application/json'});
+      navigator.sendBeacon('/api/session-summary', blob);
+    } else {
+      fetch('/api/session-summary', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: payload,
+        keepalive: true
+      }).catch(function(){});
+    }
+  }catch(e){ console.warn('Session summary failed:', e); }
+}
+
 window.addEventListener('beforeunload', ()=>{
   const data = buildSaveData();
-  if(!data) return;
-  try{
-    fetch(SUPA_URL + '/rest/v1/nafas_sessions', {
-      method: 'POST',
-      headers: supaHeaders,
-      body: JSON.stringify(data),
-      keepalive: true
-    });
-  }catch(e){}
+  if(data){
+    try{
+      fetch(SUPA_URL + '/rest/v1/nafas_sessions', {
+        method: 'POST',
+        headers: supaHeaders,
+        body: JSON.stringify(data),
+        keepalive: true
+      });
+    }catch(e){}
+  }
+  callSessionSummary();
+});
+
+// Also trigger on visibility change (more reliable on mobile)
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){
+    callSessionSummary();
+  }
 });
 
 // Periodic auto-save every 60s
