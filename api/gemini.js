@@ -499,7 +499,22 @@ export default async function handler(req, res) {
 
     if (!geminiRes || !geminiRes.ok) {
       console.error(`[${requestId}] Gemini final error: ${geminiRes?.status}`, lastErrText);
-      return res.status(502).json({ error: 'AI service temporarily unavailable', requestId, detail: lastErrText.slice(0, 200) });
+      // Instead of raw error, return a warm fallback response
+      const isCrisisMsg = CRISIS_KEYWORDS.some(re => re.test(lastUserText));
+      const fallbackResponses = [
+        'أسمعك... وأنا هني وياك. قولي أكثر عن اللي تحس فيه 💙',
+        'شكراً إنك شاركتني... هذا شي شجاع. إيش أكثر شي يثقل عليك الحين؟',
+        'كلامك وصلني... ما أنت لحالك في هذا. خذ نفس عميق وقولي أكثر 💙',
+        'أحس فيك... وأبي أفهم أكثر. إيش أول شي يجيك في بالك لما تفكر في هذا الموضوع؟'
+      ];
+      let fallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      if (isCrisisMsg) {
+        fallback = 'اللي تحس فيه حقيقي ومهم... وأنا هني وياك. ما أنت لحالك في هذا أبداً.' + CRISIS_HELPLINES;
+      }
+      return res.status(200).json({
+        candidates: [{ content: { parts: [{ text: JSON.stringify({ response: fallback, mood: 'support', vak: 'mixed', score: 3, crisis: isCrisisMsg }) }] } }],
+        _fallback: true, requestId
+      });
     }
 
     const geminiData = await geminiRes.json();
