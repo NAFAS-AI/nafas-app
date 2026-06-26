@@ -425,7 +425,9 @@ const crisisWords = {
   // === تعبيرات دقيقة يستخدمها المكتئب فعلاً ===
   'أحسن لو ما كنت','احسن لو ما كنت','لو اختفيت','ما أحد بيفرق','ما احد بيفرق','أحسن بدوني','احسن بدوني','العالم أحسن بدوني','لو ما كنت موجود','ما فيه سبب أعيش','ما فيه سبب اعيش','ما فيه فايدة من وجودي','تعبت من الحياة','ما أبي أصحى','ما ابي اصحى','أتمنى ما أصحى','اتمنى ما اصحى','يا ريت ما كنت','نفسي أنام وما أقوم','نفسي انام وما اقوم','ما فيه أمل','ما فيه امل','ما عاد أقدر أكمل','ما عاد اقدر اكمل','ودي أختفي','ودي اختفي','ودي أروح','ودي اروح','ما فيه داعي أعيش','ما فيه داعي اعيش','ضاقت فيني الدنيا','ما يفرق أحد','ما يفرق احد','ما أحد يحتاجني','ما احد يحتاجني','زي ما أني ميتة','ميت من جوا','أحس إني عبء','احس اني عبء','ثقيلة على الناس','ثقيل على الناس',
   // === كلمات مفردة خطيرة ===
-  'أبي أختفي','ابي اختفي','أبي أروح','ابي اروح','بدوني أحسن','بدوني احسن','ما لي لازمة','مالي لازمه','ما لي قيمة','مالي قيمه','ابي اموت','أبي أختفي من الوجود'],
+  'أبي أختفي','ابي اختفي','أبي أروح','ابي اروح','بدوني أحسن','بدوني احسن','ما لي لازمة','مالي لازمه','ما لي قيمة','مالي قيمه','ابي اموت','أبي أختفي من الوجود',
+  // === تعبيرات إماراتية/خليجية دقيقة ===
+  'مب طايقة روحي','مب طايق روحي','مب طايقه روحي','مب قادر أكمل','مب قادرة أكمل','مب قادره اكمل','ما يهمني شي','خلاص مب قادر','خلاص مب قادرة','ما فيها فايدة','ما فيه فايدة','الدنيا ما فيها فايدة','مب قادر','مب قادرة','ما بقى شي فيني','كل شي أسود','حاسة إني غلطة','حاس إني غلطة','بس خلاص'],
   en:['suicide','want to die','kill myself','end my life','end it all',"don't want to live","can't go on","no reason to live",'better off dead','rather be dead',
   // === Subtle expressions depressed people actually use ===
   'better without me','world without me','no point living','wish i was never born','wish i could disappear','nobody would notice','nobody cares','want to sleep forever','never wake up','no hope left','burden to everyone','tired of living','tired of life','fade away','give up on life','no one needs me','pointless existence']
@@ -1617,8 +1619,9 @@ async function detectUserCountry(){
 }
 
 function getCrisisInfo(){
-  const info = crisisDB[detectedCountry] || crisisDB._default;
-  return info;
+  if (detectedCountry && crisisDB[detectedCountry]) return crisisDB[detectedCountry];
+  // Default to UAE for Arabic users, international for English
+  return (state.lang === 'ar') ? crisisDB.AE : crisisDB._default;
 }
 
 function buildCrisisNumbersHTML(isAr){

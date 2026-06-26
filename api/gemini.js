@@ -55,11 +55,13 @@ async function upsertProfile(profile) {
   await supabaseFetch('nafas_user_profiles', 'POST', profile);
 }
 
-// ── Gender Detection ──
+// ── Gender Detection (Fixed: female checked FIRST, negative lookahead for male) ──
 function detectGenderFromText(text) {
   if (!text) return null;
-  const femaleMarkers = /تعبان[ةه]|محتاج[ةه]|زعلان[ةه]|خايف[ةه]|حاس[ةه]|مقهور[ةه]|ضايق[ةه]|أنا بنت|حامل|أم |أمي أنا|حامل[ةه]|مطلق[ةه]|متزوج[ةه]|عزباء|زوجي |ريلي |يخليني متعب[ةه]|خلين[يى]/;
-  const maleMarkers = /تعبان(?!ة)|محتاج(?!ة)|زعلان(?!ة)|خايف(?!ة)|حاس(?!ة)|مقهور(?!ة)|ضايق(?!ة)|أنا ولد|أنا رجال|أبوي|زوجتي|مطلق(?!ة)|متزوج(?!ة)|أعزب/;
+  // Female markers MUST be checked FIRST — they contain ة/ه suffix
+  const femaleMarkers = /تعبان[ةه]|محتاج[ةه]|زعلان[ةه]|خايف[ةه]|حاس[ةه]|مقهور[ةه]|ضايق[ةه]|مطفوق[ةه]|أنا بنت|أنا أم\b|أم ال|أمي أنا|حامل[ةه]|مطلق[ةه]|متزوج[ةه]|عزباء|زوجي\b|ريلي\b|يخليني متعب[ةه]|خلين[يى]/;
+  // Male markers use negative lookahead (?![ةه]) to avoid matching inside feminine forms
+  const maleMarkers = /تعبان(?![ةه])|محتاج(?![ةه])|زعلان(?![ةه])|خايف(?![ةه])|حاس(?![ةه])|مقهور(?![ةه])|ضايق(?![ةه])|مطفوق(?![ةه])|أنا ولد|أنا رجال|أبوي\b|زوجتي\b|حرمتي\b|مطلق(?![ةه])|متزوج(?![ةه])|أعزب/;
   if (femaleMarkers.test(text)) return 'female';
   if (maleMarkers.test(text)) return 'male';
   return null;
@@ -238,7 +240,7 @@ const BANNED_PHRASES = [
 
 const BANNED_CRISIS_EMOJIS = ['😄', '😊', '😂', '🤣', '😁', '😆', '😀', '😃', '🙂'];
 
-const CRISIS_HELPLINES = '\n\n💙 إذا حسيت إنك تحتاج أحد يتكلم وياه الحين:\n🇦🇪 الإمارات: 800-HOPE (4673)\n🇸🇦 السعودية: 920033360\n🌍 أو روح أقرب طوارئ';
+const CRISIS_HELPLINES = '\n\n💙 أنا وياك. وإذا حسيت إنك تحتاج أحد متخصص الحين:\n🇦🇪 خط نجدة الإمارات: 800-4673 (HOPE)\n🇦🇪 شرطة أبوظبي: 999\n🇸🇦 خط مساندة (السعودية): 920033360\n🌍 أو روح أقرب طوارئ — حياتك أهم شي 💙';
 
 function detectCrisis(text) {
   if (!text) return false;
@@ -447,8 +449,18 @@ export default async function handler(req, res) {
       enrichedContext = await loadEnrichedContext(visitorId, profileData).catch(() => ({ profile: profileData }));
     }
 
+    const sysInstruction = buildSystemInstruction(mode, deepStep, typingPattern, typingMood, enrichedContext);
+    
+    // Safety: limit system instruction length to avoid Gemini token overflow
+    let sysText = sysInstruction.parts[0].text;
+    if (sysText.length > 15000) {
+      console.warn(`[${requestId}] System instruction too long (${sysText.length}), truncating`);
+      sysText = sysText.slice(0, 15000) + '\n\n[نهاية التعليمات — التزم بالقواعد أعلاه]';
+      sysInstruction.parts[0].text = sysText;
+    }
+
     const geminiBody = {
-      system_instruction: buildSystemInstruction(mode, deepStep, typingPattern, typingMood, enrichedContext),
+      system_instruction: sysInstruction,
       contents: sanitizedContents,
       generationConfig: {
         temperature: 0.85,
@@ -465,16 +477,29 @@ export default async function handler(req, res) {
     };
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-    const geminiRes = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(geminiBody),
-    });
+    
+    // Retry logic for transient Gemini errors
+    let geminiRes = null;
+    let lastErrText = '';
+    for (let attempt = 0; attempt < 2; attempt++) {
+      geminiRes = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(geminiBody),
+      });
+      if (geminiRes.ok) break;
+      lastErrText = await geminiRes.text();
+      console.error(`[${requestId}] Gemini error attempt ${attempt+1}: ${geminiRes.status}`, lastErrText);
+      if (geminiRes.status === 429 || geminiRes.status >= 500) {
+        await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+      } else {
+        break; // Non-retryable error
+      }
+    }
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error(`[${requestId}] Gemini error: ${geminiRes.status}`, errText);
-      return res.status(502).json({ error: 'AI service temporarily unavailable', requestId });
+    if (!geminiRes || !geminiRes.ok) {
+      console.error(`[${requestId}] Gemini final error: ${geminiRes?.status}`, lastErrText);
+      return res.status(502).json({ error: 'AI service temporarily unavailable', requestId, detail: lastErrText.slice(0, 200) });
     }
 
     const geminiData = await geminiRes.json();
