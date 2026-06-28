@@ -4188,3 +4188,304 @@ body{
   .breath-hero-circle{width:180px!important;height:180px!important}
   .cta-primary.cta-hero-main{max-width:300px!important}
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS V7 DRAMATIC — Glass Card Layout
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Welcome screen as floating glass card ── */
+.screen.welcome{
+  min-height:100dvh!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:40px 24px!important;
+  gap:0!important;
+}
+
+/* Glass container - wraps main content */
+.nafas-logo-container,
+.app-name,
+.app-slogan,
+.v7-nafas-status,
+.tagline,
+.returning-welcome,
+.breath-hero,
+.cta-primary.cta-hero-main,
+.more-toggle-btn,
+.more-options-panel,
+.welcome-bottom{
+  position:relative;
+  z-index:3;
+}
+
+/* ── LIVING BACKGROUND — Multi-layer animated ── */
+body{
+  background:#040810!important;
+  overflow-x:hidden;
+}
+
+/* Layer 1: Deep space gradient */
+body::before{
+  content:''!important;
+  position:fixed!important;
+  inset:0!important;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 0%, rgba(20,30,60,0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(92,224,214,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 20%, rgba(129,140,248,0.03) 0%, transparent 50%)!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+
+/* Layer 2: Animated aurora glow */
+.screen.welcome::before{
+  content:''!important;
+  position:fixed!important;
+  width:600px!important;
+  height:600px!important;
+  top:-200px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  background:radial-gradient(circle, rgba(92,224,214,0.08) 0%, rgba(129,140,248,0.04) 40%, transparent 70%)!important;
+  filter:blur(60px)!important;
+  animation:auroraFloat 12s ease-in-out infinite!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+@keyframes auroraFloat{
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:0.7}
+  50%{transform:translateX(-50%) translateY(30px);opacity:1}
+}
+
+/* ── LOGO — Elegant glow ── */
+.nafas-logo-container{
+  margin-bottom:12px!important;
+}
+.logo-breathing-glow{
+  inset:-70px!important;
+  background:radial-gradient(circle,rgba(92,224,214,0.06) 0%,transparent 65%)!important;
+}
+.nafas-logo-img{
+  width:56px!important;
+  filter:brightness(1.2) drop-shadow(0 0 24px rgba(92,224,214,0.2))!important;
+}
+
+/* ── APP NAME — Large + Subtle ── */
+.app-name{
+  font-size:3rem!important;
+  font-weight:800!important;
+  letter-spacing:0.06em!important;
+  margin-bottom:4px!important;
+  text-shadow:0 0 50px rgba(92,224,214,0.08)!important;
+  color:#f0ede8!important;
+  -webkit-text-fill-color:#f0ede8!important;
+}
+
+/* ── SLOGAN — Refined ── */
+.app-slogan{
+  font-size:0.55rem!important;
+  letter-spacing:0.5em!important;
+  opacity:0.35!important;
+  margin-bottom:20px!important;
+  color:#5CE0D6!important;
+}
+
+/* ── STATUS BADGE — Pill ── */
+.v7-nafas-status{
+  background:rgba(92,224,214,0.05)!important;
+  border:1px solid rgba(92,224,214,0.1)!important;
+  padding:6px 16px!important;
+  border-radius:100px!important;
+  font-size:0.75rem!important;
+  color:rgba(92,224,214,0.85)!important;
+  margin-bottom:12px!important;
+  backdrop-filter:blur(12px)!important;
+}
+
+/* ── TAGLINE + GREETING ── */
+.tagline{
+  font-size:0.88rem!important;
+  color:rgba(240,237,232,0.5)!important;
+  margin-bottom:8px!important;
+  line-height:1.7!important;
+}
+.returning-welcome{
+  background:rgba(92,224,214,0.03)!important;
+  border:1px solid rgba(92,224,214,0.06)!important;
+  border-radius:14px!important;
+  padding:8px 16px!important;
+  font-size:0.78rem!important;
+  max-width:280px!important;
+  backdrop-filter:blur(8px)!important;
+  margin-bottom:16px!important;
+}
+
+/* ── BREATHING CIRCLE — Ethereal rings ── */
+.breath-hero{
+  margin:8px 0 24px!important;
+}
+.breath-hero-circle{
+  width:150px!important;
+  height:150px!important;
+  background:transparent!important;
+  border:1px solid rgba(92,224,214,0.12)!important;
+  box-shadow:
+    0 0 60px rgba(92,224,214,0.05),
+    inset 0 0 60px rgba(92,224,214,0.03)!important;
+  backdrop-filter:blur(4px)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+}
+.breath-hero-circle::before{
+  inset:-16px!important;
+  border:1px solid rgba(92,224,214,0.05)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+  animation-delay:-2s!important;
+}
+.breath-hero-circle::after{
+  inset:-8px!important;
+  border:1px solid rgba(92,224,214,0.08)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+  animation-delay:-4s!important;
+}
+@keyframes breathFloat{
+  0%,100%{transform:scale(0.92);opacity:0.7}
+  50%{transform:scale(1.08);opacity:1}
+}
+.breath-hero-text{
+  font-size:0.95rem!important;
+  color:rgba(92,224,214,0.7)!important;
+  font-weight:500!important;
+  letter-spacing:0.06em!important;
+}
+.breath-hero-subtitle{
+  font-size:0.72rem!important;
+  color:rgba(240,237,232,0.2)!important;
+  letter-spacing:0.04em!important;
+}
+
+/* ── CTA MAIN — Premium gradient ── */
+.cta-primary.cta-hero-main{
+  max-width:240px!important;
+  padding:18px 32px!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#5CE0D6 0%,#4DCEC5 60%,#3CB8B0 100%)!important;
+  color:#040810!important;
+  box-shadow:
+    0 4px 20px rgba(92,224,214,0.15),
+    0 1px 3px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.12)!important;
+  border:none!important;
+  font-family:'Tajawal',sans-serif!important;
+  transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.cta-primary.cta-hero-main:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:
+    0 12px 40px rgba(92,224,214,0.2),
+    0 2px 8px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.15)!important;
+}
+.cta-primary.cta-hero-main .cta-icon{
+  font-size:1.1rem!important;
+  margin-bottom:2px!important;
+}
+.cta-primary.cta-hero-main .cta-label-main{
+  font-size:1.1rem!important;
+  font-weight:700!important;
+  letter-spacing:0.02em!important;
+}
+.cta-primary.cta-hero-main .cta-sub{
+  font-size:0.65rem!important;
+  opacity:0.55!important;
+}
+
+/* ── MORE TOGGLE ── */
+.more-toggle-btn{
+  background:transparent!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+  color:rgba(240,237,232,0.25)!important;
+  font-size:0.72rem!important;
+  padding:5px 16px!important;
+  border-radius:100px!important;
+  margin-bottom:12px!important;
+  transition:all 0.3s ease!important;
+}
+.more-toggle-btn:hover{
+  border-color:rgba(92,224,214,0.1)!important;
+  color:rgba(92,224,214,0.6)!important;
+}
+
+/* ── SECONDARY BUTTONS ── */
+.more-options-panel{
+  max-width:260px!important;
+  gap:8px!important;
+}
+.more-options-panel .cta-secondary{
+  background:rgba(255,255,255,0.02)!important;
+  border:1px solid rgba(255,255,255,0.05)!important;
+  border-radius:14px!important;
+  padding:14px 10px!important;
+  backdrop-filter:blur(12px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.more-options-panel .cta-secondary:hover{
+  background:rgba(92,224,214,0.04)!important;
+  border-color:rgba(92,224,214,0.12)!important;
+  transform:translateY(-2px)!important;
+}
+
+/* ── HUG BUTTON ROW ── */
+.screen.welcome>[class*="hug"],
+.screen.welcome>[onclick*="Hug"],
+.screen.welcome>div:has(>[onclick*="Hug"]){
+  margin-bottom:8px!important;
+}
+
+/* ── WELCOME BOTTOM ── */
+.welcome-bottom{
+  margin-top:auto!important;
+  padding-top:16px!important;
+}
+.session-count{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.2)!important;
+}
+.journey-link,.tour-btn{
+  font-size:0.7rem!important;
+  padding:4px 12px!important;
+  border-color:rgba(255,255,255,0.03)!important;
+  color:rgba(240,237,232,0.2)!important;
+}
+.copyright{
+  font-size:0.62rem!important;
+  color:rgba(240,237,232,0.15)!important;
+  margin-top:12px!important;
+}
+
+/* ── BLOBS — Ethereal ── */
+.bg-blobs .blob{
+  filter:blur(140px)!important;
+  opacity:0.04!important;
+}
+
+/* ── STARS — More subtle ── */
+.star{
+  width:1px!important;
+  height:1px!important;
+  background:rgba(255,255,255,0.6)!important;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:380px){
+  .app-name{font-size:2.4rem!important}
+  .breath-hero-circle{width:120px!important;height:120px!important}
+  .cta-primary.cta-hero-main{max-width:220px!important;padding:16px 24px!important}
+}
+@media(min-width:768px){
+  .app-name{font-size:3.6rem!important}
+  .breath-hero-circle{width:170px!important;height:170px!important}
+  .cta-primary.cta-hero-main{max-width:280px!important}
+}
