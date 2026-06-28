@@ -3989,3 +3989,202 @@ body::after{
   .breath-hero-circle{width:160px!important;height:160px!important}
   .cta-primary{max-width:340px!important}
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS V7 BOLD — Dramatic Visual Transformation
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── ANIMATED AURORA BACKGROUND ── */
+body{
+  background:#050a12!important;
+}
+.screen.welcome::before{
+  content:'';
+  position:fixed;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:
+    conic-gradient(from 0deg at 30% 20%,
+      transparent 0deg,
+      rgba(92,224,214,0.06) 60deg,
+      transparent 120deg,
+      rgba(129,140,248,0.05) 200deg,
+      transparent 260deg,
+      rgba(167,139,250,0.04) 320deg,
+      transparent 360deg);
+  animation:auroraRotate 40s linear infinite;
+  pointer-events:none;
+  z-index:-1;
+}
+@keyframes auroraRotate{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+/* ── GLASS CONTENT CARD ── */
+.screen.welcome{
+  position:relative!important;
+  z-index:1!important;
+}
+.screen.welcome>.nafas-logo-container,
+.screen.welcome>.app-name,
+.screen.welcome>.app-slogan,
+.screen.welcome>.v7-nafas-status,
+.screen.welcome>.tagline,
+.screen.welcome>.returning-welcome,
+.screen.welcome>.breath-hero,
+.screen.welcome>.cta-primary,
+.screen.welcome>.more-toggle-btn,
+.screen.welcome>.more-options-panel{
+  position:relative;
+  z-index:2;
+}
+
+/* ── BIGGER BOLDER APP NAME ── */
+.app-name{
+  font-size:3.2rem!important;
+  font-weight:800!important;
+  letter-spacing:0.08em!important;
+  margin-bottom:6px!important;
+  text-shadow:0 0 60px rgba(92,224,214,0.12),0 2px 4px rgba(0,0,0,0.3)!important;
+}
+
+/* ── DRAMATIC BREATHING CIRCLE ── */
+.breath-hero{
+  margin-bottom:28px!important;
+  margin-top:4px!important;
+}
+.breath-hero-circle{
+  width:160px!important;
+  height:160px!important;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(92,224,214,0.15), rgba(92,224,214,0.02) 70%)!important;
+  border:1.5px solid rgba(92,224,214,0.15)!important;
+  box-shadow:
+    0 0 80px rgba(92,224,214,0.08),
+    0 0 40px rgba(92,224,214,0.04),
+    inset 0 0 40px rgba(92,224,214,0.04)!important;
+  backdrop-filter:blur(12px)!important;
+}
+.breath-hero-text{
+  font-size:1.05rem!important;
+  font-weight:600!important;
+  letter-spacing:0.04em!important;
+}
+
+/* ── COMPLETELY NEW CTA BUTTON ── */
+.cta-primary.cta-hero-main{
+  max-width:260px!important;
+  padding:20px 36px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#5CE0D6 0%,#4DCEC5 50%,#3CB8B0 100%)!important;
+  box-shadow:
+    0 8px 32px rgba(92,224,214,0.2),
+    0 2px 8px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.15)!important;
+  border:1px solid rgba(255,255,255,0.1)!important;
+}
+.cta-primary.cta-hero-main:hover{
+  transform:translateY(-4px) scale(1.03)!important;
+  box-shadow:
+    0 16px 48px rgba(92,224,214,0.25),
+    0 4px 12px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.2)!important;
+}
+.cta-label-main{
+  font-size:1.15rem!important;
+  font-weight:700!important;
+}
+.cta-sub{
+  font-size:0.68rem!important;
+  opacity:0.6!important;
+  font-weight:400!important;
+}
+
+/* ── HUG BUTTON — Glass Morphism ── */
+.hug-btn,[onclick*="showHugAnimation"]{
+  background:rgba(255,255,255,0.04)!important;
+  border:1px solid rgba(255,255,255,0.08)!important;
+  border-radius:16px!important;
+  padding:12px 24px!important;
+  backdrop-filter:blur(16px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.hug-btn:hover,[onclick*="showHugAnimation"]:hover{
+  background:rgba(92,224,214,0.06)!important;
+  border-color:rgba(92,224,214,0.15)!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 24px rgba(92,224,214,0.08)!important;
+}
+
+/* ── STATUS BADGE — More Visible ── */
+.v7-nafas-status{
+  background:rgba(92,224,214,0.08)!important;
+  border:1px solid rgba(92,224,214,0.15)!important;
+  padding:8px 20px!important;
+  font-size:0.8rem!important;
+  letter-spacing:0.04em!important;
+  box-shadow:0 4px 16px rgba(92,224,214,0.06)!important;
+}
+
+/* ── SECONDARY BUTTONS — Glass Cards ── */
+.more-options-panel .cta-secondary{
+  background:rgba(255,255,255,0.03)!important;
+  border:1px solid rgba(255,255,255,0.07)!important;
+  border-radius:16px!important;
+  padding:16px 12px!important;
+  backdrop-filter:blur(16px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.more-options-panel .cta-secondary:hover{
+  background:rgba(92,224,214,0.05)!important;
+  border-color:rgba(92,224,214,0.15)!important;
+  transform:translateY(-3px)!important;
+  box-shadow:0 8px 24px rgba(92,224,214,0.08)!important;
+}
+
+/* ── MORE TOGGLE ── */
+.more-toggle-btn{
+  margin-top:4px!important;
+}
+
+/* ── BOTTOM LINKS — Refined ── */
+.journey-link,.tour-btn{
+  font-size:0.72rem!important;
+  padding:5px 12px!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+  border-radius:20px!important;
+}
+
+/* ── FOOTER ── */
+.copyright{
+  opacity:0.6!important;
+  font-size:0.65rem!important;
+}
+
+/* ── INSTALL BANNER — Hide or Style ── */
+[style*="position: fixed"][style*="z-index"]{
+  backdrop-filter:blur(16px)!important;
+  background:rgba(6,10,18,0.9)!important;
+}
+
+/* ── AMBIENT FLOATING ORBS ── */
+.bg-blobs .blob{
+  filter:blur(120px)!important;
+  opacity:0.05!important;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:380px){
+  .app-name{font-size:2.5rem!important}
+  .breath-hero-circle{width:130px!important;height:130px!important}
+  .cta-primary.cta-hero-main{max-width:240px!important;padding:16px 28px!important}
+}
+@media(min-width:768px){
+  .app-name{font-size:3.8rem!important}
+  .breath-hero-circle{width:180px!important;height:180px!important}
+  .cta-primary.cta-hero-main{max-width:300px!important}
+}
