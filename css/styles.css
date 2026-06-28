@@ -4489,3 +4489,220 @@ body::before{
   .breath-hero-circle{width:170px!important;height:170px!important}
   .cta-primary.cta-hero-main{max-width:280px!important}
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS GLASS CARD — Structural Design System
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── The Glass Card ── */
+.nafas-glass-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+  padding:40px 32px 32px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:32px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:
+    0 24px 80px rgba(0,0,0,0.4),
+    0 0 1px rgba(255,255,255,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  position:relative;
+  z-index:2;
+  overflow:hidden;
+}
+
+/* Card top light effect */
+.nafas-glass-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:10%;
+  right:10%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(92,224,214,0.2),transparent);
+}
+
+/* Card ambient inner glow */
+.nafas-glass-card::after{
+  content:'';
+  position:absolute;
+  top:-100px;
+  left:50%;
+  transform:translateX(-50%);
+  width:300px;
+  height:200px;
+  background:radial-gradient(circle,rgba(92,224,214,0.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* ── Divider line ── */
+.nafas-divider{
+  width:40px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(92,224,214,0.3),transparent);
+  margin:8px auto 16px;
+}
+
+/* ── Override welcome screen for card layout ── */
+.screen.welcome{
+  background:transparent!important;
+  padding:24px 16px!important;
+  gap:0!important;
+}
+
+/* ── Card elements refinement ── */
+.nafas-glass-card .nafas-logo-container{
+  margin-bottom:12px;
+}
+.nafas-glass-card .nafas-logo-img{
+  width:52px!important;
+}
+.nafas-glass-card .app-name{
+  font-size:2.8rem!important;
+  margin-bottom:4px!important;
+}
+.nafas-glass-card .app-slogan{
+  font-size:0.52rem!important;
+  letter-spacing:0.45em!important;
+  margin-bottom:0!important;
+  opacity:0.35!important;
+}
+.nafas-glass-card .v7-nafas-status{
+  margin-bottom:8px!important;
+  background:rgba(92,224,214,0.04)!important;
+  border-color:rgba(92,224,214,0.08)!important;
+  padding:5px 14px!important;
+  font-size:0.72rem!important;
+}
+.nafas-glass-card .tagline{
+  font-size:0.85rem!important;
+  margin-bottom:4px!important;
+  color:rgba(240,237,232,0.45)!important;
+}
+.nafas-glass-card .returning-welcome{
+  margin-bottom:12px!important;
+}
+.nafas-glass-card .breath-hero{
+  margin:4px 0 20px!important;
+}
+.nafas-glass-card .breath-hero-circle{
+  width:130px!important;
+  height:130px!important;
+  background:transparent!important;
+  border:1px solid rgba(92,224,214,0.1)!important;
+  box-shadow:0 0 40px rgba(92,224,214,0.04),inset 0 0 30px rgba(92,224,214,0.02)!important;
+}
+.nafas-glass-card .breath-hero-text{
+  font-size:0.88rem!important;
+  color:rgba(92,224,214,0.65)!important;
+  font-weight:500!important;
+}
+.nafas-glass-card .breath-hero-subtitle{
+  font-size:0.7rem!important;
+  color:rgba(240,237,232,0.18)!important;
+}
+
+/* ── CTA inside card ── */
+.nafas-glass-card .cta-primary.cta-hero-main{
+  max-width:220px!important;
+  padding:16px 28px!important;
+  border-radius:16px!important;
+  margin-bottom:10px!important;
+  background:linear-gradient(150deg,#5CE0D6 0%,#4DCEC5 50%,#3CB8B0 100%)!important;
+  box-shadow:
+    0 4px 16px rgba(92,224,214,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1)!important;
+}
+.nafas-glass-card .cta-label-main{
+  font-size:1rem!important;
+}
+.nafas-glass-card .cta-sub{
+  font-size:0.6rem!important;
+}
+
+/* ── More options inside card ── */
+.nafas-glass-card .more-toggle-btn{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.2)!important;
+  border-color:transparent!important;
+  margin-bottom:8px!important;
+  padding:4px 12px!important;
+}
+.nafas-glass-card .more-options-panel{
+  max-width:240px!important;
+  gap:6px!important;
+  margin-bottom:0!important;
+}
+.nafas-glass-card .cta-secondary{
+  border-radius:12px!important;
+  padding:12px 8px!important;
+  background:rgba(255,255,255,0.02)!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+}
+
+/* ── Welcome bottom (outside card) ── */
+.welcome-bottom{
+  margin-top:20px!important;
+  text-align:center;
+}
+.welcome-bottom .session-count{
+  font-size:0.65rem!important;
+  color:rgba(240,237,232,0.15)!important;
+}
+.welcome-bottom .journey-link,
+.welcome-bottom .tour-btn{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.18)!important;
+  border-color:rgba(255,255,255,0.03)!important;
+}
+.welcome-bottom .copyright{
+  font-size:0.58rem!important;
+  color:rgba(240,237,232,0.12)!important;
+}
+
+/* ── Background enhancement ── */
+body{background:#030712!important}
+
+/* Aurora behind card */
+.screen.welcome::before{
+  content:''!important;
+  position:fixed!important;
+  width:500px!important;
+  height:500px!important;
+  top:-180px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  background:radial-gradient(circle, rgba(92,224,214,0.06) 0%, rgba(129,140,248,0.03) 40%, transparent 65%)!important;
+  filter:blur(50px)!important;
+  animation:auroraFloat 15s ease-in-out infinite!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+
+/* ── Responsive ── */
+@media(max-width:400px){
+  .nafas-glass-card{
+    padding:28px 20px 24px!important;
+    border-radius:24px!important;
+    margin:0 8px!important;
+  }
+  .nafas-glass-card .app-name{font-size:2.2rem!important}
+  .nafas-glass-card .breath-hero-circle{width:110px!important;height:110px!important}
+  .nafas-glass-card .cta-primary.cta-hero-main{max-width:200px!important}
+}
+@media(min-width:768px){
+  .nafas-glass-card{
+    max-width:460px!important;
+    padding:48px 40px 36px!important;
+  }
+  .nafas-glass-card .app-name{font-size:3.2rem!important}
+  .nafas-glass-card .breath-hero-circle{width:150px!important;height:150px!important}
+}

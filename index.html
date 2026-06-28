@@ -312,50 +312,61 @@
   <!-- 1. Logo Area -->
   <div class="welcome-header" style="padding-top:env(safe-area-inset-top, 12px);margin-bottom:0;height:12px"></div>
   
-  <!-- Logo with breathing glow aura -->
-  <div class="nafas-logo-container" id="logoContainer">
-    <div class="logo-breathing-glow" aria-hidden="true"></div>
-    <img src="logos/nafas_new/white_nobg.png" alt="نَفَس" class="nafas-logo-img" />
-  </div>
-  
-  <div class="app-name text-gold-shimmer" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
-  <div class="app-slogan">CALM IS HALF THE CURE</div>
-  <div class="v7-nafas-status" id="nafasStatus">نَفَس يتذكّرك</div>
-  <div class="tagline" id="tagline">يفهمكِ من كلامكِ</div>
-
-  <div class="returning-welcome" id="returningWelcome" style="display:none"></div>
-
-  <!-- 2. HERO: Breathing Circle -->
-  <div class="breath-hero">
-    <div class="breath-hero-circle">
-      <span class="breath-hero-text">خذ نفَس</span>
+  <!-- ═══ GLASS CARD ═══ -->
+  <div class="nafas-glass-card">
+    
+    <!-- Logo -->
+    <div class="nafas-logo-container" id="logoContainer">
+      <div class="logo-breathing-glow" aria-hidden="true"></div>
+      <img src="logos/nafas_new/white_nobg.png" alt="نَفَس" class="nafas-logo-img" />
     </div>
-    <div class="breath-hero-subtitle">تنفّس معي...</div>
-  </div>
+    
+    <div class="app-name text-gold-shimmer" id="appName">&#1606;&#1614;&#1601;&#1614;&#1587;</div>
+    <div class="app-slogan">CALM IS HALF THE CURE</div>
+    
+    <!-- Divider -->
+    <div class="nafas-divider" aria-hidden="true"></div>
+    
+    <!-- Status -->
+    <div class="v7-nafas-status" id="nafasStatus">نَفَس يتذكّرك</div>
+    
+    <div class="tagline" id="tagline">يفهمكِ من كلامكِ</div>
+    <div class="returning-welcome" id="returningWelcome" style="display:none"></div>
 
-  <!-- 3. PRIMARY HERO CTA — الزر الوحيد الظاهر -->
-  <button class="cta-primary cta-hero-main" onclick="startMode('vent')" role="button" aria-label="Free Venting">
-    <span class="cta-icon">🌙</span>
-    <span class="cta-label-main">فضفض لي</span>
-    <span class="cta-sub">أنا أسمع · بلا أسئلة</span>
-  </button>
+    <!-- Breathing Circle -->
+    <div class="breath-hero">
+      <div class="breath-hero-circle">
+        <span class="breath-hero-text">خذ نفَس</span>
+      </div>
+      <div class="breath-hero-subtitle">تنفّس معي...</div>
+    </div>
 
-  <!-- 4. المزيد — مطوي افتراضياً -->
-  <button class="more-toggle-btn" id="moreToggleBtn" onclick="toggleNafasMore()" aria-expanded="false">
-    <span id="moreToggleLabel">اكتشف المزيد ↓</span>
-  </button>
-  <div class="more-options-panel" id="moreOptionsPanel" aria-hidden="true">
-    <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check">
-      <span class="cta-icon">⚡</span>
-      <span class="cta-label-sec">تحقق سريع</span>
-      <span class="cta-hint-sec">سؤال واحد · 30 ثانية</span>
+    <!-- CTA -->
+    <button class="cta-primary cta-hero-main" onclick="startMode('vent')" role="button" aria-label="Free Venting">
+      <span class="cta-icon">🌙</span>
+      <span class="cta-label-main">فضفض لي</span>
+      <span class="cta-sub">أنا أسمع · بلا أسئلة</span>
     </button>
-    <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment">
-      <span class="cta-icon">📊</span>
-      <span class="cta-label-sec">تقييم عميق</span>
-      <span class="cta-hint-sec">محادثة · 5-10 دقائق</span>
+
+    <!-- More Options -->
+    <button class="more-toggle-btn" id="moreToggleBtn" onclick="toggleNafasMore()" aria-expanded="false">
+      <span id="moreToggleLabel">اكتشف المزيد ↓</span>
     </button>
+    <div class="more-options-panel" id="moreOptionsPanel" aria-hidden="true">
+      <button class="cta-secondary" onclick="startMode('quick')" role="button" aria-label="Quick Check">
+        <span class="cta-icon">⚡</span>
+        <span class="cta-label-sec">تحقق سريع</span>
+        <span class="cta-hint-sec">سؤال واحد · 30 ثانية</span>
+      </button>
+      <button class="cta-secondary" onclick="startMode('deep')" role="button" aria-label="Deep Assessment">
+        <span class="cta-icon">📊</span>
+        <span class="cta-label-sec">تقييم عميق</span>
+        <span class="cta-hint-sec">محادثة · 5-10 دقائق</span>
+      </button>
+    </div>
+    
   </div>
+  <!-- ═══ END GLASS CARD ═══ -->
 
   <!-- Hidden modesGrid: kept for app.js compatibility -->
   <div class="modes-grid" id="modesGrid" role="group" aria-label="Modes" style="display:none!important">
