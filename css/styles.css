@@ -9,14 +9,14 @@
 
 :root{
   /* Palette — Serene Night */
-  --bg-deep:    #030712;
-  --bg-surface: #0a1020;
+  --bg-deep:    #0B1120;
+  --bg-surface: #111B2E;
   --bg-card:    rgba(255,255,255,0.04);
   --bg-card-hover: rgba(255,255,255,0.07);
   
   /* Accent — Therapeutic Teal */
-  --accent:     #5CE0D6;
-  --accent-soft:#45C4BA;
+  --accent:     #4ECDC4;
+  --accent-soft:#3BA99F;
   --accent-glow: rgba(78,205,196,0.15);
   --accent-glow-strong: rgba(78,205,196,0.3);
   
@@ -108,10 +108,10 @@ body{
    ══════════════════════════════════════════════════════════════ */
 
 .bg-blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.04;animation:blobDrift 25s ease-in-out infinite alternate}
-.blob:nth-child(1){width:650px;height:650px;background:radial-gradient(circle,rgba(92,224,214,0.4),transparent);top:-10%;right:-10%;animation-delay:0s}
-.blob:nth-child(2){width:550px;height:550px;background:radial-gradient(circle,rgba(129,140,248,0.35),transparent);bottom:-5%;left:-10%;animation-delay:-8s}
-.blob:nth-child(3){width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.3),transparent);top:40%;right:30%;animation-delay:-15s}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.06;animation:blobDrift 30s ease-in-out infinite alternate;will-change:transform}
+.blob:nth-child(1){width:600px;height:600px;background:radial-gradient(circle,rgba(92,224,214,0.5),rgba(92,224,214,0.1));top:-15%;right:-10%;animation-delay:0s}
+.blob:nth-child(2){width:500px;height:500px;background:radial-gradient(circle,rgba(129,140,248,0.5),rgba(129,140,248,0.1));bottom:-10%;left:-15%;animation-delay:-10s}
+.blob:nth-child(3){width:450px;height:450px;background:radial-gradient(circle,rgba(167,139,250,0.4),rgba(167,139,250,0.1));top:35%;right:25%;animation-delay:-20s}
 
 @keyframes blobDrift{
   0%{transform:translate(0,0) scale(1)}
@@ -122,7 +122,7 @@ body{
 
 /* Stars — more subtle */
 .stars-container{position:fixed;inset:0;pointer-events:none;z-index:0}
-.star{position:absolute;width:1px;height:1px;background:rgba(255,255,255,0.7);border-radius:50%;opacity:0;animation:starTwinkle 4s ease-in-out infinite}
+.star{position:absolute;width:1.5px;height:1.5px;background:rgba(255,255,255,0.8);border-radius:50%;opacity:0;animation:starTwinkle 5s ease-in-out infinite}
 @keyframes starTwinkle{0%,100%{opacity:0}50%{opacity:0.4}}
 
 /* ══════════════════════════════════════════════════════════════
@@ -282,43 +282,44 @@ body{
 }
 .logo-breathing-glow{
   position:absolute;
-  inset:-50px;
-  background:radial-gradient(circle,rgba(78,205,196,0.1) 0%,transparent 70%);
+  inset:-60px;
+  background:radial-gradient(circle,rgba(92,224,214,0.08) 0%,rgba(129,140,248,0.03) 50%,transparent 70%);
   border-radius:50%;
-  animation:logoBreath 5s ease-in-out infinite;
+  animation:logoBreath 6s ease-in-out infinite;
 }
 @keyframes logoBreath{
   0%,100%{opacity:0.4;transform:scale(0.85)}
   50%{opacity:0.8;transform:scale(1.15)}
 }
 .nafas-logo-img{
-  width:52px;
+  width:64px;
   height:auto;
   position:relative;
   z-index:2;
-  filter:brightness(1.2) drop-shadow(0 0 20px rgba(92,224,214,0.15));
+  filter:brightness(1.15) drop-shadow(0 0 20px rgba(92,224,214,0.15));
 }
 
 /* App Name */
 .app-name{
-  font-size:2.8rem!important;
-  font-weight:var(--fw-bold)!important;
+  font-size:2.6rem!important;
+  font-weight:800!important;
   color:var(--text-primary)!important;
-  letter-spacing:0.04em;
-  margin-bottom:2px;
+  letter-spacing:0.06em;
+  margin-bottom:4px;
   background:none!important;
   -webkit-text-fill-color:var(--text-primary)!important;
+  text-shadow:0 0 40px rgba(92,224,214,0.1);
 }
 .text-gold-shimmer{background:none!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:var(--text-primary)!important}
 
 /* Slogan */
 .app-slogan{
-  font-size:0.65rem;
-  letter-spacing:0.35em;
+  font-size:0.6rem;
+  letter-spacing:0.4em;
   color:var(--accent);
-  opacity:0.5;
+  opacity:0.4;
   text-transform:uppercase;
-  margin-bottom:20px;
+  margin-bottom:16px;
   font-weight:var(--fw-medium);
 }
 
@@ -350,26 +351,38 @@ body{
   width:140px;
   height:140px;
   border-radius:50%;
-  background:radial-gradient(circle at 40% 35%, rgba(92,224,214,0.08), rgba(92,224,214,0.02));
+  background:radial-gradient(circle at 40% 35%, rgba(92,224,214,0.1), rgba(92,224,214,0.02));
   border:1px solid rgba(92,224,214,0.12);
   display:flex;
   align-items:center;
   justify-content:center;
   margin:0 auto 12px;
-  animation:breathCircle 5s ease-in-out infinite;
+  animation:breathCircle 6s ease-in-out infinite;
   position:relative;
+  backdrop-filter:blur(8px);
+  box-shadow:0 0 60px rgba(92,224,214,0.06),inset 0 0 30px rgba(92,224,214,0.03);
+}
+.breath-hero-circle::before{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  border-radius:50%;
+  border:1px solid rgba(92,224,214,0.04);
+  animation:breathCircle 6s ease-in-out infinite;
+  animation-delay:-1.5s;
 }
 .breath-hero-circle::after{
   content:'';
   position:absolute;
-  inset:-8px;
+  inset:-10px;
   border-radius:50%;
-  border:1px solid rgba(78,205,196,0.06);
-  animation:breathCircle 5s ease-in-out infinite reverse;
+  border:1px solid rgba(92,224,214,0.07);
+  animation:breathCircle 6s ease-in-out infinite;
+  animation-delay:-3s;
 }
 @keyframes breathCircle{
-  0%,100%{transform:scale(0.92);border-color:rgba(78,205,196,0.1)}
-  50%{transform:scale(1.08);border-color:rgba(78,205,196,0.25)}
+  0%,100%{transform:scale(0.9);border-color:rgba(92,224,214,0.08)}
+  50%{transform:scale(1.1);border-color:rgba(92,224,214,0.2)}
 }
 .breath-hero-text{
   font-size:0.95rem;
@@ -387,22 +400,23 @@ body{
 /* ── CTA Buttons ── */
 .cta-primary{
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:10px;
+  gap:4px;
   width:100%;
-  max-width:320px;
-  padding:16px 28px;
-  background:linear-gradient(145deg,#5CE0D6 0%,#4BCCC3 50%,#3AB5AE 100%);
-  color:#0B1120;
+  max-width:300px;
+  padding:18px 32px;
+  background:linear-gradient(135deg,#5CE0D6 0%,#45C4BA 40%,#38B2AC 100%);
+  color:#060b16;
   font-family:var(--font);
   font-size:1.05rem;
   font-weight:var(--fw-bold);
   border:none;
-  border-radius:var(--radius-full);
+  border-radius:var(--radius-xl);
   cursor:pointer;
-  transition:all var(--duration) var(--ease);
-  box-shadow:0 6px 24px rgba(92,224,214,0.18),inset 0 1px 0 rgba(255,255,255,0.1);
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 4px 20px rgba(92,224,214,0.2),0 0 60px rgba(92,224,214,0.06);
   margin:0 auto 14px;
   position:relative;
   overflow:hidden;
@@ -417,8 +431,8 @@ body{
 }
 .cta-primary:hover::before{transform:translateX(100%)}
 .cta-primary:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(78,205,196,0.35);
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 8px 36px rgba(92,224,214,0.3),0 0 80px rgba(92,224,214,0.08);
 }
 .cta-primary:active{transform:scale(0.97)}
 .cta-icon{font-size:1.1rem}
@@ -433,20 +447,21 @@ body{
 .cta-secondary{
   flex:1;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:8px;
-  padding:13px 12px;
-  background:var(--bg-card);
-  border:1px solid var(--glass-border);
+  gap:3px;
+  padding:14px 12px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
   color:var(--text-primary);
   font-family:var(--font);
-  font-size:0.88rem;
+  font-size:0.85rem;
   font-weight:var(--fw-medium);
-  border-radius:var(--radius-full);
+  border-radius:var(--radius-lg);
   cursor:pointer;
-  transition:all var(--duration) var(--ease);
-  backdrop-filter:blur(10px);
+  transition:all 0.35s var(--ease);
+  backdrop-filter:blur(12px);
 }
 .cta-secondary:hover{
   background:var(--bg-card-hover);
@@ -855,7 +870,7 @@ button[onclick="startTour()"]:hover{
 @keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.2)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
 
 .send-btn{
-  background:linear-gradient(145deg,#5CE0D6 0%,#4BCCC3 50%,#3AB5AE 100%);
+  background:linear-gradient(135deg,var(--accent),#38B2AC);
   color:#0B1120;
   font-size:1.1rem;
   box-shadow:0 2px 12px rgba(78,205,196,0.2);
@@ -2524,7 +2539,7 @@ button[onclick*="send"],
     gap:6px!important;
   }
   .app-name{
-    font-size:2.8rem!important;
+    font-size:2.2rem!important;
   }
   .tagline{
     font-size:0.85rem!important;
@@ -3684,140 +3699,1078 @@ button:focus:not(:focus-visible) {
 
 
 /* ══════════════════════════════════════════════════════════════
-   NAFAS V7 — Glass Card Design System
+   NAFAS V7 PRO — Professional Design System Override
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Ambient aurora ── */
+/* Ambient mesh gradient overlay */
 body::after{
   content:'';
   position:fixed;
   inset:0;
   background:
-    radial-gradient(ellipse 100% 60% at 50% -10%, rgba(20,30,55,0.9) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 20% 90%, rgba(92,224,214,0.03) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(129,140,248,0.02) 0%, transparent 45%);
+    radial-gradient(ellipse 80% 50% at 15% 5%, rgba(92,224,214,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 85% 85%, rgba(129,140,248,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 40%, rgba(167,139,250,0.025) 0%, transparent 50%);
   pointer-events:none;
   z-index:0;
 }
 
-/* ── Glass Card ── */
+/* Remove old V7 overlays */
+.v7-aurora,.v7-breath-particle,.v7-nafas-status .dot{display:none!important}
+
+/* ── Pro Status Badge ── */
+.v7-nafas-status{
+  display:inline-flex!important;
+  align-items:center;
+  gap:8px;
+  background:rgba(92,224,214,0.06);
+  border:1px solid rgba(92,224,214,0.1);
+  backdrop-filter:blur(16px);
+  padding:6px 18px;
+  border-radius:var(--radius-full);
+  font-size:0.78rem;
+  color:rgba(92,224,214,0.9);
+  margin-bottom:16px;
+  letter-spacing:0.03em;
+  animation:statusFadeIn 1.5s ease forwards;
+}
+.v7-nafas-status::before{
+  content:'';
+  width:6px;
+  height:6px;
+  background:#5CE0D6;
+  border-radius:50%;
+  box-shadow:0 0 8px rgba(92,224,214,0.5);
+  animation:statusPulse 3s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes statusPulse{
+  0%,100%{opacity:0.6;box-shadow:0 0 6px rgba(92,224,214,0.3)}
+  50%{opacity:1;box-shadow:0 0 12px rgba(92,224,214,0.6)}
+}
+@keyframes statusFadeIn{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── Pro Tagline (greeting) ── */
+.tagline{
+  font-size:0.95rem!important;
+  color:var(--text-secondary)!important;
+  margin-bottom:24px!important;
+  font-weight:var(--fw-regular)!important;
+  max-width:280px;
+  line-height:1.6;
+}
+
+/* ── Pro Returning Welcome ── */
+.returning-welcome{
+  background:rgba(92,224,214,0.04)!important;
+  border:1px solid rgba(92,224,214,0.08)!important;
+  border-radius:var(--radius-lg)!important;
+  padding:10px 20px!important;
+  font-size:0.82rem!important;
+  color:var(--text-secondary)!important;
+  backdrop-filter:blur(10px);
+  max-width:300px;
+}
+
+/* ── CTA labels ── */
+.cta-label-main{
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:0.02em;
+}
+.cta-sub{
+  font-size:0.72rem;
+  opacity:0.7;
+  letter-spacing:0.01em;
+}
+.cta-label-sec{
+  font-size:0.82rem;
+  font-weight:600;
+}
+.cta-hint-sec{
+  font-size:0.65rem;
+  opacity:0.5;
+}
+.cta-icon{font-size:1.2rem!important}
+
+/* ── More toggle ── */
+.more-toggle-btn{
+  background:transparent!important;
+  border:1px solid rgba(255,255,255,0.05)!important;
+  color:var(--text-muted)!important;
+  font-size:0.78rem!important;
+  padding:7px 20px!important;
+  border-radius:var(--radius-full)!important;
+  transition:all 0.3s var(--ease)!important;
+  margin-bottom:12px!important;
+}
+.more-toggle-btn:hover{
+  border-color:rgba(92,224,214,0.15)!important;
+  color:var(--accent)!important;
+}
+
+/* ── More options panel ── */
+.more-options-panel{
+  display:flex;
+  gap:10px;
+  width:100%;
+  max-width:300px;
+  margin:0 auto 16px;
+}
+
+/* ── Bottom section ── */
+.welcome-bottom{
+  margin-top:auto;
+  padding-top:24px;
+}
+.session-count{
+  font-size:0.72rem!important;
+  color:var(--text-muted)!important;
+  margin-bottom:8px;
+}
+.journey-link,.tour-btn{
+  background:transparent!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+  color:var(--text-muted)!important;
+  font-size:0.75rem!important;
+  padding:6px 14px!important;
+  border-radius:var(--radius-full)!important;
+  transition:all 0.3s!important;
+  margin:3px!important;
+}
+.journey-link:hover,.tour-btn:hover{
+  border-color:rgba(92,224,214,0.12)!important;
+  color:var(--text-secondary)!important;
+}
+.hug-btn{
+  background:rgba(255,255,255,0.03)!important;
+  border:1px solid rgba(255,255,255,0.06)!important;
+  border-radius:var(--radius-lg)!important;
+  padding:10px 20px!important;
+  color:var(--text-secondary)!important;
+  font-size:0.82rem!important;
+  transition:all 0.3s!important;
+  backdrop-filter:blur(8px);
+}
+.hug-btn:hover{
+  border-color:rgba(92,224,214,0.15)!important;
+  background:rgba(92,224,214,0.05)!important;
+}
+
+/* ── Copyright ── */
+.copyright{
+  font-size:0.68rem!important;
+  color:var(--text-muted)!important;
+  margin-top:16px;
+  line-height:1.5;
+  letter-spacing:0.01em;
+}
+
+/* ── Chat Header Pro ── */
+.chat-header{
+  backdrop-filter:blur(20px)!important;
+  background:rgba(6,11,22,0.85)!important;
+  border-bottom:1px solid rgba(255,255,255,0.04)!important;
+}
+
+/* ── Chat Messages Pro ── */
+.msg.bot .bubble{
+  background:rgba(92,224,214,0.05)!important;
+  border:1px solid rgba(92,224,214,0.08)!important;
+  border-radius:18px 18px 18px 4px!important;
+  backdrop-filter:blur(6px);
+}
+.msg.user .bubble{
+  background:rgba(92,224,214,0.1)!important;
+  border:1px solid rgba(92,224,214,0.15)!important;
+  border-radius:18px 18px 4px 18px!important;
+}
+
+/* ── Input Area Pro ── */
+.input-area{
+  backdrop-filter:blur(20px)!important;
+  background:rgba(6,11,22,0.85)!important;
+  border-top:1px solid rgba(255,255,255,0.04)!important;
+}
+.input-area textarea{
+  background:rgba(255,255,255,0.04)!important;
+  border:1px solid rgba(255,255,255,0.06)!important;
+  border-radius:var(--radius-lg)!important;
+  color:var(--text-primary)!important;
+  transition:border-color 0.3s!important;
+}
+.input-area textarea:focus{
+  border-color:rgba(92,224,214,0.2)!important;
+  box-shadow:0 0 20px rgba(92,224,214,0.05)!important;
+}
+.send-btn{
+  background:linear-gradient(135deg,#5CE0D6,#45C4BA)!important;
+  color:#060b16!important;
+  border-radius:var(--radius-md)!important;
+  transition:all 0.3s!important;
+}
+.send-btn:hover{
+  box-shadow:0 0 20px rgba(92,224,214,0.2)!important;
+  transform:scale(1.05);
+}
+
+/* ── SOS Button Pro ── */
+.help-fab{
+  background:rgba(255,107,107,0.12)!important;
+  border:1px solid rgba(255,107,107,0.2)!important;
+  backdrop-filter:blur(12px)!important;
+  border-radius:var(--radius-full)!important;
+  color:#FF6B6B!important;
+  transition:all 0.3s!important;
+}
+.help-fab:hover{
+  background:rgba(255,107,107,0.2)!important;
+  box-shadow:0 0 20px rgba(255,107,107,0.15)!important;
+}
+
+/* ── Consent/Privacy Pro ── */
+.consent-box,.privacy-box{
+  background:rgba(12,20,36,0.95)!important;
+  border:1px solid rgba(255,255,255,0.06)!important;
+  backdrop-filter:blur(24px)!important;
+  border-radius:var(--radius-xl)!important;
+}
+.consent-accept{
+  background:linear-gradient(135deg,#5CE0D6,#45C4BA)!important;
+  color:#060b16!important;
+  border-radius:var(--radius-lg)!important;
+  font-weight:700!important;
+  letter-spacing:0.02em;
+}
+
+/* ── Smooth page transitions ── */
+.screen{
+  animation:screenIn 0.6s ease forwards;
+}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── Burnout bar Pro ── */
+.burnout-bar{
+  background:rgba(255,255,255,0.03)!important;
+  height:3px!important;
+}
+.burnout-bar-fill{
+  background:linear-gradient(90deg,#5CE0D6,#818cf8)!important;
+  height:3px!important;
+  border-radius:3px!important;
+  transition:width 0.8s cubic-bezier(0.4,0,0.2,1)!important;
+}
+
+/* ── Progress button ── */
+.progress-fab,.progress-btn,#progressToggle,[onclick*="progress"]{
+  background:rgba(92,224,214,0.06)!important;
+  border:1px solid rgba(92,224,214,0.1)!important;
+  backdrop-filter:blur(12px)!important;
+  border-radius:var(--radius-md)!important;
+  color:var(--text-secondary)!important;
+  font-size:0.78rem!important;
+}
+
+/* ── Responsive refinements ── */
+@media(max-width:380px){
+  .app-name{font-size:2.2rem!important}
+  .breath-hero-circle{width:120px!important;height:120px!important}
+  .cta-primary{max-width:280px!important;padding:16px 24px!important}
+}
+@media(min-width:768px){
+  .screen.welcome{gap:4px}
+  .app-name{font-size:3rem!important}
+  .breath-hero-circle{width:160px!important;height:160px!important}
+  .cta-primary{max-width:340px!important}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS V7 BOLD — Dramatic Visual Transformation
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── ANIMATED AURORA BACKGROUND ── */
+body{
+  background:#050a12!important;
+}
+.screen.welcome::before{
+  content:'';
+  position:fixed;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:
+    conic-gradient(from 0deg at 30% 20%,
+      transparent 0deg,
+      rgba(92,224,214,0.06) 60deg,
+      transparent 120deg,
+      rgba(129,140,248,0.05) 200deg,
+      transparent 260deg,
+      rgba(167,139,250,0.04) 320deg,
+      transparent 360deg);
+  animation:auroraRotate 40s linear infinite;
+  pointer-events:none;
+  z-index:-1;
+}
+@keyframes auroraRotate{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+/* ── GLASS CONTENT CARD ── */
+.screen.welcome{
+  position:relative!important;
+  z-index:1!important;
+}
+.screen.welcome>.nafas-logo-container,
+.screen.welcome>.app-name,
+.screen.welcome>.app-slogan,
+.screen.welcome>.v7-nafas-status,
+.screen.welcome>.tagline,
+.screen.welcome>.returning-welcome,
+.screen.welcome>.breath-hero,
+.screen.welcome>.cta-primary,
+.screen.welcome>.more-toggle-btn,
+.screen.welcome>.more-options-panel{
+  position:relative;
+  z-index:2;
+}
+
+/* ── BIGGER BOLDER APP NAME ── */
+.app-name{
+  font-size:3.2rem!important;
+  font-weight:800!important;
+  letter-spacing:0.08em!important;
+  margin-bottom:6px!important;
+  text-shadow:0 0 60px rgba(92,224,214,0.12),0 2px 4px rgba(0,0,0,0.3)!important;
+}
+
+/* ── DRAMATIC BREATHING CIRCLE ── */
+.breath-hero{
+  margin-bottom:28px!important;
+  margin-top:4px!important;
+}
+.breath-hero-circle{
+  width:160px!important;
+  height:160px!important;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(92,224,214,0.15), rgba(92,224,214,0.02) 70%)!important;
+  border:1.5px solid rgba(92,224,214,0.15)!important;
+  box-shadow:
+    0 0 80px rgba(92,224,214,0.08),
+    0 0 40px rgba(92,224,214,0.04),
+    inset 0 0 40px rgba(92,224,214,0.04)!important;
+  backdrop-filter:blur(12px)!important;
+}
+.breath-hero-text{
+  font-size:1.05rem!important;
+  font-weight:600!important;
+  letter-spacing:0.04em!important;
+}
+
+/* ── COMPLETELY NEW CTA BUTTON ── */
+.cta-primary.cta-hero-main{
+  max-width:260px!important;
+  padding:20px 36px!important;
+  border-radius:20px!important;
+  background:linear-gradient(145deg,#5CE0D6 0%,#4DCEC5 50%,#3CB8B0 100%)!important;
+  box-shadow:
+    0 8px 32px rgba(92,224,214,0.2),
+    0 2px 8px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.15)!important;
+  border:1px solid rgba(255,255,255,0.1)!important;
+}
+.cta-primary.cta-hero-main:hover{
+  transform:translateY(-4px) scale(1.03)!important;
+  box-shadow:
+    0 16px 48px rgba(92,224,214,0.25),
+    0 4px 12px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.2)!important;
+}
+.cta-label-main{
+  font-size:1.15rem!important;
+  font-weight:700!important;
+}
+.cta-sub{
+  font-size:0.68rem!important;
+  opacity:0.6!important;
+  font-weight:400!important;
+}
+
+/* ── HUG BUTTON — Glass Morphism ── */
+.hug-btn,[onclick*="showHugAnimation"]{
+  background:rgba(255,255,255,0.04)!important;
+  border:1px solid rgba(255,255,255,0.08)!important;
+  border-radius:16px!important;
+  padding:12px 24px!important;
+  backdrop-filter:blur(16px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.hug-btn:hover,[onclick*="showHugAnimation"]:hover{
+  background:rgba(92,224,214,0.06)!important;
+  border-color:rgba(92,224,214,0.15)!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 24px rgba(92,224,214,0.08)!important;
+}
+
+/* ── STATUS BADGE — More Visible ── */
+.v7-nafas-status{
+  background:rgba(92,224,214,0.08)!important;
+  border:1px solid rgba(92,224,214,0.15)!important;
+  padding:8px 20px!important;
+  font-size:0.8rem!important;
+  letter-spacing:0.04em!important;
+  box-shadow:0 4px 16px rgba(92,224,214,0.06)!important;
+}
+
+/* ── SECONDARY BUTTONS — Glass Cards ── */
+.more-options-panel .cta-secondary{
+  background:rgba(255,255,255,0.03)!important;
+  border:1px solid rgba(255,255,255,0.07)!important;
+  border-radius:16px!important;
+  padding:16px 12px!important;
+  backdrop-filter:blur(16px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.more-options-panel .cta-secondary:hover{
+  background:rgba(92,224,214,0.05)!important;
+  border-color:rgba(92,224,214,0.15)!important;
+  transform:translateY(-3px)!important;
+  box-shadow:0 8px 24px rgba(92,224,214,0.08)!important;
+}
+
+/* ── MORE TOGGLE ── */
+.more-toggle-btn{
+  margin-top:4px!important;
+}
+
+/* ── BOTTOM LINKS — Refined ── */
+.journey-link,.tour-btn{
+  font-size:0.72rem!important;
+  padding:5px 12px!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+  border-radius:20px!important;
+}
+
+/* ── FOOTER ── */
+.copyright{
+  opacity:0.6!important;
+  font-size:0.65rem!important;
+}
+
+/* ── INSTALL BANNER — Hide or Style ── */
+[style*="position: fixed"][style*="z-index"]{
+  backdrop-filter:blur(16px)!important;
+  background:rgba(6,10,18,0.9)!important;
+}
+
+/* ── AMBIENT FLOATING ORBS ── */
+.bg-blobs .blob{
+  filter:blur(120px)!important;
+  opacity:0.05!important;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:380px){
+  .app-name{font-size:2.5rem!important}
+  .breath-hero-circle{width:130px!important;height:130px!important}
+  .cta-primary.cta-hero-main{max-width:240px!important;padding:16px 28px!important}
+}
+@media(min-width:768px){
+  .app-name{font-size:3.8rem!important}
+  .breath-hero-circle{width:180px!important;height:180px!important}
+  .cta-primary.cta-hero-main{max-width:300px!important}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS V7 DRAMATIC — Glass Card Layout
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Welcome screen as floating glass card ── */
+.screen.welcome{
+  min-height:100dvh!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:40px 24px!important;
+  gap:0!important;
+}
+
+/* Glass container - wraps main content */
+.nafas-logo-container,
+.app-name,
+.app-slogan,
+.v7-nafas-status,
+.tagline,
+.returning-welcome,
+.breath-hero,
+.cta-primary.cta-hero-main,
+.more-toggle-btn,
+.more-options-panel,
+.welcome-bottom{
+  position:relative;
+  z-index:3;
+}
+
+/* ── LIVING BACKGROUND — Multi-layer animated ── */
+body{
+  background:#040810!important;
+  overflow-x:hidden;
+}
+
+/* Layer 1: Deep space gradient */
+body::before{
+  content:''!important;
+  position:fixed!important;
+  inset:0!important;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 0%, rgba(20,30,60,0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(92,224,214,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 20%, rgba(129,140,248,0.03) 0%, transparent 50%)!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+
+/* Layer 2: Animated aurora glow */
+.screen.welcome::before{
+  content:''!important;
+  position:fixed!important;
+  width:600px!important;
+  height:600px!important;
+  top:-200px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  background:radial-gradient(circle, rgba(92,224,214,0.08) 0%, rgba(129,140,248,0.04) 40%, transparent 70%)!important;
+  filter:blur(60px)!important;
+  animation:auroraFloat 12s ease-in-out infinite!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+@keyframes auroraFloat{
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:0.7}
+  50%{transform:translateX(-50%) translateY(30px);opacity:1}
+}
+
+/* ── LOGO — Elegant glow ── */
+.nafas-logo-container{
+  margin-bottom:12px!important;
+}
+.logo-breathing-glow{
+  inset:-70px!important;
+  background:radial-gradient(circle,rgba(92,224,214,0.06) 0%,transparent 65%)!important;
+}
+.nafas-logo-img{
+  width:56px!important;
+  filter:brightness(1.2) drop-shadow(0 0 24px rgba(92,224,214,0.2))!important;
+}
+
+/* ── APP NAME — Large + Subtle ── */
+.app-name{
+  font-size:3rem!important;
+  font-weight:800!important;
+  letter-spacing:0.06em!important;
+  margin-bottom:4px!important;
+  text-shadow:0 0 50px rgba(92,224,214,0.08)!important;
+  color:#f0ede8!important;
+  -webkit-text-fill-color:#f0ede8!important;
+}
+
+/* ── SLOGAN — Refined ── */
+.app-slogan{
+  font-size:0.55rem!important;
+  letter-spacing:0.5em!important;
+  opacity:0.35!important;
+  margin-bottom:20px!important;
+  color:#5CE0D6!important;
+}
+
+/* ── STATUS BADGE — Pill ── */
+.v7-nafas-status{
+  background:rgba(92,224,214,0.05)!important;
+  border:1px solid rgba(92,224,214,0.1)!important;
+  padding:6px 16px!important;
+  border-radius:100px!important;
+  font-size:0.75rem!important;
+  color:rgba(92,224,214,0.85)!important;
+  margin-bottom:12px!important;
+  backdrop-filter:blur(12px)!important;
+}
+
+/* ── TAGLINE + GREETING ── */
+.tagline{
+  font-size:0.88rem!important;
+  color:rgba(240,237,232,0.5)!important;
+  margin-bottom:8px!important;
+  line-height:1.7!important;
+}
+.returning-welcome{
+  background:rgba(92,224,214,0.03)!important;
+  border:1px solid rgba(92,224,214,0.06)!important;
+  border-radius:14px!important;
+  padding:8px 16px!important;
+  font-size:0.78rem!important;
+  max-width:280px!important;
+  backdrop-filter:blur(8px)!important;
+  margin-bottom:16px!important;
+}
+
+/* ── BREATHING CIRCLE — Ethereal rings ── */
+.breath-hero{
+  margin:8px 0 24px!important;
+}
+.breath-hero-circle{
+  width:150px!important;
+  height:150px!important;
+  background:transparent!important;
+  border:1px solid rgba(92,224,214,0.12)!important;
+  box-shadow:
+    0 0 60px rgba(92,224,214,0.05),
+    inset 0 0 60px rgba(92,224,214,0.03)!important;
+  backdrop-filter:blur(4px)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+}
+.breath-hero-circle::before{
+  inset:-16px!important;
+  border:1px solid rgba(92,224,214,0.05)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+  animation-delay:-2s!important;
+}
+.breath-hero-circle::after{
+  inset:-8px!important;
+  border:1px solid rgba(92,224,214,0.08)!important;
+  animation:breathFloat 6s ease-in-out infinite!important;
+  animation-delay:-4s!important;
+}
+@keyframes breathFloat{
+  0%,100%{transform:scale(0.92);opacity:0.7}
+  50%{transform:scale(1.08);opacity:1}
+}
+.breath-hero-text{
+  font-size:0.95rem!important;
+  color:rgba(92,224,214,0.7)!important;
+  font-weight:500!important;
+  letter-spacing:0.06em!important;
+}
+.breath-hero-subtitle{
+  font-size:0.72rem!important;
+  color:rgba(240,237,232,0.2)!important;
+  letter-spacing:0.04em!important;
+}
+
+/* ── CTA MAIN — Premium gradient ── */
+.cta-primary.cta-hero-main{
+  max-width:240px!important;
+  padding:18px 32px!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,#5CE0D6 0%,#4DCEC5 60%,#3CB8B0 100%)!important;
+  color:#040810!important;
+  box-shadow:
+    0 4px 20px rgba(92,224,214,0.15),
+    0 1px 3px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.12)!important;
+  border:none!important;
+  font-family:'Tajawal',sans-serif!important;
+  transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.cta-primary.cta-hero-main:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:
+    0 12px 40px rgba(92,224,214,0.2),
+    0 2px 8px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.15)!important;
+}
+.cta-primary.cta-hero-main .cta-icon{
+  font-size:1.1rem!important;
+  margin-bottom:2px!important;
+}
+.cta-primary.cta-hero-main .cta-label-main{
+  font-size:1.1rem!important;
+  font-weight:700!important;
+  letter-spacing:0.02em!important;
+}
+.cta-primary.cta-hero-main .cta-sub{
+  font-size:0.65rem!important;
+  opacity:0.55!important;
+}
+
+/* ── MORE TOGGLE ── */
+.more-toggle-btn{
+  background:transparent!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+  color:rgba(240,237,232,0.25)!important;
+  font-size:0.72rem!important;
+  padding:5px 16px!important;
+  border-radius:100px!important;
+  margin-bottom:12px!important;
+  transition:all 0.3s ease!important;
+}
+.more-toggle-btn:hover{
+  border-color:rgba(92,224,214,0.1)!important;
+  color:rgba(92,224,214,0.6)!important;
+}
+
+/* ── SECONDARY BUTTONS ── */
+.more-options-panel{
+  max-width:260px!important;
+  gap:8px!important;
+}
+.more-options-panel .cta-secondary{
+  background:rgba(255,255,255,0.02)!important;
+  border:1px solid rgba(255,255,255,0.05)!important;
+  border-radius:14px!important;
+  padding:14px 10px!important;
+  backdrop-filter:blur(12px)!important;
+  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1)!important;
+}
+.more-options-panel .cta-secondary:hover{
+  background:rgba(92,224,214,0.04)!important;
+  border-color:rgba(92,224,214,0.12)!important;
+  transform:translateY(-2px)!important;
+}
+
+/* ── HUG BUTTON ROW ── */
+.screen.welcome>[class*="hug"],
+.screen.welcome>[onclick*="Hug"],
+.screen.welcome>div:has(>[onclick*="Hug"]){
+  margin-bottom:8px!important;
+}
+
+/* ── WELCOME BOTTOM ── */
+.welcome-bottom{
+  margin-top:auto!important;
+  padding-top:16px!important;
+}
+.session-count{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.2)!important;
+}
+.journey-link,.tour-btn{
+  font-size:0.7rem!important;
+  padding:4px 12px!important;
+  border-color:rgba(255,255,255,0.03)!important;
+  color:rgba(240,237,232,0.2)!important;
+}
+.copyright{
+  font-size:0.62rem!important;
+  color:rgba(240,237,232,0.15)!important;
+  margin-top:12px!important;
+}
+
+/* ── BLOBS — Ethereal ── */
+.bg-blobs .blob{
+  filter:blur(140px)!important;
+  opacity:0.04!important;
+}
+
+/* ── STARS — More subtle ── */
+.star{
+  width:1px!important;
+  height:1px!important;
+  background:rgba(255,255,255,0.6)!important;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:380px){
+  .app-name{font-size:2.4rem!important}
+  .breath-hero-circle{width:120px!important;height:120px!important}
+  .cta-primary.cta-hero-main{max-width:220px!important;padding:16px 24px!important}
+}
+@media(min-width:768px){
+  .app-name{font-size:3.6rem!important}
+  .breath-hero-circle{width:170px!important;height:170px!important}
+  .cta-primary.cta-hero-main{max-width:280px!important}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAFAS GLASS CARD — Structural Design System
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── The Glass Card ── */
 .nafas-glass-card{
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  width:calc(100% - 32px);
-  max-width:400px;
+  width:100%;
+  max-width:420px;
   margin:0 auto;
-  padding:36px 28px 28px;
-  background:linear-gradient(165deg, rgba(15,22,40,0.85) 0%, rgba(10,16,32,0.9) 100%);
-  border:1px solid rgba(92,224,214,0.08);
-  border-radius:28px;
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
+  padding:40px 32px 32px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:32px;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    0 0 0 1px rgba(255,255,255,0.03),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+    0 24px 80px rgba(0,0,0,0.4),
+    0 0 1px rgba(255,255,255,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.05);
   position:relative;
   z-index:2;
+  overflow:hidden;
 }
 
-/* Card top highlight */
+/* Card top light effect */
 .nafas-glass-card::before{
   content:'';
   position:absolute;
   top:0;
-  left:15%;
-  right:15%;
+  left:10%;
+  right:10%;
   height:1px;
-  background:linear-gradient(90deg, transparent, rgba(92,224,214,0.25), transparent);
-  border-radius:1px;
+  background:linear-gradient(90deg,transparent,rgba(92,224,214,0.2),transparent);
 }
 
-/* Card inner ambient glow */
+/* Card ambient inner glow */
 .nafas-glass-card::after{
   content:'';
   position:absolute;
-  top:-80px;
+  top:-100px;
   left:50%;
   transform:translateX(-50%);
-  width:250px;
-  height:160px;
-  background:radial-gradient(circle, rgba(92,224,214,0.04) 0%, transparent 65%);
+  width:300px;
+  height:200px;
+  background:radial-gradient(circle,rgba(92,224,214,0.04) 0%,transparent 70%);
   pointer-events:none;
-  z-index:-1;
 }
 
-/* ── Divider ── */
+/* ── Divider line ── */
 .nafas-divider{
-  width:36px;
+  width:40px;
   height:1px;
-  background:linear-gradient(90deg, transparent, rgba(92,224,214,0.25), transparent);
-  margin:6px auto 14px;
+  background:linear-gradient(90deg,transparent,rgba(92,224,214,0.3),transparent);
+  margin:8px auto 16px;
 }
 
-/* ── Status Badge ── */
-.v7-nafas-status{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:rgba(92,224,214,0.04);
-  border:1px solid rgba(92,224,214,0.08);
-  padding:5px 14px;
-  border-radius:100px;
-  font-size:0.72rem;
-  color:rgba(92,224,214,0.8);
-  margin-bottom:10px;
-  backdrop-filter:blur(8px);
-}
-.v7-nafas-status::before{
-  content:'';
-  width:5px;
-  height:5px;
-  background:#5CE0D6;
-  border-radius:50%;
-  box-shadow:0 0 8px rgba(92,224,214,0.4);
-  animation:statusGlow 3s ease-in-out infinite;
-  flex-shrink:0;
-}
-@keyframes statusGlow{
-  0%,100%{opacity:0.5;box-shadow:0 0 4px rgba(92,224,214,0.2)}
-  50%{opacity:1;box-shadow:0 0 10px rgba(92,224,214,0.5)}
+/* ── Override welcome screen for card layout ── */
+.screen.welcome{
+  background:transparent!important;
+  padding:24px 16px!important;
+  gap:0!important;
 }
 
-/* ── Inside-card refinements ── */
-.nafas-glass-card .nafas-logo-container{margin-bottom:10px}
-.nafas-glass-card .nafas-logo-img{width:48px!important}
-.nafas-glass-card .app-name{font-size:2.6rem!important;margin-bottom:3px!important}
-.nafas-glass-card .app-slogan{font-size:0.5rem!important;letter-spacing:0.45em!important;margin-bottom:0!important;opacity:0.3!important}
-.nafas-glass-card .tagline{font-size:0.82rem!important;margin-bottom:4px!important;color:rgba(240,237,232,0.4)!important}
+/* ── Card elements refinement ── */
+.nafas-glass-card .nafas-logo-container{
+  margin-bottom:12px;
+}
+.nafas-glass-card .nafas-logo-img{
+  width:52px!important;
+}
+.nafas-glass-card .app-name{
+  font-size:2.8rem!important;
+  margin-bottom:4px!important;
+}
+.nafas-glass-card .app-slogan{
+  font-size:0.52rem!important;
+  letter-spacing:0.45em!important;
+  margin-bottom:0!important;
+  opacity:0.35!important;
+}
+.nafas-glass-card .v7-nafas-status{
+  margin-bottom:8px!important;
+  background:rgba(92,224,214,0.04)!important;
+  border-color:rgba(92,224,214,0.08)!important;
+  padding:5px 14px!important;
+  font-size:0.72rem!important;
+}
+.nafas-glass-card .tagline{
+  font-size:0.85rem!important;
+  margin-bottom:4px!important;
+  color:rgba(240,237,232,0.45)!important;
+}
+.nafas-glass-card .returning-welcome{
+  margin-bottom:12px!important;
+}
+.nafas-glass-card .breath-hero{
+  margin:4px 0 20px!important;
+}
+.nafas-glass-card .breath-hero-circle{
+  width:130px!important;
+  height:130px!important;
+  background:transparent!important;
+  border:1px solid rgba(92,224,214,0.1)!important;
+  box-shadow:0 0 40px rgba(92,224,214,0.04),inset 0 0 30px rgba(92,224,214,0.02)!important;
+}
+.nafas-glass-card .breath-hero-text{
+  font-size:0.88rem!important;
+  color:rgba(92,224,214,0.65)!important;
+  font-weight:500!important;
+}
+.nafas-glass-card .breath-hero-subtitle{
+  font-size:0.7rem!important;
+  color:rgba(240,237,232,0.18)!important;
+}
 
-.nafas-glass-card .breath-hero{margin:6px 0 18px!important}
-.nafas-glass-card .breath-hero-circle{width:120px!important;height:120px!important}
-.nafas-glass-card .breath-hero-text{font-size:0.85rem!important;color:rgba(92,224,214,0.6)!important}
-.nafas-glass-card .breath-hero-subtitle{font-size:0.68rem!important;color:rgba(240,237,232,0.15)!important}
+/* ── CTA inside card ── */
+.nafas-glass-card .cta-primary.cta-hero-main{
+  max-width:220px!important;
+  padding:16px 28px!important;
+  border-radius:16px!important;
+  margin-bottom:10px!important;
+  background:linear-gradient(150deg,#5CE0D6 0%,#4DCEC5 50%,#3CB8B0 100%)!important;
+  box-shadow:
+    0 4px 16px rgba(92,224,214,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1)!important;
+}
+.nafas-glass-card .cta-label-main{
+  font-size:1rem!important;
+}
+.nafas-glass-card .cta-sub{
+  font-size:0.6rem!important;
+}
 
-.nafas-glass-card .cta-primary{max-width:200px!important;padding:14px 24px!important;border-radius:14px!important;margin-bottom:8px!important;font-size:0.95rem!important}
-.nafas-glass-card .cta-label-main{font-size:0.95rem!important}
-.nafas-glass-card .cta-sub{font-size:0.58rem!important}
+/* ── More options inside card ── */
+.nafas-glass-card .more-toggle-btn{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.2)!important;
+  border-color:transparent!important;
+  margin-bottom:8px!important;
+  padding:4px 12px!important;
+}
+.nafas-glass-card .more-options-panel{
+  max-width:240px!important;
+  gap:6px!important;
+  margin-bottom:0!important;
+}
+.nafas-glass-card .cta-secondary{
+  border-radius:12px!important;
+  padding:12px 8px!important;
+  background:rgba(255,255,255,0.02)!important;
+  border:1px solid rgba(255,255,255,0.04)!important;
+}
 
-.nafas-glass-card .more-toggle-btn{font-size:0.65rem!important;color:rgba(240,237,232,0.2)!important;border-color:transparent!important;padding:3px 10px!important;margin-bottom:6px!important}
-.nafas-glass-card .more-options-panel{max-width:220px!important;gap:6px!important}
-.nafas-glass-card .cta-secondary{border-radius:10px!important;padding:10px 8px!important;font-size:0.78rem!important}
+/* ── Welcome bottom (outside card) ── */
+.welcome-bottom{
+  margin-top:20px!important;
+  text-align:center;
+}
+.welcome-bottom .session-count{
+  font-size:0.65rem!important;
+  color:rgba(240,237,232,0.15)!important;
+}
+.welcome-bottom .journey-link,
+.welcome-bottom .tour-btn{
+  font-size:0.68rem!important;
+  color:rgba(240,237,232,0.18)!important;
+  border-color:rgba(255,255,255,0.03)!important;
+}
+.welcome-bottom .copyright{
+  font-size:0.58rem!important;
+  color:rgba(240,237,232,0.12)!important;
+}
 
-/* ── Welcome bottom ── */
-.welcome-bottom{margin-top:16px!important;opacity:0.7}
-.welcome-bottom .copyright{font-size:0.58rem!important;color:rgba(240,237,232,0.15)!important}
+/* ── Background enhancement ── */
+body{background:#030712!important}
+
+/* Aurora behind card */
+.screen.welcome::before{
+  content:''!important;
+  position:fixed!important;
+  width:500px!important;
+  height:500px!important;
+  top:-180px!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  background:radial-gradient(circle, rgba(92,224,214,0.06) 0%, rgba(129,140,248,0.03) 40%, transparent 65%)!important;
+  filter:blur(50px)!important;
+  animation:auroraFloat 15s ease-in-out infinite!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
 
 /* ── Responsive ── */
 @media(max-width:400px){
-  .nafas-glass-card{padding:28px 20px 22px!important;border-radius:22px!important;margin:0 12px!important}
+  .nafas-glass-card{
+    padding:28px 20px 24px!important;
+    border-radius:24px!important;
+    margin:0 8px!important;
+  }
   .nafas-glass-card .app-name{font-size:2.2rem!important}
-  .nafas-glass-card .breath-hero-circle{width:100px!important;height:100px!important}
+  .nafas-glass-card .breath-hero-circle{width:110px!important;height:110px!important}
+  .nafas-glass-card .cta-primary.cta-hero-main{max-width:200px!important}
 }
 @media(min-width:768px){
-  .nafas-glass-card{max-width:440px!important;padding:44px 36px 34px!important}
-  .nafas-glass-card .app-name{font-size:3rem!important}
-  .nafas-glass-card .breath-hero-circle{width:140px!important;height:140px!important}
+  .nafas-glass-card{
+    max-width:460px!important;
+    padding:48px 40px 36px!important;
+  }
+  .nafas-glass-card .app-name{font-size:3.2rem!important}
+  .nafas-glass-card .breath-hero-circle{width:150px!important;height:150px!important}
+}
+
+
+/* ═══════════════════════════════════════
+   V7 HERO ORB — LARGE breathing sphere at TOP
+   ═══════════════════════════════════════ */
+.breath-hero-top {
+  margin-bottom: 16px !important;
+  margin-top: 8px !important;
+}
+.breath-orb-large {
+  width: 200px !important;
+  height: 200px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 40% 40%,
+    rgba(78,205,196,0.45),
+    rgba(78,205,196,0.2) 45%,
+    rgba(78,205,196,0.08) 70%,
+    transparent) !important;
+  border: 2px solid rgba(78,205,196,0.3) !important;
+  box-shadow: 
+    0 0 60px rgba(78,205,196,0.25),
+    0 0 120px rgba(78,205,196,0.12),
+    inset 0 0 50px rgba(78,205,196,0.1) !important;
+  animation: v7-orb-breathe 6s ease-in-out infinite !important;
+  position: relative;
+}
+.breath-orb-large::before {
+  content: '';
+  position: absolute; inset: -15px;
+  border-radius: 50%;
+  border: 1px solid rgba(78,205,196,0.1);
+  animation: v7-orb-ring 6s ease-in-out infinite;
+}
+.breath-orb-large::after {
+  content: '';
+  position: absolute; inset: -30px;
+  border-radius: 50%;
+  border: 1px solid rgba(78,205,196,0.06);
+  animation: v7-orb-ring 6s ease-in-out infinite 1s;
+}
+@keyframes v7-orb-breathe {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 60px rgba(78,205,196,0.2), inset 0 0 40px rgba(78,205,196,0.08);
+  }
+  30% { 
+    transform: scale(1.1); 
+    box-shadow: 0 0 100px rgba(78,205,196,0.35), inset 0 0 60px rgba(78,205,196,0.15);
+  }
+  50% { transform: scale(1.1); }
+  80% { 
+    transform: scale(1); 
+  }
+}
+@keyframes v7-orb-ring {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  30% { transform: scale(1.15); opacity: 0.8; }
+  50% { transform: scale(1.15); }
+  80% { transform: scale(1); opacity: 0.5; }
+}
+
+/* Mobile: slightly smaller orb */
+@media (max-width: 480px) {
+  .breath-orb-large {
+    width: 170px !important;
+    height: 170px !important;
+  }
 }
