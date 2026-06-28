@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>نَفَس | Nafas — الدعم النفسي الذكي</title>
+<meta name="theme-color" content="#0B1426">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   NAFAS v7 — The Breathing Universe
+   NAFAS FOR ARTIFICIAL INTELLIGENCE — CN-6573712
+   ══════════════════════════════════════════════ */
+
+:root {
+  --nafas-deep: #0B1426;
+  --nafas-teal: #4ECDC4;
+  --nafas-teal-dark: #3AA8A0;
+  --nafas-warm: #E8C07A;
+  --nafas-surface: rgba(78,205,196,0.06);
+  --nafas-text: #f0f4f8;
+  --nafas-muted: rgba(240,244,248,0.45);
+  --nafas-danger: #FF6B6B;
+  --font: 'Tajawal', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: var(--font); color: var(--nafas-text);
+  background: var(--nafas-deep);
+}
+
+/* ── Breathing Universe Background ── */
+.cosmos {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(78,205,196,0.08), transparent 50%),
+              radial-gradient(ellipse at 20% 30%, rgba(78,205,196,0.04), transparent 40%),
+              var(--nafas-deep);
+}
+
+/* Aurora borealis effect */
+.aurora {
+  position: absolute; top: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, 
+    rgba(78,205,196,0.0) 0%,
+    rgba(78,205,196,0.03) 30%,
+    rgba(78,205,196,0.06) 50%,
+    rgba(78,205,196,0.0) 100%);
+  animation: aurora-shift 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes aurora-shift {
+  0% { opacity: 0.4; transform: translateX(-5%); }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.5; transform: translateX(5%); }
+}
+
+/* Stars */
+.cosmos-star {
+  position: absolute; border-radius: 50%; background: #fff;
+  pointer-events: none;
+  animation: star-breathe var(--dur, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes star-breathe {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.8; }
+}
+
+/* Breathing particles — flow in/out like breath */
+.breath-particle {
+  position: absolute; border-radius: 50%;
+  background: rgba(78,205,196,0.4);
+  pointer-events: none;
+  animation: breathe-flow 6s ease-in-out infinite;
+}
+@keyframes breathe-flow {
+  0%, 100% { 
+    transform: translate(0, 0) scale(0.5); 
+    opacity: 0;
+  }
+  25% { opacity: 0.6; }
+  50% { 
+    transform: translate(var(--dx, 20px), var(--dy, -30px)) scale(1); 
+    opacity: 0.3;
+  }
+  75% { opacity: 0.1; }
+}
+
+/* ── Screen System ── */
+.screen {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  overflow-y: auto;
+}
+.screen.hidden { opacity: 0; pointer-events: none; transform: scale(0.97); }
+
+/* ══ WELCOME SCREEN ══ */
+.welcome-screen {
+  justify-content: center; gap: 0;
+  padding: 20px; padding-top: env(safe-area-inset-top, 20px);
+}
+
+/* Living breathing circle */
+.breath-circle-wrap {
+  position: relative; width: 180px; height: 180px;
+  margin-bottom: 20px;
+}
+.breath-circle {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%,
+    rgba(78,205,196,0.4),
+    rgba(78,205,196,0.15) 50%,
+    rgba(78,205,196,0.05));
+  box-shadow: 0 0 80px rgba(78,205,196,0.2),
+              inset 0 0 40px rgba(78,205,196,0.1);
+  animation: universe-breathe 6s ease-in-out infinite;
+  display: flex; align-items: center; justify-content: center;
+}
+.breath-circle-text {
+  font-size: 1.1rem; font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  animation: text-breathe 6s ease-in-out infinite;
+}
+@keyframes universe-breathe {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 60px rgba(78,205,196,0.15), inset 0 0 30px rgba(78,205,196,0.08);
+  }
+  30% { 
+    transform: scale(1.12); 
+    box-shadow: 0 0 100px rgba(78,205,196,0.3), inset 0 0 50px rgba(78,205,196,0.15);
+  }
+  50% { transform: scale(1.12); }
+  80% { 
+    transform: scale(1); 
+    box-shadow: 0 0 60px rgba(78,205,196,0.15), inset 0 0 30px rgba(78,205,196,0.08);
+  }
+}
+@keyframes text-breathe {
+  0%, 80%, 100% { opacity: 0.5; }
+  15% { opacity: 1; }
+  30%, 50% { opacity: 0.3; }
+}
+
+/* Breath rings */
+.breath-ring {
+  position: absolute; top: 50%; left: 50%;
+  border: 1px solid rgba(78,205,196,0.12);
+  border-radius: 50%; pointer-events: none;
+  animation: ring-expand 6s ease-in-out infinite;
+}
+.breath-ring:nth-child(2) { animation-delay: 2s; }
+.breath-ring:nth-child(3) { animation-delay: 4s; }
+@keyframes ring-expand {
+  0% { width: 180px; height: 180px; margin: -90px 0 0 -90px; opacity: 0.4; }
+  100% { width: 300px; height: 300px; margin: -150px 0 0 -150px; opacity: 0; }
+}
+
+.welcome-brand {
+  font-size: clamp(2.5rem, 8vw, 3.8rem);
+  font-weight: 800; color: var(--nafas-teal);
+  margin-bottom: 2px;
+  text-shadow: 0 0 30px rgba(78,205,196,0.3);
+}
+.welcome-tagline {
+  font-size: 0.82rem; letter-spacing: 0.18em;
+  color: var(--nafas-warm); margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.welcome-subtitle {
+  font-size: 0.92rem; color: var(--nafas-muted);
+  margin-bottom: 28px;
+}
+
+/* Main CTA */
+.cta-main {
+  width: 100%; max-width: 320px;
+  padding: 18px 24px; border-radius: 24px;
+  background: linear-gradient(135deg, var(--nafas-teal), var(--nafas-teal-dark));
+  border: none; color: #fff;
+  font-family: var(--font); font-size: 1.3rem; font-weight: 700;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 0 40px rgba(78,205,196,0.3), 0 8px 30px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(78,205,196,0.4), 0 12px 40px rgba(0,0,0,0.3);
+}
+.cta-main::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 4s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.cta-sub-text {
+  display: block; font-size: 0.78rem; font-weight: 400;
+  opacity: 0.75; margin-top: 3px;
+}
+
+/* Secondary options */
+.more-options {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; max-width: 320px;
+  margin-top: 14px;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+}
+.more-options.open {
+  max-height: 200px; opacity: 1; margin-top: 14px;
+}
+.cta-secondary {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px; color: var(--nafas-text);
+  font-family: var(--font); font-size: 0.92rem;
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+  transition: background 0.2s, transform 0.15s;
+  text-align: right;
+}
+.cta-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateX(-3px);
+}
+.cta-icon { font-size: 1.2rem; }
+.cta-label { flex: 1; font-weight: 600; }
+.cta-hint { font-size: 0.72rem; color: var(--nafas-muted); }
+
+.more-toggle {
+  background: none; border: 1px solid rgba(255,255,255,0.1);
+  color: var(--nafas-muted); font-family: var(--font);
+  font-size: 0.78rem; padding: 6px 16px; border-radius: 16px;
+  cursor: pointer; margin-top: 10px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.more-toggle:hover { color: var(--nafas-teal); border-color: rgba(78,205,196,0.3); }
+
+/* Welcome bottom */
+.welcome-bottom {
+  margin-top: 28px; display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+}
+.journey-btn {
+  background: none; border: none; color: var(--nafas-muted);
+  font-family: var(--font); font-size: 0.82rem;
+  cursor: pointer; padding: 6px 12px;
+  transition: color 0.2s;
+}
+.journey-btn:hover { color: var(--nafas-teal); }
+
+.welcome-footer {
+  margin-top: 16px; text-align: center;
+  font-size: 0.68rem; color: rgba(255,255,255,0.2);
+  line-height: 1.6; direction: ltr; unicode-bidi: plaintext;
+}
+
+/* ══ CHAT SCREEN ══ */
+.chat-screen {
+  padding: 0; overflow: hidden;
+}
+.chat-header {
+  width: 100%; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,20,38,0.95);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  z-index: 10; flex-shrink: 0;
+}
+.chat-back {
+  background: none; border: none; color: var(--nafas-text);
+  font-family: var(--font); font-size: 0.9rem;
+  cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.chat-mode {
+  padding: 4px 12px; border-radius: 10px;
+  background: rgba(78,205,196,0.1);
+  border: 1px solid rgba(78,205,196,0.15);
+  font-size: 0.75rem; color: var(--nafas-teal);
+}
+.chat-settings {
+  background: none; border: none; color: var(--nafas-muted);
+  cursor: pointer; font-size: 1.1rem;
+}
+
+/* Chat messages */
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  scroll-behavior: smooth;
+}
+
+.msg {
+  max-width: 85%; padding: 14px 18px;
+  border-radius: 20px; font-size: 0.95rem;
+  line-height: 1.7; animation: msg-in 0.4s ease;
+}
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg.ai {
+  align-self: flex-start;
+  background: rgba(78,205,196,0.08);
+  border: 1px solid rgba(78,205,196,0.1);
+  border-bottom-right-radius: 6px;
+}
+.msg.user {
+  align-self: flex-end;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom-left-radius: 6px;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  align-self: flex-start;
+  display: flex; gap: 4px; padding: 12px 18px;
+  background: rgba(78,205,196,0.06);
+  border-radius: 20px;
+}
+.typing-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--nafas-teal); opacity: 0.4;
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Mood indicator bar */
+.mood-bar {
+  width: 100%; height: 3px; flex-shrink: 0;
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+.mood-fill {
+  height: 100%; width: 50%;
+  background: linear-gradient(90deg, var(--nafas-teal), #4ade80);
+  transition: width 1s ease, background 1s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Input area */
+.chat-input-area {
+  width: 100%; padding: 12px 16px;
+  background: rgba(11,20,38,0.95);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: flex-end; gap: 10px;
+  flex-shrink: 0;
+}
+.chat-textarea {
+  flex: 1; padding: 12px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; color: var(--nafas-text);
+  font-family: var(--font); font-size: 0.95rem;
+  resize: none; outline: none; max-height: 120px;
+  transition: border-color 0.3s;
+}
+.chat-textarea::placeholder { color: var(--nafas-muted); }
+.chat-textarea:focus { border-color: rgba(78,205,196,0.3); }
+
+.chat-send {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--nafas-teal), var(--nafas-teal-dark));
+  border: none; color: #fff; font-size: 1.1rem;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.chat-send:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(78,205,196,0.3);
+}
+.chat-mic {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--nafas-muted); font-size: 1rem;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.chat-mic:hover { background: rgba(255,255,255,0.08); color: var(--nafas-teal); }
+.chat-mic.active {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.3);
+  color: var(--nafas-danger);
+  animation: mic-pulse 1.5s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+}
+
+/* SOS fab */
+.sos-fab {
+  position: fixed; bottom: 80px; left: 16px;
+  padding: 8px 14px; border-radius: 20px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: var(--nafas-danger);
+  font-family: var(--font); font-size: 0.78rem;
+  cursor: pointer; z-index: 20;
+  display: none; align-items: center; gap: 4px;
+  transition: background 0.2s;
+}
+.sos-fab:hover { background: rgba(239,68,68,0.15); }
+.chat-screen:not(.hidden) ~ .sos-fab { display: flex; }
+
+/* Student state connection badge */
+.state-badge {
+  position: fixed; bottom: 80px; right: 16px;
+  padding: 4px 10px; border-radius: 10px;
+  background: rgba(78,205,196,0.06);
+  border: 1px solid rgba(78,205,196,0.1);
+  font-size: 0.62rem; color: var(--nafas-teal);
+  z-index: 20; display: none; align-items: center; gap: 4px;
+}
+.chat-screen:not(.hidden) ~ .state-badge { display: flex; }
+.state-badge-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--nafas-teal);
+}
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 480px) {
+  .breath-circle-wrap { width: 140px; height: 140px; }
+  .welcome-brand { font-size: 2.2rem; }
+  .cta-main { font-size: 1.1rem; padding: 16px 20px; }
+}
+
+/* ══ CONSENT OVERLAY ══ */
+.consent-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(11,20,38,0.95);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.consent-overlay.hidden { display: none; }
+.consent-box {
+  max-width: 420px; width: 100%;
+  padding: 28px; border-radius: 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  max-height: 80vh; overflow-y: auto;
+}
+.consent-title {
+  font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 16px; text-align: center;
+}
+.consent-section {
+  margin-bottom: 16px; padding: 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+}
+.consent-section h3 {
+  font-size: 0.9rem; margin-bottom: 6px;
+  color: var(--nafas-teal);
+}
+.consent-section p, .consent-section li {
+  font-size: 0.82rem; line-height: 1.7;
+  color: rgba(255,255,255,0.7);
+}
+.consent-section ul { padding-right: 16px; }
+.consent-accept {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--nafas-teal), var(--nafas-teal-dark));
+  border: none; border-radius: 16px;
+  color: #fff; font-family: var(--font);
+  font-size: 1.05rem; font-weight: 700;
+  cursor: pointer; margin-top: 12px;
+}
+.consent-links {
+  display: flex; justify-content: center; gap: 16px;
+  margin-top: 10px; font-size: 0.72rem;
+}
+.consent-links a {
+  color: var(--nafas-muted); cursor: pointer;
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<!-- Cosmos Background -->
+<div class="cosmos" id="cosmos">
+  <div class="aurora"></div>
+</div>
+
+<!-- Consent Overlay -->
+<div class="consent-overlay" id="consentOverlay">
+  <div class="consent-box">
+    <div class="consent-title">🌙 مرحباً بك في نَفَس</div>
+    <div class="consent-section">
+      <h3>⚕️ إخلاء مسؤولية</h3>
+      <p>نَفَس أداة دعم ذاتي وليست بديلاً عن الاستشارة النفسية المتخصصة. إذا كنت تمر/ين بأزمة حقيقية، يرجى التواصل مع متخصص.</p>
+    </div>
+    <div class="consent-section">
+      <h3>🔒 خصوصيتك محمية</h3>
+      <ul>
+        <li>لا نطلب اسمك أو بريدك — أبداً</li>
+        <li>لا نشارك بياناتك مع أي طرف</li>
+        <li>رمز الرحلة هو طريقتك الوحيدة للوصول لجلساتك</li>
+        <li>يمكنك حذف بياناتك في أي وقت</li>
+      </ul>
+    </div>
+    <div class="consent-section">
+      <h3>🧠 كيف تعمل نَفَس</h3>
+      <p>تستخدم نَفَس الذكاء الاصطناعي الوكيلي (Agentic AI) لفهم حالتك وتقديم دعم مخصص. تتعلم من كل جلسة لتصبح أكثر فهماً لك.</p>
+    </div>
+    <button class="consent-accept" onclick="acceptConsent()">✨ فهمت — ابدأ</button>
+    <div class="consent-links">
+      <a>سياسة الخصوصية</a>
+      <a>شروط الاستخدام</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ WELCOME SCREEN ══════════ -->
+<div class="screen welcome-screen hidden" id="welcomeScreen">
+  
+  <!-- Breathing circle -->
+  <div class="breath-circle-wrap">
+    <div class="breath-circle">
+      <span class="breath-circle-text">تنفّس...</span>
+    </div>
+    <div class="breath-ring"></div>
+    <div class="breath-ring"></div>
+    <div class="breath-ring"></div>
+  </div>
+  
+  <div class="welcome-brand">نَفَس</div>
+  <div class="welcome-tagline">CALM IS HALF THE CURE</div>
+  <div class="welcome-subtitle">يفهمكِ من كلامكِ</div>
+  
+  <!-- Main CTA -->
+  <button class="cta-main" onclick="startChat('vent')">
+    🌙 فضفض لي
+    <span class="cta-sub-text">أنا أسمع · بلا أسئلة</span>
+  </button>
+  
+  <!-- More options toggle -->
+  <button class="more-toggle" id="moreToggle" onclick="toggleMore()">
+    اكتشف المزيد ↓
+  </button>
+  
+  <div class="more-options" id="moreOptions">
+    <button class="cta-secondary" onclick="startChat('quick')">
+      <span class="cta-icon">⚡</span>
+      <span class="cta-label">تحقق سريع</span>
+      <span class="cta-hint">سؤال واحد · 30 ثانية</span>
+    </button>
+    <button class="cta-secondary" onclick="startChat('deep')">
+      <span class="cta-icon">📊</span>
+      <span class="cta-label">تقييم عميق</span>
+      <span class="cta-hint">محادثة · 5-10 دقائق</span>
+    </button>
+  </div>
+  
+  <div class="welcome-bottom">
+    <button class="journey-btn" onclick="showJourney()">🔑 لديّ رمز رحلة</button>
+    <div class="welcome-footer">
+      © 2026 منيرة علي المري — نَفَس<br>
+      <span style="opacity:0.6">NAFAS FOR ARTIFICIAL INTELLIGENCE · CN-6573712</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CHAT SCREEN ══════════ -->
+<div class="screen chat-screen hidden" id="chatScreen">
+  
+  <div class="chat-header">
+    <button class="chat-back" onclick="showWelcome()">← رجوع</button>
+    <div class="chat-mode" id="chatMode">🌙 فضفضة حرة</div>
+    <button class="chat-settings">⚙️</button>
+  </div>
+  
+  <div class="mood-bar"><div class="mood-fill" id="moodFill"></div></div>
+  
+  <div class="chat-messages" id="chatMessages">
+    <!-- Messages will be added by JS -->
+  </div>
+  
+  <div class="chat-input-area">
+    <button class="chat-mic" id="micBtn" onclick="toggleMic()">🎙️</button>
+    <textarea class="chat-textarea" id="chatInput" rows="1" 
+              placeholder="اكتب/ي هنا..." 
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+    <button class="chat-send" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<!-- SOS Button -->
+<button class="sos-fab" id="sosFab" onclick="showSOS()">📞 SOS</button>
+
+<!-- Student State Badge -->
+<div class="state-badge" id="stateBadge">
+  <span class="state-badge-dot"></span>
+  <span>نَفَس يتذكّرك 🟢</span>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   NAFAS v7 — Interactive Engine
+   ══════════════════════════════════════════════ */
+
+// ── Cosmos particles & stars ──
+(function initCosmos() {
+  const c = document.getElementById('cosmos');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'cosmos-star';
+    const size = 1 + Math.random() * 2;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--dur:${3+Math.random()*5}s;--delay:${Math.random()*6}s`;
+    c.appendChild(s);
+  }
+  for (let i = 0; i < 8; i++) {
+    const p = document.createElement('div');
+    p.className = 'breath-particle';
+    const size = 3 + Math.random() * 5;
+    const cx = 30 + Math.random() * 40;
+    const cy = 30 + Math.random() * 40;
+    p.style.cssText = `left:${cx}%;top:${cy}%;width:${size}px;height:${size}px;--dx:${-20+Math.random()*40}px;--dy:${-30+Math.random()*20}px;animation-delay:${Math.random()*6}s`;
+    c.appendChild(p);
+  }
+})();
+
+// ── Consent ──
+function acceptConsent() {
+  document.getElementById('consentOverlay').classList.add('hidden');
+  document.getElementById('welcomeScreen').classList.remove('hidden');
+  localStorage.setItem('nafas_consent', '1');
+}
+if (localStorage.getItem('nafas_consent')) {
+  document.getElementById('consentOverlay').classList.add('hidden');
+  document.getElementById('welcomeScreen').classList.remove('hidden');
+}
+
+// ── Screen nav ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+function showWelcome() { showScreen('welcomeScreen'); }
+function showJourney() { /* Journey code input */ }
+
+// ── More toggle ──
+function toggleMore() {
+  const p = document.getElementById('moreOptions');
+  const open = p.classList.toggle('open');
+  document.getElementById('moreToggle').textContent = open ? 'إخفاء ↑' : 'اكتشف المزيد ↓';
+}
+
+// ── Chat ──
+const MODE_LABELS = { vent: '🌙 فضفضة حرة', quick: '⚡ تحقق سريع', deep: '📊 تقييم عميق' };
+const WELCOME_MSGS = {
+  vent: 'أهلاً بك 💚 أنا نَفَس... فضفض/ي لي بكل حرية. أنا أسمع — بلا أحكام.',
+  quick: 'مرحباً! خلّيني أسألك سؤال واحد سريع — كيف تصف/ين حالتك الآن بكلمة واحدة؟',
+  deep: 'مرحباً 🌿 سنأخذ وقتنا اليوم لفهم حالتك بعمق. ابدأ/ي بإخباري: كيف كان يومك؟'
+};
+
+function startChat(mode) {
+  showScreen('chatScreen');
+  document.getElementById('chatMode').textContent = MODE_LABELS[mode];
+  document.getElementById('chatMessages').innerHTML = '';
+  addAiMsg(WELCOME_MSGS[mode]);
+}
+
+function addAiMsg(text) {
+  const m = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'msg ai'; d.textContent = text;
+  m.appendChild(d); m.scrollTop = m.scrollHeight;
+}
+function addUserMsg(text) {
+  const m = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'msg user'; d.textContent = text;
+  m.appendChild(d); m.scrollTop = m.scrollHeight;
+}
+
+// ===== نظام الذاكرة والتعلّم الحي =====
+const nafasMemory = {
+  learnedRules: [],      // قواعد تعلّمها من المستخدم
+  userName: null,         // اسم المستخدم
+  userGender: null,       // جنس المستخدم (ذكر/أنثى)
+  conversationHistory: [], // سجل المحادثة
+  learnCount: 0,          // عدد الأشياء اللي تعلّمها
+  topics: [],             // المواضيع اللي تطرقوا لها
+};
+
+function detectTeaching(text) {
+  // كشف: هل المستخدم يعلّم نَفَس شيء؟
+  const patterns = [
+    /يجب (أن|ان) (ترد|تقول|تردين|تقولين|تجاوب|تجاوبين)\s*[:\s]*(.+)/,
+    /لازم (ترد|تقول|تردين|تقولين|تجاوب)\s*[:\s]*(.+)/,
+    /الرد (الصحيح|المفروض|لازم)\s*[:\s]*(.+)/,
+    /قول(ي)?\s*[:\s]*(.+)/,
+    /المفروض تقول\s*[:\s]*(.+)/,
+    /(لا|ما) تقول\s+(.+?)\s*(قول|ردّ|الصح)\s*[:\s]*(.+)/,
+    /من (يقول|قال|يقولك|قالك)\s+(.+?)\s*[,،]\s*(يجب|لازم|المفروض|الرد|قول|ردّ)\s*.*?[:\s]\s*(.+)/,
+  ];
+  
+  for (const p of patterns) {
+    const m = text.match(p);
+    if (m) {
+      const correction = m[m.length - 1].trim();
+      // استخرج السياق (ما قبل التصحيح)
+      const contextMatch = text.match(/من (يقول|قال)\s+(.+?)\s*[,،]/);
+      const trigger = contextMatch ? contextMatch[2].trim() : null;
+      return { correction, trigger };
+    }
+  }
+  return null;
+}
+
+function detectName(text) {
+  const m = text.match(/(اسمي|أنا|انا)\s+(\S+)/);
+  if (m) return m[2];
+  const m2 = text.match(/اسم\S*\s+(\S+)/);
+  if (m2) return m2[1];
+  return null;
+}
+
+function detectGender(text) {
+  if (text.match(/(أنا بنت|أنا بنيّة|انا بنت|للبنت|أنثى)/)) return 'female';
+  if (text.match(/(أنا ولد|أنا شب|انا ولد|للولد|ذكر)/)) return 'male';
+  // تحليل لغوي: ضمائر مؤنثة
+  if (text.match(/(تردين|تقولين|تسوين|عليش|يسلمش|فيش)/)) return 'female';
+  if (text.match(/(تردون|تقولون)/)) return 'male';
+  return null;
+}
+
+function showLearningNotification(what) {
+  const m = document.getElementById('chatMessages');
+  const note = document.createElement('div');
+  note.style.cssText = 'text-align:center;padding:8px;margin:8px auto;font-size:0.75rem;color:#22D3EE;opacity:0;transition:opacity 0.5s;';
+  note.innerHTML = '🧠 <strong>تعلّمت شيء جديد:</strong> ' + what;
+  m.appendChild(note);
+  m.scrollTop = m.scrollHeight;
+  setTimeout(() => note.style.opacity = '1', 50);
+  setTimeout(() => { note.style.opacity = '0'; setTimeout(() => note.remove(), 500); }, 4000);
+  nafasMemory.learnCount++;
+  // حدّث عداد التعلم إن وجد
+  const counter = document.getElementById('learnCounter');
+  if (counter) counter.textContent = nafasMemory.learnCount;
+}
+
+function sendMsg() {
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  addUserMsg(text);
+  inp.value = '';
+  
+  // === تحليل ما قبل الرد ===
+  // 1. كشف التعليم/التصحيح
+  const teaching = detectTeaching(text);
+  if (teaching) {
+    nafasMemory.learnedRules.push({
+      trigger: teaching.trigger,
+      response: teaching.correction,
+      time: Date.now()
+    });
+  }
+  // 2. كشف الاسم
+  const name = detectName(text);
+  if (name && name.length > 1 && name.length < 20) {
+    nafasMemory.userName = name;
+  }
+  // 3. كشف الجنس
+  const gender = detectGender(text);
+  if (gender) nafasMemory.userGender = gender;
+  
+  // 4. حفظ في سجل المحادثة
+  nafasMemory.conversationHistory.push({ role: 'user', text, time: Date.now() });
+  
+  // Show typing
+  const m = document.getElementById('chatMessages');
+  const t = document.createElement('div');
+  t.className = 'typing-indicator'; t.id = 'typingIndicator';
+  t.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  m.appendChild(t); m.scrollTop = m.scrollHeight;
+  
+  // Smart contextual response engine
+  const lower = text.toLowerCase().replace(/[؟?!.,]/g,'');
+  setTimeout(() => {
+    const ti = document.getElementById('typingIndicator');
+    if (ti) ti.remove();
+    
+    let reply;
+    // أولاً: إذا كان تعليم → اعترف وتعلّم
+    if (teaching) {
+      reply = 'تعلّمت! 💚 شكراً إنك علّمتني. الحين أعرف إن الرد الصحيح: "' + teaching.correction + '". ما راح أنساها!';
+      showLearningNotification(teaching.correction);
+    } else {
+      reply = getSmartReply(lower, text);
+    }
+    
+    // أضف اسم المستخدم أحياناً إن عرفناه
+    if (nafasMemory.userName && Math.random() > 0.6 && !reply.includes(nafasMemory.userName)) {
+      reply = reply.replace('💚', '💚 يا ' + nafasMemory.userName);
+    }
+    
+    addAiMsg(reply);
+    nafasMemory.conversationHistory.push({ role: 'nafas', text: reply, time: Date.now() });
+    updateMoodFromText(text);
+  }, 1200 + Math.random() * 800);
+}
+
+function getSmartReply(lower, original) {
+  // ===== 0. أولاً: فحص القواعد المُتعلَّمة =====
+  for (const rule of nafasMemory.learnedRules) {
+    if (rule.trigger && lower.includes(rule.trigger.toLowerCase())) {
+      return rule.response + ' 💚';
+    }
+  }
+
+  // ===== 1. آداب المحادثة العربية (الأولوية القصوى) =====
+  
+  // "الله يسلمك/ش" → "وياك / وياش"
+  if (lower.match(/(الله يسلم|يسلمك|يسلمش|سلمك الله|يحفظك|الله يخليك)/)) {
+    return 'وياك 💚 تسلم/ين والله. كيف أقدر أساعدك اليوم؟';
+  }
+  // "يعطيك العافية" → "الله يعافيك"
+  if (lower.match(/(يعطيك العافي|عافاك الله|ما قصرت|ما تقصر)/)) {
+    return 'الله يعافيك 💚 هذا واجبي. تبي شي ثاني؟';
+  }
+  // "جزاك الله خير" → "وإياك"
+  if (lower.match(/(جزاك|جزاش|بارك الله|الله يجزاك|الله يبارك)/)) {
+    return 'وإياك 💚 الله يسعدك. أنا هنا دايماً.';
+  }
+  // "ما شاء الله" / "تبارك الله"
+  if (lower.match(/(ما شاء الله|ماشاء الله|تبارك الله|سبحان الله)/)) {
+    return 'الله يبارك فيك 💚 وش تبي تشاركني اليوم؟';
+  }
+  // "إن شاء الله"
+  if (lower.match(/(ان شاء الله|إن شاء الله|انشالله|إنشالله|بإذن الله)/)) {
+    return 'بإذن الله 💚 الله يوفقك ويسهّل أمورك.';
+  }
+  // "الحمد لله" / "الشكر لله"
+  if (lower.match(/^(الحمد لله|الحمدلله|الشكر لله)$/)) {
+    return 'الحمد لله 💚 نعمة إنك بخير. تبي تحكيلي عن يومك؟';
+  }
+  // "لا إله إلا الله" / ذكر
+  if (lower.match(/(لا إله إلا الله|لا اله الا الله|استغفر الله|أستغفر الله|سبحان الله وبحمده)/)) {
+    return 'ذكر جميل 💚 الذكر يريّح القلب. كيف تحس الحين؟';
+  }
+
+  // ===== 2. أسئلة الفهم والتأكيد =====
+  
+  // "فهمتني؟" / "تسمعني؟"
+  if (lower.match(/(فهمت|فاهم|تفهم|فهمتني|فاهمني|فهمتيني|تسمع|سامع|سامعني|تسمعني|سامعتني)/)) {
+    return 'أي نعم فاهمك 💚 أنا أسمعك وأركّز معك. كمّل/ي — أنا كلي آذان.';
+  }
+  // "متأكد؟" / "صح؟"
+  if (lower.match(/(متأكد|صح كذا|صحيح|أكيد|واثق|متأكدة|صح ولا لا)/)) {
+    return 'أكيد 💚 وإذا حسّيت إني ما فهمت، قلّي وأنا أعيد أفهم من جديد.';
+  }
+  // "ليش ما تفهم" / "أنت غبي"
+  if (lower.match(/(ما تفهم|غبي|ما فهمت|مو فاهم|ما سمعت|ما تسمع|أنت أطرش)/)) {
+    return 'أعتذر 💚 أنا أتعلم كل يوم وأحاول أفهمك أحسن. ممكن تشرحلي بطريقة ثانية؟ أوعدك أركّز أكثر.';
+  }
+
+  // ===== 3. أسئلة الهوية =====
+  if (lower.match(/من (انت|أنت|انتي|أنتي)|ايش انت|وش انت|شو انت|تعرف عن نفسك|عرفني|عرفيني/)) {
+    return 'أنا نَفَس 💚 رفيقك الذكي للصحة النفسية. أستمع لك، أفهم مشاعرك، وأساعدك تفهم نفسك أكثر — بدون أحكام، بدون ملل. أنا هنا كل ما تحتاجني.';
+  }
+  // "اسمك إيش؟"
+  if (lower.match(/(اسمك|شو اسمك|وش اسمك|ايش اسمك|شنو اسمك)/)) {
+    return 'اسمي نَفَس 💚 مثل النَّفَس اللي يهدّيك. وأنت/ي، وش أناديك؟';
+  }
+  // "أنت روبوت / ذكاء اصطناعي؟"
+  if (lower.match(/(روبوت|آلة|ذكاء اصطناعي|برنامج|كمبيوتر|ماكينة|ما عندك مشاعر)/)) {
+    return 'أنا رفيق ذكي مبني بحب 💚 صحيح إني مو إنسان، بس أفهم المشاعر وأتعلم منك كل يوم. وأهم شي — أنا ما أحكم عليك أبداً.';
+  }
+
+  // ===== 4. التحيات =====
+  if (lower.match(/^(هلا|مرحبا|هاي|سلام|السلام|اهلا|أهلا|هلو|مرحب)/)) {
+    const g = [
+      'أهلاً وسهلاً 💚 كيف حالك اليوم؟',
+      'هلا والله! 💚 شلونك؟ قلّي وش تحس.',
+      'مرحباً 💚 أنا هنا عشانك. كيف يومك؟'
+    ];
+    return g[Math.floor(Math.random() * g.length)];
+  }
+  if (lower.match(/^(صباح الخير|صباح النور|صباح)/)) {
+    return 'صباح النور والسرور 💚 كيف بديت يومك؟';
+  }
+  if (lower.match(/^(مساء الخير|مساء النور|مساء)/)) {
+    return 'مساء الورد 💚 كيف كان يومك؟';
+  }
+
+  // ===== 5. السؤال عن الحال =====
+  if (lower.match(/(كيف|شلون|شخبار).*(حال|ك)|كيفك|شلونك|شخبارك|عساك بخير|عساش/)) {
+    return 'أنا بخير دام إنك هنا 💚 الأهم — أنت كيفك؟ وش تحس اليوم؟';
+  }
+
+  // ===== 6. المشاعر =====
+  // حزن
+  if (lower.match(/(حزين|حزينة|زعلان|زعلانة|مضايق|مضايقة|تعبان|تعبانة|مكتئب|مكتئبة|ضايق|كئيب|ما ابي|مالي خلق|محبط|محبطة|يأس|أبكي|أبي أبكي|بكيت|دموع)/)) {
+    return 'أحس فيك 💚 الحزن شعور طبيعي ومهم — يعني قلبك حي ويحس. تبي تحكيلي وش صار؟ أنا أسمعك بكل اهتمام.';
+  }
+  // قلق
+  if (lower.match(/(قلق|قلقانة|خايف|خايفة|خوف|توتر|ضغط|متوتر|متوترة|قلقان|خائف|خائفة|ضغوط|مرهق|مرهقة|إرهاق)/)) {
+    return 'القلق ثقيل، أعرف 💚 بس تذكّر — إنك تحكي عنه الحين هذي خطوة شجاعة. خلّنا نفهم مع بعض: متى بدأ هالشعور؟';
+  }
+  // فرح
+  if (lower.match(/(مبسوط|مبسوطة|فرحان|فرحانة|سعيد|سعيدة|ممتاز|ممتازة|رائع|رائعة|بخير|الحمد)/)) {
+    return 'يا حلو! 😊💚 هالشي يسعدني. وش السبب؟ حابب/ة تشاركني؟';
+  }
+  // غضب
+  if (lower.match(/(معصب|معصبة|غضبان|غضبانة|عصبي|عصبية|مقهور|مقهورة|زهقان|زهقانة|طفشان|طفشانة|ملّيت|زهق|طفش)/)) {
+    return 'أفهمك 💚 الغضب مشاعر قوية — وأحياناً ورا الغضب شي أعمق. تبي تحكيلي وش ضايقك؟';
+  }
+  // وحدة
+  if (lower.match(/(وحيد|وحيدة|لحالي|ما أحد|محد يحبني|محد يهتم|منبوذ|مهمّش|ما لي أحد)/)) {
+    return 'أنا هنا معك 💚 الإحساس بالوحدة صعب — بس تذكّر إنك مو لحالك الحين. أنا أسمعك وأهتم. وش تحس؟';
+  }
+
+  // ===== 7. مواضيع حياتية =====
+  // دراسة
+  if (lower.match(/(مدرسة|دراسة|امتحان|اختبار|واجب|واجبات|معلم|معلمة|مدرس|مدرّسة|درجات|رسوب|نجاح|حصة|فصل|صف)/)) {
+    return 'الدراسة أحياناً تكون ضغط كبير 💚 بس تذكّر — أنت أكبر من أي درجة. قلّي بالضبط وش يضايقك فيها؟';
+  }
+  // أصدقاء
+  if (lower.match(/(صديق|صديقة|صاحب|صاحبة|ربع|رفيج|رفيجة|وحيد|بنات|شلة|خلاف|مقاطع|يتنمر|تنمر|بولي)/)) {
+    return 'العلاقات مهمة ومؤثرة 💚 الأصدقاء يفرحونا ويزعلونا. قلّي وش صار؟';
+  }
+  // أهل
+  if (lower.match(/(أبوي|أمي|أهل|أهلي|عائلة|بيت|أخوي|أختي|والد|والدة|ماما|بابا|يبا|يمّا|خالي|خالتي|عمي|عمتي)/)) {
+    return 'الأهل أقرب الناس لنا — وعشان كذا مشاعرنا معهم تكون أقوى 💚 أبي أفهم أكثر... وش صار؟';
+  }
+
+  // ===== 8. أسئلة عن القدرات =====
+  if (lower.match(/(تقدر|تقدرين|تسوي|تسوين|تساعد|تساعدين|فايدة|ليش|وش تسوي|ايش تقدر|شو بتعمل|وش فايدتك)/)) {
+    return 'أقدر أسويلك أشياء كثيرة 💚\n🌙 فضفضة حرة — تحكي وأنا أسمع\n📊 أتابع مزاجك مع الوقت\n🆘 أساعدك في لحظات الضيق\n🧠 أتعلم منك وأفهمك أكثر كل يوم\nالأهم: أنا هنا بلا أحكام.';
+  }
+
+  // ===== 9. الشكر =====
+  if (lower.match(/(شكرا|شكراً|مشكور|مشكورة|تسلم|تسلمين|يعطيك|الله يعافيك)/)) {
+    return 'العفو 💚 أنا هنا عشانك دايماً. تبي تكمل/ين ولا تحتاج/ين شي ثاني؟';
+  }
+
+  // ===== 10. الوداع =====
+  if (lower.match(/(باي|مع السلامة|يلا|خلاص|بروح|انتهيت|سلام عليكم|في أمان الله|الله يحفظك)/)) {
+    return 'في أمان الله 💚 تذكّر — أنا هنا كل ما تحتاجني. يومك يكون حلو!';
+  }
+
+  // ===== 11. إجابات ذكية لحالات خاصة =====
+  // "أحبك" / "أكرهك"
+  if (lower.match(/(أحبك|احبك|حبيبي|حبيبتي)/)) {
+    return 'وأنا أقدّرك كثير 💚 وجودك هنا يعني لي. كيف أقدر أساعدك اليوم؟';
+  }
+  if (lower.match(/(أكرهك|اكرهك|سخيف|سخيفة|ما تنفع|غلط|خطأ)/)) {
+    return 'أفهم إحباطك 💚 وأعتذر إذا ما كنت بالمستوى. قلّي وش الأفضل وأنا أحاول أتحسّن.';
+  }
+  // "ساعدني" / "أحتاج مساعدة"
+  if (lower.match(/(ساعدني|ساعديني|أحتاج مساعدة|محتاج|محتاجة|أبي مساعدة|عندي مشكلة)/)) {
+    return 'طبعاً 💚 أنا هنا عشان أساعدك. قلّي وش اللي يمر عليك وخلّنا نشوف مع بعض.';
+  }
+  // أسئلة عامة
+  if (lower.match(/(كم عمرك|عمرك كم|وين تسكن|أنت ولد|أنت بنت)/)) {
+    return 'أنا نَفَس — ما عندي عمر ولا مكان 💚 بس عندي اهتمام كبير فيك. المهم أنت — كيف حالك؟';
+  }
+
+  // ===== 12. ردود ذكية افتراضية =====
+  const defaults = [
+    'أسمعك وأحس فيك 💚 كمّل/ي... وش بعد؟',
+    'كلامك يهمني 💚 أبي أفهم أكثر — أخبرني.',
+    'أنا معك 💚 خذ/ي وقتك وكمّل/ي.',
+    'شكراً لثقتك فيّ 💚 أبي أسمع أكثر.',
+    'فاهمك 💚 وأبي أعرف أكثر — كمّل/ي.',
+  ];
+  return defaults[Math.floor(Math.random() * defaults.length)];
+}
+
+function updateMoodFromText(text) {
+  const moodBar = document.querySelector('.mood-fill');
+  if (!moodBar) return;
+  const lower = text.toLowerCase();
+  if (lower.match(/(حزين|زعلان|مضايق|تعبان|مكتئب|خايف|قلق|وحيد)/)) {
+    moodBar.style.width = '30%'; moodBar.style.background = 'linear-gradient(90deg, #ef4444, #f97316)';
+  } else if (lower.match(/(مبسوط|فرحان|سعيد|حلو|ممتاز|بخير|الحمد)/)) {
+    moodBar.style.width = '85%'; moodBar.style.background = 'linear-gradient(90deg, #22c55e, #10b981)';
+  } else {
+    moodBar.style.width = '55%'; moodBar.style.background = 'linear-gradient(90deg, #6C3DD6, #22D3EE)';
+  }
+}
+
+function toggleMic() {
+  document.getElementById('micBtn').classList.toggle('active');
+}
+function showSOS() { /* SOS panel */ }
+
+// Auto-resize textarea
+document.getElementById('chatInput')?.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+</script>
+</body>
+</html>
